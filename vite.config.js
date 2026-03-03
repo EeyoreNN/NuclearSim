@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-  base: './',
+  base: '/NuclearSim/',
   build: {
     outDir: 'dist',
     sourcemap: false,
