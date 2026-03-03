@@ -1,0 +1,138 @@
+{
+  "country": "India",
+  "flag": "🇮🇳",
+  "warheads": [
+    {
+      "id": "IN-fission-20kt",
+      "name": "20 kt Fission device",
+      "yield_kt": 20,
+      "type": "fission",
+      "weight_kg": 300,
+      "description": "Boosted fission warhead based on 1998 Shakti tests. Estimated 12-45 kt. For Prithvi and Agni-I."
+    },
+    {
+      "id": "IN-thermo-150kt",
+      "name": "150 kt Thermonuclear warhead",
+      "yield_kt": 150,
+      "type": "thermonuclear",
+      "weight_kg": 500,
+      "description": "Estimated thermonuclear warhead for Agni-IV/V. 1998 Shakti-1 thermonuclear test disputed (45 kt observed vs 45+ kt claimed)."
+    },
+    {
+      "id": "IN-agni5-mirv",
+      "name": "Agni-V MIRV warhead",
+      "yield_kt": 150,
+      "type": "thermonuclear",
+      "weight_kg": 250,
+      "description": "MIRV warhead tested 2024 on Agni-V. 3 warheads demonstrated. India's first MIRV capability."
+    },
+    {
+      "id": "IN-sagarika-wh",
+      "name": "K-15 Sagarika warhead",
+      "yield_kt": 20,
+      "type": "fission",
+      "weight_kg": 200,
+      "description": "Compact warhead for submarine-launched K-15. Short-range SLBM limited to regional targeting."
+    }
+  ],
+  "delivery_systems": [
+    {
+      "id": "agni-v",
+      "name": "Agni-V",
+      "type": "ICBM",
+      "platform": "mobile_TEL",
+      "range_km": 5500,
+      "cep_m": 300,
+      "warheads_per_missile": 3,
+      "compatible_warheads": ["IN-agni5-mirv", "IN-thermo-150kt"],
+      "count": 12,
+      "icon": "🚀",
+      "deployment_year": 2018,
+      "description": "India's first ICBM-class ballistic missile. Reaches all of China. MIRV tested 2024. Canisterized TEL."
+    },
+    {
+      "id": "agni-iv",
+      "name": "Agni-IV",
+      "type": "IRBM",
+      "platform": "mobile_TEL",
+      "range_km": 4000,
+      "cep_m": 400,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["IN-thermo-150kt"],
+      "count": 20,
+      "icon": "🚀",
+      "deployment_year": 2014,
+      "description": "IRBM reaching all of Pakistan and most of China. Two-stage solid-fueled. Rail-mobile deployment."
+    },
+    {
+      "id": "agni-iii",
+      "name": "Agni-III",
+      "type": "IRBM",
+      "platform": "mobile_TEL",
+      "range_km": 3500,
+      "cep_m": 400,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["IN-thermo-150kt"],
+      "count": 18,
+      "icon": "🚀",
+      "deployment_year": 2011,
+      "description": "Medium-range IRBM for targets in China. 3,000 kg payload. Rail or road mobile."
+    },
+    {
+      "id": "agni-ii",
+      "name": "Agni-II",
+      "type": "IRBM",
+      "platform": "mobile_TEL",
+      "range_km": 2000,
+      "cep_m": 500,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["IN-fission-20kt", "IN-thermo-150kt"],
+      "count": 24,
+      "icon": "🚀",
+      "deployment_year": 1999,
+      "description": "Pakistan-focused MRBM. Solid-fueled, road-mobile. Primary Pakistan theater deterrent."
+    },
+    {
+      "id": "k-15-sagarika",
+      "name": "K-15 Sagarika (B-05)",
+      "type": "SLBM",
+      "platform": "submarine",
+      "range_km": 750,
+      "cep_m": 600,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["IN-sagarika-wh"],
+      "count": 24,
+      "icon": "🚢",
+      "deployment_year": 2018,
+      "description": "Short-range SLBM for INS Arihant (S-2) and Arighat (S-3). 4 tubes × 4 missiles. Very limited range."
+    },
+    {
+      "id": "k-4-slbm",
+      "name": "K-4 SLBM",
+      "type": "SLBM",
+      "platform": "submarine",
+      "range_km": 3500,
+      "cep_m": 400,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["IN-thermo-150kt"],
+      "count": 8,
+      "icon": "🚢",
+      "deployment_year": 2023,
+      "description": "Longer-range SLBM for S-4/S-5 class SSBNs. 4 tubes in Arihant successor. Reaches most of China."
+    },
+    {
+      "id": "rafale-india",
+      "name": "Rafale F3-R (India)",
+      "type": "gravity_bomb",
+      "platform": "aircraft",
+      "range_km": 3700,
+      "cep_m": 5,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["IN-thermo-150kt"],
+      "count": 36,
+      "icon": "✈",
+      "deployment_year": 2020,
+      "description": "36 Rafale jets acquired with SCALP cruise missile capability. Nuclear role possible with indigenous warhead integration."
+    }
+  ]
+}

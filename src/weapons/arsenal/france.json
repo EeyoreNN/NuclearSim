@@ -1,0 +1,80 @@
+{
+  "country": "France",
+  "flag": "🇫🇷",
+  "warheads": [
+    {
+      "id": "TN75",
+      "name": "TN-75 SLBM warhead",
+      "yield_kt": 100,
+      "type": "thermonuclear",
+      "weight_kg": 200,
+      "description": "Warhead for M51 SLBM. Estimated 100 kt per RV. MIRV capable (6 warheads per missile)."
+    },
+    {
+      "id": "TNA",
+      "name": "TNA ASMP-A warhead",
+      "yield_kt": 300,
+      "type": "thermonuclear",
+      "weight_kg": 280,
+      "description": "Air-sol moyenne portée amélioré warhead. Estimated 300 kt. For airborne component of deterrent."
+    }
+  ],
+  "delivery_systems": [
+    {
+      "id": "m51-3",
+      "name": "M51.3 SLBM",
+      "type": "SLBM",
+      "platform": "submarine",
+      "range_km": 9000,
+      "cep_m": 200,
+      "warheads_per_missile": 6,
+      "compatible_warheads": ["TN75"],
+      "count": 48,
+      "icon": "🚢",
+      "deployment_year": 2010,
+      "description": "French SLBM on Le Triomphant-class SSBN. 4 boats × 16 tubes. M51.3 variant deployed ~2025."
+    },
+    {
+      "id": "asmp-a",
+      "name": "ASMP-A (Air-Sol Moyenne Portée Amélioré)",
+      "type": "ALCM",
+      "platform": "aircraft",
+      "range_km": 500,
+      "cep_m": 10,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["TNA"],
+      "count": 54,
+      "icon": "✈",
+      "deployment_year": 2009,
+      "description": "Nuclear air-launched cruise missile. Mach 3 terminal. Carried by Rafale F3-R and Mirage 2000N. 54 operational."
+    },
+    {
+      "id": "rafale-f3r",
+      "name": "Rafale F3-R",
+      "type": "ALCM",
+      "platform": "aircraft",
+      "range_km": 3700,
+      "cep_m": 10,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["TNA"],
+      "count": 40,
+      "icon": "✈",
+      "deployment_year": 2015,
+      "description": "Dual-capable fighter-bomber. Nuclear role via ASMP-A. Based at Saint-Dizier and Istres. Carrier-capable variant too."
+    },
+    {
+      "id": "asn4g",
+      "name": "ASN4G Hypersonic ALCM",
+      "type": "ALCM",
+      "platform": "aircraft",
+      "range_km": 1000,
+      "cep_m": 5,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["TNA"],
+      "count": 0,
+      "icon": "✈",
+      "deployment_year": 2035,
+      "description": "Hypersonic successor to ASMP-A. Under development. Planned Mach 5+ scramjet-powered cruise missile."
+    }
+  ]
+}

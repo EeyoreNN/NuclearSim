@@ -1,0 +1,38 @@
+{
+  "country": "UK",
+  "flag": "🇬🇧",
+  "warheads": [
+    {
+      "id": "UK-Holbrook",
+      "name": "Holbrook warhead (Mk4A)",
+      "yield_kt": 100,
+      "type": "thermonuclear",
+      "weight_kg": 164,
+      "description": "UK-designed warhead for Trident II. Estimated 100 kt per RV. Based on W76 design with UK modifications."
+    },
+    {
+      "id": "UK-Holbrook-LoY",
+      "name": "Holbrook Low-Yield variant",
+      "yield_kt": 10,
+      "type": "thermonuclear",
+      "weight_kg": 164,
+      "description": "Sub-strategic low-yield variant. Available for sub-strategic deterrence missions. Estimated 10 kt."
+    }
+  ],
+  "delivery_systems": [
+    {
+      "id": "uk-trident-ii",
+      "name": "UGM-133A Trident II D5",
+      "type": "SLBM",
+      "platform": "submarine",
+      "range_km": 11300,
+      "cep_m": 90,
+      "warheads_per_missile": 8,
+      "compatible_warheads": ["UK-Holbrook", "UK-Holbrook-LoY"],
+      "count": 48,
+      "icon": "🚢",
+      "deployment_year": 1994,
+      "description": "UK's sole nuclear delivery system. 4 Vanguard-class SSBNs, 12 missiles each, up to 8 RVs per missile. Continuously At Sea Deterrence since 1969."
+    }
+  ]
+}

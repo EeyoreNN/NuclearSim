@@ -1,0 +1,144 @@
+{
+  "country": "Pakistan",
+  "flag": "🇵🇰",
+  "warheads": [
+    {
+      "id": "PK-fission-10kt",
+      "name": "10 kt Fission Warhead",
+      "yield_kt": 10,
+      "type": "fission",
+      "weight_kg": 300,
+      "description": "Tactical fission warhead for short-range missiles. Chagai-I test 1998. Estimated 10-12 kt."
+    },
+    {
+      "id": "PK-boosted-40kt",
+      "name": "40 kt Boosted Fission",
+      "yield_kt": 40,
+      "type": "fission",
+      "weight_kg": 450,
+      "description": "Boosted fission warhead for Shaheen missiles. Estimated 30-45 kt. Pakistan's standard strategic warhead."
+    },
+    {
+      "id": "PK-nasr-tactical",
+      "name": "Nasr Tactical Warhead",
+      "yield_kt": 5,
+      "type": "fission",
+      "weight_kg": 100,
+      "description": "Very low yield tactical nuclear warhead for Nasr (Hatf-9) SRBM. Battlefield nuclear option. Est. 5-10 kt."
+    }
+  ],
+  "delivery_systems": [
+    {
+      "id": "shaheen-iii",
+      "name": "Shaheen-III (Hatf-6)",
+      "type": "IRBM",
+      "platform": "mobile_TEL",
+      "range_km": 2750,
+      "cep_m": 300,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["PK-boosted-40kt"],
+      "count": 18,
+      "icon": "🚀",
+      "deployment_year": 2015,
+      "description": "Pakistan's longest-range ballistic missile. Covers all of India including Andaman Islands."
+    },
+    {
+      "id": "shaheen-ii",
+      "name": "Shaheen-II (Hatf-6A)",
+      "type": "IRBM",
+      "platform": "mobile_TEL",
+      "range_km": 2000,
+      "cep_m": 350,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["PK-boosted-40kt"],
+      "count": 36,
+      "icon": "🚀",
+      "deployment_year": 2004,
+      "description": "Main strategic IRBM. Covers all major Indian cities. Solid-fueled, road-mobile TEL."
+    },
+    {
+      "id": "ghauri-ii",
+      "name": "Ghauri-II (Hatf-5A)",
+      "type": "IRBM",
+      "platform": "mobile_TEL",
+      "range_km": 2300,
+      "cep_m": 400,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["PK-boosted-40kt"],
+      "count": 20,
+      "icon": "🚀",
+      "deployment_year": 2002,
+      "description": "Liquid-fueled MRBM based on No-dong technology. Longer range than Ghauri-I."
+    },
+    {
+      "id": "ababeel",
+      "name": "Ababeel MRBM",
+      "type": "IRBM",
+      "platform": "mobile_TEL",
+      "range_km": 2200,
+      "cep_m": 200,
+      "warheads_per_missile": 3,
+      "compatible_warheads": ["PK-boosted-40kt"],
+      "count": 6,
+      "icon": "🚀",
+      "deployment_year": 2022,
+      "description": "Pakistan's first MIRV-capable missile. 3 warheads, MaRV maneuvering capability. Counters Indian ABM."
+    },
+    {
+      "id": "babur-3",
+      "name": "Babur-3 (Hatf-7) SLCM",
+      "type": "GLCM",
+      "platform": "submarine",
+      "range_km": 450,
+      "cep_m": 15,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["PK-fission-10kt"],
+      "count": 12,
+      "icon": "🚢",
+      "deployment_year": 2018,
+      "description": "Sea-launched cruise missile from conventional submarine (Agosta-90B). Nuclear-tipped SLCM."
+    },
+    {
+      "id": "nasr-hatf9",
+      "name": "Nasr (Hatf-9) SRBM",
+      "type": "SRBM",
+      "platform": "mobile_TEL",
+      "range_km": 60,
+      "cep_m": 25,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["PK-nasr-tactical"],
+      "count": 24,
+      "icon": "🚀",
+      "deployment_year": 2011,
+      "description": "Short-range tactical nuclear rocket. Quick-response battlefield nuclear option vs. Indian Cold Start doctrine."
+    },
+    {
+      "id": "ra-ad-alcm",
+      "name": "Ra'ad ALCM (Hatf-8)",
+      "type": "ALCM",
+      "platform": "aircraft",
+      "range_km": 350,
+      "cep_m": 10,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["PK-fission-10kt"],
+      "count": 30,
+      "icon": "✈",
+      "deployment_year": 2007,
+      "description": "Air-launched cruise missile on Mirage III/V. Ra'ad-II extends range to 550 km."
+    },
+    {
+      "id": "f16-pakistan",
+      "name": "F-16A/B (nuclear role)",
+      "type": "gravity_bomb",
+      "platform": "aircraft",
+      "range_km": 1600,
+      "cep_m": 15,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["PK-boosted-40kt"],
+      "count": 36,
+      "icon": "✈",
+      "deployment_year": 1986,
+      "description": "Primary nuclear strike aircraft. 36 F-16A/B with suspected nuclear gravity bomb capability."
+    }
+  ]
+}

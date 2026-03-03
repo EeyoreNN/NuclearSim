@@ -1,0 +1,212 @@
+{
+  "country": "China",
+  "flag": "🇨🇳",
+  "warheads": [
+    {
+      "id": "DF5-RV",
+      "name": "DF-5B Warhead",
+      "yield_kt": 5000,
+      "type": "thermonuclear",
+      "weight_kg": 3000,
+      "description": "Large thermonuclear warhead for DF-5B ICBM. Estimated 4-5 Mt yield. 2-3 MIRVs possible."
+    },
+    {
+      "id": "DF41-RV",
+      "name": "DF-41 MIRV warhead",
+      "yield_kt": 150,
+      "type": "thermonuclear",
+      "weight_kg": 300,
+      "description": "MIRV warhead for DF-41. Estimated 150-200 kt per RV. Up to 10 warheads per missile."
+    },
+    {
+      "id": "DF31-RV",
+      "name": "DF-31AG Warhead",
+      "yield_kt": 200,
+      "type": "thermonuclear",
+      "weight_kg": 350,
+      "description": "Single warhead for DF-31AG mobile ICBM. Estimated 150-200 kt. Road-mobile survivability."
+    },
+    {
+      "id": "DF26-RV",
+      "name": "DF-26 Warhead",
+      "yield_kt": 1200,
+      "type": "thermonuclear",
+      "weight_kg": 1800,
+      "description": "Warhead for DF-26 IRBM. Estimated 1-2 Mt. Dual-capable (nuclear/conventional)."
+    },
+    {
+      "id": "JL2-RV",
+      "name": "JL-2 Warhead",
+      "yield_kt": 250,
+      "type": "thermonuclear",
+      "weight_kg": 400,
+      "description": "SLBM warhead for JL-2 on Type-094 submarines. Estimated 250-1000 kt. 3 MIRVs possible."
+    },
+    {
+      "id": "JL3-RV",
+      "name": "JL-3 Warhead",
+      "yield_kt": 150,
+      "type": "thermonuclear",
+      "weight_kg": 280,
+      "description": "SLBM warhead for JL-3 on Type-096 submarines. Estimated 150 kt. Up to 8 MIRVs."
+    },
+    {
+      "id": "DF21-RV",
+      "name": "DF-21A Warhead",
+      "yield_kt": 300,
+      "type": "thermonuclear",
+      "weight_kg": 600,
+      "description": "Warhead for DF-21A MRBM. Estimated 200-300 kt. Theater strike capability."
+    },
+    {
+      "id": "DF17-RV",
+      "name": "DF-17 HGV Warhead",
+      "yield_kt": 250,
+      "type": "thermonuclear",
+      "weight_kg": 600,
+      "description": "Warhead on DF-ZF hypersonic glide vehicle, carried by DF-17. Estimated 250 kt."
+    }
+  ],
+  "delivery_systems": [
+    {
+      "id": "df-5b",
+      "name": "DF-5B (CSS-4 Mod 3)",
+      "type": "ICBM",
+      "platform": "silo",
+      "range_km": 13000,
+      "cep_m": 300,
+      "warheads_per_missile": 3,
+      "compatible_warheads": ["DF5-RV"],
+      "count": 20,
+      "icon": "🚀",
+      "deployment_year": 2015,
+      "description": "Heavy silo-based ICBM. MIRVed with 2-3 warheads. Liquid-fueled, 30-minute launch prep."
+    },
+    {
+      "id": "df-41-silo",
+      "name": "DF-41 (CSS-X-20, silo)",
+      "type": "ICBM",
+      "platform": "silo",
+      "range_km": 14000,
+      "cep_m": 100,
+      "warheads_per_missile": 10,
+      "compatible_warheads": ["DF41-RV"],
+      "count": 120,
+      "icon": "🚀",
+      "deployment_year": 2019,
+      "description": "China's most capable ICBM. 10 MIRVs. Silo deployment ongoing in Gansu/Xinjiang mega-fields."
+    },
+    {
+      "id": "df-41-mobile",
+      "name": "DF-41 (CSS-X-20, mobile)",
+      "type": "ICBM",
+      "platform": "mobile_TEL",
+      "range_km": 14000,
+      "cep_m": 150,
+      "warheads_per_missile": 6,
+      "compatible_warheads": ["DF41-RV"],
+      "count": 36,
+      "icon": "🚀",
+      "deployment_year": 2017,
+      "description": "Road-mobile DF-41 on 16-axle TEL. Rapid deployment capability, survivable second strike."
+    },
+    {
+      "id": "df-31ag",
+      "name": "DF-31AG (CSS-10 Mod 2)",
+      "type": "ICBM",
+      "platform": "mobile_TEL",
+      "range_km": 11200,
+      "cep_m": 150,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["DF31-RV"],
+      "count": 72,
+      "icon": "🚀",
+      "deployment_year": 2007,
+      "description": "Road-mobile solid-fuel ICBM. Single warhead. Upgraded from DF-31 with all-terrain TEL."
+    },
+    {
+      "id": "df-26",
+      "name": "DF-26 (CSS-18)",
+      "type": "IRBM",
+      "platform": "mobile_TEL",
+      "range_km": 4000,
+      "cep_m": 150,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["DF26-RV"],
+      "count": 200,
+      "icon": "🚀",
+      "deployment_year": 2018,
+      "description": "Dual-capable IRBM targeting Guam and US Pacific bases. Called 'Guam Killer'. 200+ deployed."
+    },
+    {
+      "id": "df-21a",
+      "name": "DF-21A (CSS-5 Mod 2)",
+      "type": "IRBM",
+      "platform": "mobile_TEL",
+      "range_km": 2100,
+      "cep_m": 300,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["DF21-RV"],
+      "count": 80,
+      "icon": "🚀",
+      "deployment_year": 1995,
+      "description": "Theater nuclear MRBM. Targets US regional bases, carrier groups. 80+ nuclear-configured."
+    },
+    {
+      "id": "df-17",
+      "name": "DF-17 HGV",
+      "type": "HGV",
+      "platform": "mobile_TEL",
+      "range_km": 2500,
+      "cep_m": 50,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["DF17-RV"],
+      "count": 40,
+      "icon": "🚀",
+      "deployment_year": 2019,
+      "description": "Medium-range ballistic missile carrying DF-ZF hypersonic glide vehicle. Mach 5-10 terminal."
+    },
+    {
+      "id": "jl-2",
+      "name": "JL-2 (CSS-NX-14)",
+      "type": "SLBM",
+      "platform": "submarine",
+      "range_km": 7400,
+      "cep_m": 300,
+      "warheads_per_missile": 3,
+      "compatible_warheads": ["JL2-RV"],
+      "count": 48,
+      "icon": "🚢",
+      "deployment_year": 2015,
+      "description": "SLBM on Type-094 Jin-class SSBN. 4 boats × 12 tubes = 48 missiles. China's first viable sea-based deterrent."
+    },
+    {
+      "id": "jl-3",
+      "name": "JL-3 (CSS-NX-20)",
+      "type": "SLBM",
+      "platform": "submarine",
+      "range_km": 10000,
+      "cep_m": 150,
+      "warheads_per_missile": 8,
+      "compatible_warheads": ["JL3-RV"],
+      "count": 24,
+      "icon": "🚢",
+      "deployment_year": 2023,
+      "description": "Next-gen SLBM for Type-096 Tang-class SSBN. Extended range reaches CONUS from Chinese waters."
+    },
+    {
+      "id": "h6n-bomber",
+      "name": "H-6N Strategic Bomber",
+      "type": "ALCM",
+      "platform": "aircraft",
+      "range_km": 6000,
+      "cep_m": 30,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["DF26-RV"],
+      "count": 15,
+      "icon": "✈",
+      "deployment_year": 2019,
+      "description": "Aerial refueling-capable H-6 bomber variant. Can carry CJ-100 ALCM or DF-21 ballistic missile."
+    }
+  ]
+}

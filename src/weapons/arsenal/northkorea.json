@@ -1,0 +1,138 @@
+{
+  "country": "North Korea",
+  "flag": "🇰🇵",
+  "warheads": [
+    {
+      "id": "NK-fission-20kt",
+      "name": "20 kt Fission Warhead",
+      "yield_kt": 20,
+      "type": "fission",
+      "weight_kg": 500,
+      "description": "NK's earliest proven warhead design. 2006-2013 tests ranged 0.5-7 kt. Current miniaturized est. 15-20 kt."
+    },
+    {
+      "id": "NK-boosted-100kt",
+      "name": "100 kt Boosted Fission",
+      "yield_kt": 100,
+      "type": "fission",
+      "weight_kg": 400,
+      "description": "Tested Sept 2017 with ~140-250 kt yield. May be true thermonuclear stage. NK ICBM primary warhead."
+    },
+    {
+      "id": "NK-thermonuclear",
+      "name": "Thermonuclear Warhead",
+      "yield_kt": 250,
+      "type": "thermonuclear",
+      "weight_kg": 600,
+      "description": "Claimed thermonuclear capability post-2017. Designed to fit Hwasong-15/17. Est. 100-250 kt."
+    },
+    {
+      "id": "NK-kn23-tactical",
+      "name": "KN-23 Tactical Warhead",
+      "yield_kt": 10,
+      "type": "fission",
+      "weight_kg": 300,
+      "description": "Compact tactical warhead for KN-23 short-range missiles. 2023 announcement of tactical nuke tests."
+    }
+  ],
+  "delivery_systems": [
+    {
+      "id": "hwasong-17",
+      "name": "Hwasong-17 (KN-22)",
+      "type": "ICBM",
+      "platform": "mobile_TEL",
+      "range_km": 15000,
+      "cep_m": 1000,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["NK-thermonuclear", "NK-boosted-100kt"],
+      "count": 12,
+      "icon": "🚀",
+      "deployment_year": 2022,
+      "description": "NK's largest ICBM. Can reach all of CONUS. Liquid-fueled, road-mobile. 22-25 m length. 9-axle TEL."
+    },
+    {
+      "id": "hwasong-15",
+      "name": "Hwasong-15 (KN-22B)",
+      "type": "ICBM",
+      "platform": "mobile_TEL",
+      "range_km": 13000,
+      "cep_m": 1000,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["NK-boosted-100kt", "NK-thermonuclear"],
+      "count": 24,
+      "icon": "🚀",
+      "deployment_year": 2017,
+      "description": "Operational ICBM capable of reaching all of US mainland. Tested Nov 2017. Fully operational 2018."
+    },
+    {
+      "id": "hwasong-14",
+      "name": "Hwasong-14 (KN-20)",
+      "type": "ICBM",
+      "platform": "mobile_TEL",
+      "range_km": 10400,
+      "cep_m": 1200,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["NK-fission-20kt", "NK-boosted-100kt"],
+      "count": 12,
+      "icon": "🚀",
+      "deployment_year": 2017,
+      "description": "First NK ICBM to reach CONUS range. Two successful tests 2017. Range reaches Alaska/Hawaii/west coast."
+    },
+    {
+      "id": "hwasong-12",
+      "name": "Hwasong-12 (KN-17)",
+      "type": "IRBM",
+      "platform": "mobile_TEL",
+      "range_km": 4500,
+      "cep_m": 800,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["NK-fission-20kt", "NK-boosted-100kt"],
+      "count": 30,
+      "icon": "🚀",
+      "deployment_year": 2017,
+      "description": "IRBM targeting Guam and US Pacific bases. Extensively tested over Japan 2017. Operational."
+    },
+    {
+      "id": "kn-23",
+      "name": "KN-23 Iskander-type SRBM",
+      "type": "SRBM",
+      "platform": "mobile_TEL",
+      "range_km": 600,
+      "cep_m": 10,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["NK-kn23-tactical"],
+      "count": 50,
+      "icon": "🚀",
+      "deployment_year": 2019,
+      "description": "NK's most accurate SRBM. Quasi-ballistic, low-altitude trajectory evades THAAD. Targets South Korea."
+    },
+    {
+      "id": "kn-24",
+      "name": "KN-24 ATACMS-type SRBM",
+      "type": "SRBM",
+      "platform": "mobile_TEL",
+      "range_km": 400,
+      "cep_m": 10,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["NK-kn23-tactical"],
+      "count": 30,
+      "icon": "🚀",
+      "deployment_year": 2020,
+      "description": "Short-range ballistic missile similar to US ATACMS. Solid-fueled, rapid-fire. Targets South Korea."
+    },
+    {
+      "id": "pukguksong-3",
+      "name": "Pukguksong-3 SLBM",
+      "type": "SLBM",
+      "platform": "submarine",
+      "range_km": 1900,
+      "cep_m": 800,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["NK-fission-20kt"],
+      "count": 8,
+      "icon": "🚢",
+      "deployment_year": 2019,
+      "description": "Sea-based solid-fuel SLBM for Sinpo-class SSBN. Tested 2019. Provides limited second-strike option."
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "country": "USA",
+  "flag": "🇺🇸",
+  "warheads": [
+    {
+      "id": "W87-0",
+      "name": "W87-0",
+      "yield_kt": 300,
+      "type": "thermonuclear",
+      "weight_kg": 276,
+      "description": "Minuteman III Mk21 reentry vehicle warhead. Deployed since 1986, upgraded from W87 block 0."
+    },
+    {
+      "id": "W87-1",
+      "name": "W87-1",
+      "yield_kt": 475,
+      "type": "thermonuclear",
+      "weight_kg": 285,
+      "description": "W87-1 planned for Sentinel GBSD ICBM. Higher yield upgraded version of W87-0."
+    },
+    {
+      "id": "W78",
+      "name": "W78",
+      "yield_kt": 335,
+      "type": "thermonuclear",
+      "weight_kg": 272,
+      "description": "Minuteman III Mk12A warhead. Deployed 1979, partially replaced by W87-0. Retiring."
+    },
+    {
+      "id": "W76-1",
+      "name": "W76-1",
+      "yield_kt": 90,
+      "type": "thermonuclear",
+      "weight_kg": 164,
+      "description": "Trident II D5 primary SLBM warhead. LEP-upgraded version of W76, life-extended to 2040s."
+    },
+    {
+      "id": "W76-2",
+      "name": "W76-2",
+      "yield_kt": 8,
+      "type": "thermonuclear",
+      "weight_kg": 164,
+      "description": "Low-yield variant of W76 for Trident II. Deployed 2019 as non-strategic deterrent option."
+    },
+    {
+      "id": "W88",
+      "name": "W88",
+      "yield_kt": 455,
+      "type": "thermonuclear",
+      "weight_kg": 360,
+      "description": "Highest-yield US operational SLBM warhead. Deployed on Trident II Mk5 RV. 455 kt yield."
+    },
+    {
+      "id": "B61-12",
+      "name": "B61-12",
+      "yield_kt": 50,
+      "type": "thermonuclear",
+      "weight_kg": 315,
+      "description": "Variable-yield guided gravity bomb. Selectable: 0.3/1.5/10/50 kt. Deployed with NATO allies."
+    },
+    {
+      "id": "B83-1",
+      "name": "B83-1",
+      "yield_kt": 1200,
+      "type": "thermonuclear",
+      "weight_kg": 1089,
+      "description": "Highest-yield US nuclear weapon. Megaton-class gravity bomb. In reserve/inactive stockpile."
+    },
+    {
+      "id": "W80-4",
+      "name": "W80-4",
+      "yield_kt": 150,
+      "type": "thermonuclear",
+      "weight_kg": 130,
+      "description": "ALCM warhead for LRSO (Long Range Stand-Off) cruise missile. Under development/deployment."
+    }
+  ],
+  "delivery_systems": [
+    {
+      "id": "minuteman-iii",
+      "name": "LGM-30G Minuteman III",
+      "type": "ICBM",
+      "platform": "silo",
+      "range_km": 13000,
+      "cep_m": 120,
+      "warheads_per_missile": 1,
+      "compatible_warheads": ["W87-0", "W78"],
+      "count": 400,
+      "icon": "🚀",
+      "deployment_year": 1970,
+      "description": "Land-based silo ICBM, backbone of US nuclear triad. 400 deployed in WY/ND/MT silo fields."
+    },
+    {
+      "id": "trident-ii",
+      "name": "UGM-133A Trident II D5",
+      "type": "SLBM",
+      "platform": "submarine",
+      "range_km": 11300,
+      "cep_m": 90,
+      "warheads_per_missile": 4,
+      "compatible_warheads": ["W76-1", "W76-2", "W88"],
+      "count": 280,
+      "icon": "🚢",
+      "deployment_year": 1990,
+      "description": "Ohio-class SSBN SLBM. 14 boats × 20 tubes = 280 missiles. Highest accuracy SLBM in world."
+    },
+    {
+      "id": "b2-spirit",
+      "name": "B-2A Spirit",
+      "type": "gravity_bomb",
+      "platform": "aircraft",
+      "range_km": 11000,
+      "cep_m": 5,
+      "warheads_per_missile": 16,
+      "compatible_warheads": ["B61-12", "B83-1"],
+      "count": 20,
+      "icon": "✈",
+      "deployment_year": 1997,
+      "description": "Stealth strategic bomber. Carries up to 16 B61-12 or 8 B83-1. Based at Whiteman AFB, MO."
+    },
+    {
+      "id": "b52-stratofortress",
+      "name": "B-52H Stratofortress",
+      "type": "ALCM",
+      "platform": "aircraft",
+      "range_km": 16000,
+      "cep_m": 30,
+      "warheads_per_missile": 8,
+      "compatible_warheads": ["W80-4"],
+      "count": 46,
+      "icon": "✈",
+      "deployment_year": 1961,
+      "description": "Long-range strategic bomber carrying ACM-86B and future LRSO cruise missiles. 46 nuclear-capable."
+    },
+    {
+      "id": "f35a",
+      "name": "F-35A Lightning II",
+      "type": "gravity_bomb",
+      "platform": "aircraft",
+      "range_km": 2200,
+      "cep_m": 5,
+      "warheads_per_missile": 2,
+      "compatible_warheads": ["B61-12"],
+      "count": 100,
+      "icon": "✈",
+      "deployment_year": 2015,
+      "description": "Dual-capable fighter for NATO nuclear sharing mission. Based in Europe and CONUS."
+    },
+    {
+      "id": "b21-raider",
+      "name": "B-21A Raider",
+      "type": "gravity_bomb",
+      "platform": "aircraft",
+      "range_km": 9000,
+      "cep_m": 5,
+      "warheads_per_missile": 16,
+      "compatible_warheads": ["B61-12", "B83-1"],
+      "count": 6,
+      "icon": "✈",
+      "deployment_year": 2024,
+      "description": "Next-generation stealth strategic bomber. 6 initial aircraft; planned fleet of 100+."
+    }
+  ]
+}
