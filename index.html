@@ -4,215 +4,86 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NuclearSim — Strategic Nuclear Exchange Simulator</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/src/styles/main.css" />
+  <!-- style.css loaded by Vite via main.js import -->
 </head>
 <body>
-  <!-- Scanline overlay -->
-  <div class="scanlines" aria-hidden="true"></div>
 
-  <!-- Boot / Splash Screen -->
+  <!-- BOOT SCREEN -->
   <div id="boot-screen">
     <div class="boot-content">
-      <div class="boot-logo">
-        <div class="boot-logo-symbol">☢</div>
-        <div class="boot-logo-text">NUCLEARSIM</div>
-        <div class="boot-logo-sub">STRATEGIC NUCLEAR EXCHANGE SIMULATOR</div>
-      </div>
+      <div class="boot-logo">&#9762; NUCLEARSIM</div>
       <div class="boot-quote">
-        <p class="quote-text">"This is not a game. It's a simulation."</p>
-        <p class="quote-author">— Principal Horizon</p>
+        "This is not a game. It's a simulation."
+        <div class="quote-author">— Principal Horizon</div>
       </div>
-      <div class="boot-terminal" id="boot-terminal">
-        <div class="terminal-line" id="t-line-1"></div>
-        <div class="terminal-line" id="t-line-2"></div>
-        <div class="terminal-line" id="t-line-3"></div>
-        <div class="terminal-line" id="t-line-4"></div>
-        <div class="terminal-line" id="t-line-5"></div>
-        <div class="terminal-line" id="t-line-6"></div>
-      </div>
-      <div class="boot-disclaimer">
-        <span class="classified-badge">&#9888; CLASSIFIED — EYES ONLY &#9888;</span>
-        <p>This simulator is provided for educational and policy research purposes only.<br>
-        Nuclear weapons cause catastrophic humanitarian and environmental harm.<br>
-        No operational targeting data is used or implied.</p>
-      </div>
-      <button class="boot-enter-btn" id="boot-enter-btn" style="display:none">
-        INITIALIZE SIMULATION <span class="blink-cursor">&#9646;</span>
-      </button>
+      <div class="boot-checks" id="boot-checks"></div>
+      <div class="boot-loading">INITIALIZING SYSTEMS<span class="blink">_</span></div>
+      <div class="boot-progress"><div id="boot-bar"></div></div>
     </div>
+    <div class="scanlines"></div>
   </div>
 
-  <!-- Main App -->
+  <!-- MAIN APP (hidden until boot complete) -->
   <div id="app" style="display:none">
+
     <!-- Three.js Canvas -->
     <canvas id="globe-canvas"></canvas>
 
-    <!-- Top Bar -->
-    <header class="top-bar">
-      <div class="top-bar-left">
-        <span class="logo-mark">&#9762;</span>
-        <span class="app-title">NUCLEARSIM</span>
-        <span class="app-version">v2.0 CLASSIFIED</span>
+    <!-- TOP NAV BAR -->
+    <nav id="top-nav" class="defcon-5">
+      <span class="nav-logo">&#9762; NUCLEARSIM</span>
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-panel="scenarios">SCENARIOS</button>
+        <button class="nav-tab" data-panel="weapons">WEAPONS</button>
+        <button class="nav-tab" data-panel="forces">FORCES</button>
+        <button class="nav-tab" data-panel="execute">EXECUTE</button>
+        <button class="nav-tab" data-panel="results">RESULTS</button>
       </div>
-      <div class="top-bar-center">
-        <div class="status-badge" id="status-badge">SIMULATION READY</div>
-      </div>
-      <div class="top-bar-right">
-        <button class="hdr-btn" id="btn-toggle-left">&#9776; CONTROLS</button>
-        <button class="hdr-btn" id="btn-toggle-right">&#9635; REPORT</button>
-        <button class="hdr-btn" id="btn-reset">&#8635; RESET</button>
-      </div>
-    </header>
+      <div class="nav-defcon">DEFCON <span id="defcon-level">5</span></div>
+    </nav>
 
-    <!-- Left Control Panel -->
-    <aside class="panel panel-left" id="panel-left">
-      <div class="panel-header">
-        <span>COMMAND CONSOLE</span>
-        <button class="panel-close" id="btn-close-left">&#10005;</button>
-      </div>
-
-      <!-- Mode Tabs -->
-      <div class="tab-bar">
-        <button class="tab-btn active" data-tab="weapons">WEAPONS</button>
-        <button class="tab-btn" data-tab="scenarios">SCENARIOS</button>
-        <button class="tab-btn" data-tab="settings">OPTIONS</button>
-      </div>
-
-      <!-- Weapons Tab -->
-      <div class="tab-content active" id="tab-weapons">
-        <div class="section-label">SELECT NATION</div>
-        <div class="country-grid" id="country-grid"></div>
-
-        <div class="section-label" style="margin-top:12px">SELECT WEAPON SYSTEM</div>
-        <div class="weapon-list" id="weapon-list"></div>
-
-        <div class="section-label" style="margin-top:12px">WEAPON PARAMETERS</div>
-        <div class="weapon-detail" id="weapon-detail">
-          <p class="dim-text">Select a weapon above</p>
-        </div>
-
-        <div class="section-label" style="margin-top:12px">BURST MODE</div>
-        <div class="toggle-row">
-          <label class="toggle-label">
-            <input type="checkbox" id="airburst-toggle" checked />
-            <span class="toggle-switch"></span>
-            Airburst (minimize fallout)
-          </label>
-        </div>
-
-        <div class="action-btn-group">
-          <button class="action-btn primary" id="btn-detonate-all">&#9889; DETONATE ALL</button>
-          <button class="action-btn danger" id="btn-auto-target">&#9993; AUTO-TARGET</button>
-          <button class="action-btn" id="btn-clear-targets">&#10005; CLEAR TARGETS</button>
-        </div>
-
-        <div class="hint-text">Click the globe to place a target</div>
-      </div>
-
-      <!-- Scenarios Tab -->
-      <div class="tab-content" id="tab-scenarios">
-        <div class="section-label">PREDEFINED SCENARIOS</div>
-        <div class="scenario-list" id="scenario-list"></div>
-        <div class="section-label" style="margin-top:12px">PLAYBACK SPEED</div>
-        <div class="slider-row">
-          <span class="dim-text">Slow</span>
-          <input type="range" id="playback-speed" min="0.5" max="4" step="0.5" value="1" />
-          <span class="dim-text">Fast</span>
-        </div>
-        <div class="action-btn-group">
-          <button class="action-btn primary" id="btn-play-scenario" disabled>&#9654; PLAY</button>
-          <button class="action-btn" id="btn-stop-scenario" disabled>&#9632; STOP</button>
-        </div>
-      </div>
-
-      <!-- Settings Tab -->
-      <div class="tab-content" id="tab-settings">
-        <div class="section-label">DISPLAY OPTIONS</div>
-        <div class="toggle-row"><label class="toggle-label"><input type="checkbox" id="opt-city-dots" checked /><span class="toggle-switch"></span>City Markers</label></div>
-        <div class="toggle-row"><label class="toggle-label"><input type="checkbox" id="opt-atmosphere" checked /><span class="toggle-switch"></span>Atmosphere Glow</label></div>
-        <div class="toggle-row"><label class="toggle-label"><input type="checkbox" id="opt-clouds" checked /><span class="toggle-switch"></span>Cloud Layer</label></div>
-        <div class="toggle-row"><label class="toggle-label"><input type="checkbox" id="opt-stars" checked /><span class="toggle-switch"></span>Starfield</label></div>
-        <div class="section-label" style="margin-top:12px">GLOBE OPTIONS</div>
-        <div class="toggle-row"><label class="toggle-label"><input type="checkbox" id="opt-autorotate" checked /><span class="toggle-switch"></span>Auto-Rotate</label></div>
-        <div class="section-label" style="margin-top:12px">EFFECTS QUALITY</div>
-        <div class="slider-row">
-          <span class="dim-text">Low</span>
-          <input type="range" id="quality-slider" min="1" max="3" step="1" value="2" />
-          <span class="dim-text">High</span>
-        </div>
-      </div>
+    <!-- LEFT SIDEBAR (panels swap here) -->
+    <aside id="left-panel">
+      <div id="scenarios-panel" class="panel active"></div>
+      <div id="weapon-designer-panel" class="panel"></div>
+      <div id="forces-panel" class="panel"></div>
+      <div id="execute-panel" class="panel"></div>
     </aside>
 
-    <!-- Right Report Panel -->
-    <aside class="panel panel-right" id="panel-right">
-      <div class="panel-header">
-        <span>DAMAGE ASSESSMENT</span>
-        <button class="panel-close" id="btn-close-right">&#10005;</button>
-      </div>
-
-      <!-- Global Stats -->
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-value" id="stat-detonations">0</div>
-          <div class="stat-label">DETONATIONS</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value red" id="stat-immediate-deaths">0</div>
-          <div class="stat-label">IMMEDIATE DEATHS</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value orange" id="stat-radiation-deaths">0</div>
-          <div class="stat-label">RADIATION DEATHS</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="stat-total-yield">0 MT</div>
-          <div class="stat-label">TOTAL YIELD</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value" id="stat-affected-area">0 km&#178;</div>
-          <div class="stat-label">AFFECTED AREA</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-value orange" id="stat-soot">0 Tg</div>
-          <div class="stat-label">NUCLEAR WINTER SOOT</div>
-        </div>
-      </div>
-
-      <div class="section-label" style="margin-top:12px">NUCLEAR WINTER INDEX</div>
-      <div class="winter-bar-wrap">
-        <div class="winter-bar-bg">
-          <div class="winter-bar-fill" id="winter-bar" style="width:0%"></div>
-        </div>
-        <span class="winter-label" id="winter-label">No impact detected</span>
-      </div>
-
-      <div class="section-label" style="margin-top:12px">DETONATION LOG</div>
-      <div class="detonation-log" id="detonation-log">
-        <p class="dim-text" style="padding:8px 0">No detonations recorded.</p>
-      </div>
+    <!-- RIGHT SIDEBAR — Stats -->
+    <aside id="right-panel">
+      <div id="stats-panel" class="panel active"></div>
     </aside>
 
-    <!-- Target Tooltip -->
-    <div class="target-tooltip" id="target-tooltip" style="display:none">
-      <div class="tooltip-city" id="tt-city">City Name</div>
-      <div class="tooltip-pop" id="tt-pop">Population: —</div>
-      <div class="tooltip-weapon" id="tt-weapon">No weapon assigned</div>
-      <div class="tooltip-actions">
-        <button class="tt-btn primary" id="tt-detonate">&#9889; Detonate</button>
-        <button class="tt-btn" id="tt-remove">&#10005; Remove</button>
+    <!-- BOTTOM TIMELINE -->
+    <div id="timeline-bar">
+      <div id="timeline-controls">
+        <button id="btn-rewind" title="Rewind">&#9194;</button>
+        <button id="btn-play" title="Play">&#9654;</button>
+        <button id="btn-pause" title="Pause">&#9646;&#9646;</button>
+        <button id="btn-step" title="Step">&#9197;</button>
       </div>
+      <input type="range" id="timeline-scrubber" min="0" max="100" value="0" />
+      <span id="timeline-time">T+00:00:00</span>
+      <select id="timeline-speed">
+        <option value="0.25">0.25x</option>
+        <option value="0.5">0.5x</option>
+        <option value="1" selected>1x</option>
+        <option value="2">2x</option>
+        <option value="5">5x</option>
+        <option value="10">10x</option>
+        <option value="30">30x</option>
+        <option value="60">60x</option>
+      </select>
+      <div id="strike-sequence-display"></div>
     </div>
 
-    <!-- Bottom Status Bar -->
-    <div class="bottom-bar">
-      <span id="bottom-coords">LAT: 0.000° LON: 0.000°</span>
-      <span id="bottom-targets">TARGETS: 0</span>
-      <span id="bottom-weapon">WEAPON: None selected</span>
-      <span class="bottom-right">NUCLEARSIM — CLASSIFIED — EYES ONLY</span>
-    </div>
+    <!-- THERMAL FLASH OVERLAY -->
+    <div id="thermal-flash"></div>
+
+    <!-- SCANLINE OVERLAY (always on top) -->
+    <div id="scanlines-overlay"></div>
+
   </div>
 
   <script type="module" src="/src/main.js"></script>

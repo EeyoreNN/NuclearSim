@@ -1,238 +1,146 @@
 /**
  * main.js — NuclearSim entry point
- * Orchestrates Three.js scene, globe, simulation, and UI.
+ *
+ * Bootstraps the Three.js engine (AGENT 1).
+ * Stubs for AGENT 2 (weapons), AGENT 3 (physics), AGENT 4 (effects),
+ * and AGENT 5 (UI) are imported but left empty until those agents deliver.
  */
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-import { Globe } from './globe/Globe.js';
-import { TargetManager } from './simulation/TargetManager.js';
-import { ScenarioPlayer } from './simulation/ScenarioPlayer.js';
-import { UIManager } from './ui/UIManager.js';
-import { initBootScreen } from './ui/BootScreen.js';
-import { CITIES } from './data/cities.js';
+// ── AGENT 1: Core Engine ─────────────────────────────────────────────────────
+import {
+  SceneManager,
+  buildGlobe,
+  updateGlobe,
+  buildStarfield,
+  CameraController,
+} from './engine/index.js';
 
-// ================================================================
-// NuclearSim — main application class
-// ================================================================
-class NuclearSim {
-  constructor() {
-    this._setupRenderer();
-    this._setupScene();
-    this._setupCamera();
-    this._setupLights();
-    this._setupGlobe();
-    this._setupControls();
-    this._setupUI();
-    this._setupSimulation();
-    this._setupEvents();
-    this._animate();
-  }
+// ── AGENT 2: Weapons & Data (stubs — Agent 2 will implement) ─────────────────
+// import { loadAllArsenals, ForceManager, TargetDatabase } from './weapons/index.js';
 
-  // ---- Renderer ----
-  _setupRenderer() {
-    const canvas = document.getElementById('globe-canvas');
-    this.renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    this.renderer.toneMappingExposure = 0.6;
-    this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-  }
+// ── AGENT 3: Physics (stubs — Agent 3 will implement) ────────────────────────
+// import { allBlastRings, CasualtyEstimator } from './physics/index.js';
 
-  // ---- Scene ----
-  _setupScene() {
-    this.scene   = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x020408);
-    this.clock   = new THREE.Clock();
-    this.raycaster = new THREE.Raycaster();
-    this.mouse   = new THREE.Vector2();
-    this._autoRotate = true;
-  }
+// ── AGENT 4: Visual Effects (stubs — Agent 4 will implement) ─────────────────
+// import { MissileTrajectory, DetonationSequence } from './effects/index.js';
 
-  // ---- Camera ----
-  _setupCamera() {
-    this.camera = new THREE.PerspectiveCamera(
-      45, window.innerWidth / window.innerHeight, 0.01, 1000
-    );
-    this.camera.position.set(0, 0, 2.8);
-  }
+// ── AGENT 5: UI Shell (stubs — Agent 5 will implement) ───────────────────────
+// import { runBootSequence, MainLayout, ScenarioPanel } from './ui/index.js';
 
-  // ---- Lights ----
-  _setupLights() {
-    const sun = new THREE.DirectionalLight(0xfff5e0, 2.5);
-    sun.position.set(5, 3, 5).normalize();
-    this.scene.add(sun);
+// ============================================================================
+// Boot sequence
+// ============================================================================
 
-    const ambient = new THREE.AmbientLight(0x112244, 0.6);
-    this.scene.add(ambient);
-  }
+/**
+ * Minimal boot sequence until Agent 5 delivers BootScreen.js.
+ * Fades out #boot-screen and shows #app.
+ */
+function runMinimalBoot(onComplete) {
+  const bootScreen  = document.getElementById('boot-screen');
+  const app         = document.getElementById('app');
+  const bootBar     = document.getElementById('boot-bar');
+  const enterBtn    = document.getElementById('boot-enter-btn');
 
-  // ---- Globe ----
-  _setupGlobe() {
-    this.globe = new Globe(this.scene);
-    this.globe.buildCityDots(CITIES);
-  }
+  const lines = [
+    'LOADING PHYSICS ENGINE............. OK',
+    'LOADING ARSENAL DATABASE........... OK',
+    'INITIALIZING GLOBE RENDERER........ OK',
+    'CALIBRATING BLAST PHYSICS.......... OK',
+    'VERIFYING TARGETING SYSTEMS........ OK',
+    'SYSTEM READY.',
+  ];
 
-  // ---- Orbit Controls ----
-  _setupControls() {
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableDamping    = true;
-    this.controls.dampingFactor    = 0.06;
-    this.controls.minDistance      = 1.15;
-    this.controls.maxDistance      = 9.0;
-    this.controls.rotateSpeed      = 0.4;
-    this.controls.zoomSpeed        = 0.7;
-    this.controls.enablePan        = false;
-    this.controls.autoRotate       = true;
-    this.controls.autoRotateSpeed  = 0.3;
-  }
+  let pct   = 0;
+  let lineI = 0;
 
-  // ---- UI ----
-  _setupUI() {
-    this.ui = new UIManager();
+  const tick = setInterval(() => {
+    pct = Math.min(pct + 2, 100);
+    if (bootBar) bootBar.style.width = pct + '%';
 
-    this.ui.onWeaponSelect(w => {
-      this.targetManager?.setWeapon(w);
-    });
-    this.ui.onAirburstChange(v => {
-      this.targetManager?.setAirburst(v);
-    });
-    this.ui.onDetonateAll(() => {
-      this.targetManager?.detonateAll();
-    });
-    this.ui.onAutoTarget(() => {
-      this.targetManager?.autoTarget();
-    });
-    this.ui.onClearTargets(() => {
-      this.targetManager?.clearAll();
-    });
-    this.ui.onReset(() => {
-      this.targetManager?.reset();
-      this.scenarioPlayer?.stop();
-    });
-    this.ui.onScenarioPlay(id => {
-      this.scenarioPlayer?.selectScenario(id);
-      this.scenarioPlayer?.play();
-    });
-    this.ui.onScenarioStop(() => {
-      this.scenarioPlayer?.stop();
-    });
-    this.ui.onSpeedChange(v => {
-      this.scenarioPlayer?.setSpeed(v);
-    });
-    this.ui.onOptionChange((key, val) => {
-      this._handleOption(key, val);
-    });
-  }
-
-  _handleOption(key, val) {
-    switch (key) {
-      case 'city-dots':   this.globe.setCityDotsVisible(val); break;
-      case 'atmosphere':  this.globe.setAtmosphereVisible(val); break;
-      case 'clouds':      this.globe.setCloudsVisible(val); break;
-      case 'stars':       this.globe.setStarsVisible(val); break;
-      case 'autorotate':
-        this._autoRotate = val;
-        this.controls.autoRotate = val;
-        break;
+    // Print terminal lines at intervals
+    const lineIdx = Math.floor((pct / 100) * lines.length);
+    while (lineI < lineIdx && lineI < lines.length) {
+      const el = document.getElementById(`t-line-${lineI + 1}`);
+      if (el) el.textContent = lines[lineI];
+      lineI++;
     }
-  }
 
-  // ---- Simulation ----
-  _setupSimulation() {
-    this.targetManager  = new TargetManager(this.scene, this.globe, this.ui);
-    this.scenarioPlayer = new ScenarioPlayer(this.targetManager, this.ui);
-  }
-
-  // ---- Events ----
-  _setupEvents() {
-    // Window resize
-    window.addEventListener('resize', () => {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
-      this.camera.updateProjectionMatrix();
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // Mouse move — update coords display
-    const canvas = this.renderer.domElement;
-    canvas.addEventListener('mousemove', (e) => {
-      this.mouse.set(
-        (e.clientX / window.innerWidth)  * 2 - 1,
-       -(e.clientY / window.innerHeight) * 2 + 1
-      );
-
-      this.raycaster.setFromCamera(this.mouse, this.camera);
-      const hits = this.raycaster.intersectObject(this.globe.earthMeshForRaycast, false);
-      if (hits.length > 0) {
-        const { lat, lng } = this.globe.worldToLatLng(hits[0].point);
-        this.ui.updateCoords(lat, lng);
+    if (pct >= 100) {
+      clearInterval(tick);
+      if (enterBtn) {
+        enterBtn.style.display = 'inline-block';
+        enterBtn.addEventListener('click', () => {
+          bootScreen.style.transition = 'opacity 0.8s';
+          bootScreen.style.opacity    = '0';
+          setTimeout(() => {
+            bootScreen.style.display = 'none';
+            app.style.display        = 'block';
+            onComplete();
+          }, 800);
+        });
+      } else {
+        // No button — auto-advance after 300ms
+        setTimeout(() => {
+          bootScreen.style.transition = 'opacity 0.8s';
+          bootScreen.style.opacity    = '0';
+          setTimeout(() => {
+            bootScreen.style.display = 'none';
+            app.style.display        = 'block';
+            onComplete();
+          }, 800);
+        }, 300);
       }
-    });
-
-    // Click — place target
-    let _mouseDown = null;
-    canvas.addEventListener('mousedown', (e) => {
-      _mouseDown = { x: e.clientX, y: e.clientY };
-    });
-    canvas.addEventListener('mouseup', (e) => {
-      if (!_mouseDown) return;
-      const dx = Math.abs(e.clientX - _mouseDown.x);
-      const dy = Math.abs(e.clientY - _mouseDown.y);
-      if (dx < 5 && dy < 5) this._handleClick(e);
-      _mouseDown = null;
-    });
-
-    // Hide tooltip on canvas click away
-    canvas.addEventListener('mousedown', () => {
-      document.getElementById('target-tooltip').style.display = 'none';
-    });
-
-    // Touch support
-    canvas.addEventListener('touchend', (e) => {
-      if (e.changedTouches.length === 1) {
-        const t = e.changedTouches[0];
-        this.mouse.set(
-          (t.clientX / window.innerWidth)  * 2 - 1,
-         -(t.clientY / window.innerHeight) * 2 + 1
-        );
-        // Brief delay to distinguish pan from tap
-        setTimeout(() => this._handleClick(e, t.clientX, t.clientY), 50);
-      }
-    });
-  }
-
-  _handleClick(e, cx, cy) {
-    const x = cx ?? e.clientX;
-    const y = cy ?? e.clientY;
-    this.mouse.set(
-      (x / window.innerWidth)  * 2 - 1,
-     -(y / window.innerHeight) * 2 + 1
-    );
-    this.raycaster.setFromCamera(this.mouse, this.camera);
-    const hits = this.raycaster.intersectObject(this.globe.earthMeshForRaycast, false);
-    if (hits.length > 0) {
-      const { lat, lng } = this.globe.worldToLatLng(hits[0].point);
-      this.targetManager.onGlobeClick(lat, lng);
     }
-  }
-
-  // ---- Animation Loop ----
-  _animate() {
-    requestAnimationFrame(() => this._animate());
-    const delta = Math.min(this.clock.getDelta(), 0.1);
-
-    this.controls.update();
-    this.globe.update(delta, this.camera);
-    this.targetManager?.update(delta);
-
-    this.renderer.render(this.scene, this.camera);
-  }
+  }, 25); // ~2.5 s total
 }
 
-// ================================================================
-// Boot sequence → launch app
-// ================================================================
-initBootScreen(() => {
-  new NuclearSim();
+// ============================================================================
+// Engine bootstrap
+// ============================================================================
+
+function initEngine() {
+  const canvas        = document.getElementById('globe-canvas');
+  const sceneManager  = new SceneManager(canvas);
+  const textureLoader = new THREE.TextureLoader();
+
+  // Build scene objects
+  const { earthMesh, cloudMesh } = buildGlobe(sceneManager.scene, textureLoader);
+  buildStarfield(sceneManager.scene);
+
+  // Camera controller
+  const camCtrl = new CameraController(sceneManager.camera, canvas);
+
+  // Sun direction uniform — update earth shader each frame
+  const sunDir = sceneManager.sunDir;
+
+  // Start render loop
+  sceneManager.startRenderLoop((delta) => {
+    camCtrl.update(delta);
+    updateGlobe(cloudMesh);
+
+    // Keep earth shader's sunDir in sync
+    if (earthMesh.material.uniforms && earthMesh.material.uniforms.sunDir) {
+      earthMesh.material.uniforms.sunDir.value.copy(sunDir);
+    }
+  });
+
+  // Expose globally for other agents to access (inter-module comms via window)
+  window.__NuclearSim = {
+    sceneManager,
+    camCtrl,
+    earthMesh,
+    cloudMesh,
+    sunDir,
+  };
+
+  console.log('[NuclearSim] Engine initialized. Globe radius = 1.0 unit = 6371 km.');
+}
+
+// ============================================================================
+// Entry point
+// ============================================================================
+
+runMinimalBoot(() => {
+  initEngine();
 });
