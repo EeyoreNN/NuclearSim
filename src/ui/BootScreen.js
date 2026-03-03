@@ -1,58 +1,86 @@
 /**
- * BootScreen.js — Animated boot sequence with terminal typing effect
+ * BootScreen.js — Animated boot sequence
+ * Exports: runBootSequence() → Promise<void>
+ *
+ * Shows: logo, THE QUOTE, system-check lines, progress bar.
+ * Resolves when boot animation completes and #app is revealed.
  */
 
-const BOOT_LINES = [
-  'NUCLEARSIM v2.0 — STRATEGIC SIMULATION SYSTEM',
-  'Loading Earth geodata... OK',
-  'Initializing nuclear arsenal database... OK (9 nations, 42 weapon systems)',
-  'Loading city population data... OK (500+ targets indexed)',
-  'Calibrating blast physics engine... OK',
-  'Rendering subsystem: THREE.js WebGL... OK',
-  '>>> SYSTEM READY. AWAITING AUTHORIZATION. <<<',
+const SYSTEM_CHECKS = [
+  'VERIFYING LAUNCH AUTHORIZATION CODES',
+  'LOADING ARSENAL DATABASE (9 NATIONS / 42 SYSTEMS)',
+  'INITIALIZING PHYSICS ENGINE (GLASSTONE-DOLAN)',
+  'INDEXING TARGET CITIES (500+ LOCATIONS)',
+  'CALIBRATING BLAST RADIUS CALCULATOR',
+  'LOADING POPULATION GRID (GPWV4)',
+  'INITIALIZING THREE.JS WEBGL RENDERER',
+  'ESTABLISHING NORAD LINK',
+  'ALL SYSTEMS NOMINAL — CLEARED FOR OPERATION',
 ];
 
-function typeText(el, text, speed = 28) {
+/**
+ * Animate the progress bar and system check lines, then reveal #app.
+ * @returns {Promise<void>} Resolves when transition to #app is complete.
+ */
+export function runBootSequence() {
   return new Promise(resolve => {
-    let i = 0;
-    const interval = setInterval(() => {
-      el.textContent += text[i++];
-      if (i >= text.length) { clearInterval(interval); resolve(); }
-    }, speed);
-  });
-}
+    const bootScreen = document.getElementById('boot-screen');
+    const bootBar    = document.getElementById('boot-bar');
+    const checksEl   = document.getElementById('boot-checks');
 
-async function runBootSequence() {
-  const lines = document.querySelectorAll('.terminal-line');
-  for (let i = 0; i < Math.min(lines.length, BOOT_LINES.length); i++) {
-    await typeText(lines[i], BOOT_LINES[i], i === 0 ? 20 : 18);
-    await new Promise(r => setTimeout(r, 80));
-  }
+    if (!bootScreen) { resolve(); return; }
 
-  // Show the enter button
-  const btn = document.getElementById('boot-enter-btn');
-  if (btn) {
-    btn.style.display = 'block';
-    btn.style.opacity = '0';
-    btn.style.transition = 'opacity 0.5s ease';
-    setTimeout(() => { btn.style.opacity = '1'; }, 100);
-  }
-}
-
-export function initBootScreen(onEnter) {
-  // Start boot sequence after a brief pause
-  setTimeout(runBootSequence, 500);
-
-  const btn = document.getElementById('boot-enter-btn');
-  if (btn) {
-    btn.addEventListener('click', () => {
-      const screen = document.getElementById('boot-screen');
-      screen.classList.add('fade-out');
-      setTimeout(() => {
-        screen.style.display = 'none';
-        document.getElementById('app').style.display = 'block';
-        onEnter();
-      }, 800);
+    // Build check line elements
+    const lineEls = SYSTEM_CHECKS.map(text => {
+      const div = document.createElement('div');
+      div.className = 'boot-check-line';
+      checksEl?.appendChild(div);
+      return { el: div, text };
     });
-  }
+
+    const TOTAL_DURATION = 2800; // ms for full bar animation
+    const startTime = performance.now();
+    let checkIdx = 0;
+    let done = false;
+
+    function update(now) {
+      if (done) return;
+
+      const elapsed  = now - startTime;
+      const progress = Math.min(elapsed / TOTAL_DURATION, 1.0);
+
+      // Update progress bar
+      if (bootBar) bootBar.style.width = (progress * 100) + '%';
+
+      // Reveal check lines at evenly-spaced intervals
+      const lineProgress = progress * (SYSTEM_CHECKS.length - 1);
+      while (checkIdx <= Math.floor(lineProgress) && checkIdx < lineEls.length) {
+        const { el, text } = lineEls[checkIdx];
+        const isLast = checkIdx === lineEls.length - 1;
+        el.classList.add('visible');
+        el.innerHTML = isLast
+          ? `<span class="ok">&#10003; ${text}</span>`
+          : `<span class="ok">&#10003; ${text}... OK</span>`;
+        checkIdx++;
+      }
+
+      if (progress < 1.0) {
+        requestAnimationFrame(update);
+      } else {
+        done = true;
+        // Short pause, then fade out boot screen and reveal app
+        setTimeout(() => {
+          bootScreen.classList.add('fade-out');
+          setTimeout(() => {
+            bootScreen.style.display = 'none';
+            const app = document.getElementById('app');
+            if (app) app.style.display = 'block';
+            resolve();
+          }, 800);
+        }, 400);
+      }
+    }
+
+    requestAnimationFrame(update);
+  });
 }
