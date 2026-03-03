@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NuclearSim — Strategic Nuclear Exchange Simulator</title>
+  <!-- style.css loaded by Vite via main.js import -->
+  <script type="module" crossorigin src="/NuclearSim/assets/index-Bl_G6IY_.js"></script>
+  <link rel="stylesheet" crossorigin href="/NuclearSim/assets/index-B2ZXaTOC.css">
+</head>
+<body>
+
+  <!-- BOOT SCREEN -->
+  <div id="boot-screen">
+    <div class="boot-content">
+      <div class="boot-logo">&#9762; NUCLEARSIM</div>
+      <div class="boot-quote">
+        "This is not a game. It's a simulation."
+        <div class="quote-author">— Principal Horizon</div>
+      </div>
+      <div class="boot-checks" id="boot-checks"></div>
+      <div class="boot-loading">INITIALIZING SYSTEMS<span class="blink">_</span></div>
+      <div class="boot-progress"><div id="boot-bar"></div></div>
+    </div>
+    <div class="scanlines"></div>
+  </div>
+
+  <!-- MAIN APP (hidden until boot complete) -->
+  <div id="app" style="display:none">
+
+    <!-- Three.js Canvas -->
+    <canvas id="globe-canvas"></canvas>
+
+    <!-- TOP NAV BAR -->
+    <nav id="top-nav" class="defcon-5">
+      <span class="nav-logo">&#9762; NUCLEARSIM</span>
+      <div class="nav-tabs">
+        <button class="nav-tab active" data-panel="scenarios">SCENARIOS</button>
+        <button class="nav-tab" data-panel="weapons">WEAPONS</button>
+        <button class="nav-tab" data-panel="forces">FORCES</button>
+        <button class="nav-tab" data-panel="execute">EXECUTE</button>
+        <button class="nav-tab" data-panel="results">RESULTS</button>
+      </div>
+      <div class="nav-defcon">DEFCON <span id="defcon-level">5</span></div>
+    </nav>
+
+    <!-- LEFT SIDEBAR (panels swap here) -->
+    <aside id="left-panel">
+      <div id="scenarios-panel" class="panel active"></div>
+      <div id="weapon-designer-panel" class="panel"></div>
+      <div id="forces-panel" class="panel"></div>
+      <div id="execute-panel" class="panel"></div>
+    </aside>
+
+    <!-- RIGHT SIDEBAR — Stats -->
+    <aside id="right-panel">
+      <div id="stats-panel" class="panel active"></div>
+    </aside>
+
+    <!-- BOTTOM TIMELINE -->
+    <div id="timeline-bar">
+      <div id="timeline-controls">
+        <button id="btn-rewind" title="Rewind">&#9194;</button>
+        <button id="btn-play" title="Play">&#9654;</button>
+        <button id="btn-pause" title="Pause">&#9646;&#9646;</button>
+        <button id="btn-step" title="Step">&#9197;</button>
+      </div>
+      <input type="range" id="timeline-scrubber" min="0" max="100" value="0" />
+      <span id="timeline-time">T+00:00:00</span>
+      <select id="timeline-speed">
+        <option value="0.25">0.25x</option>
+        <option value="0.5">0.5x</option>
+        <option value="1" selected>1x</option>
+        <option value="2">2x</option>
+        <option value="5">5x</option>
+        <option value="10">10x</option>
+        <option value="30">30x</option>
+        <option value="60">60x</option>
+      </select>
+      <div id="strike-sequence-display"></div>
+    </div>
+
+    <!-- THERMAL FLASH OVERLAY -->
+    <div id="thermal-flash"></div>
+
+    <!-- SCANLINE OVERLAY (always on top) -->
+    <div id="scanlines-overlay"></div>
+
+  </div>
+
+</body>
+</html>
