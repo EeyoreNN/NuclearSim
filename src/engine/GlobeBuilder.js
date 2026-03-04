@@ -16,9 +16,10 @@ export function buildGlobe(scene, textureLoader) {
   // ── Earth mesh ──────────────────────────────────────────────────
   const earthGeo = new THREE.SphereGeometry(1.0, 64, 64);
 
-  const dayMap   = textureLoader.load('textures/earth_daymap.jpg');
-  const nightMap = textureLoader.load('textures/earth_nightmap.jpg');
-  const specMap  = textureLoader.load('textures/earth_specular.jpg');
+  const base     = import.meta.env.BASE_URL;
+  const dayMap   = textureLoader.load(`${base}textures/earth_daymap.jpg`);
+  const nightMap = textureLoader.load(`${base}textures/earth_nightmap.jpg`);
+  const specMap  = textureLoader.load(`${base}textures/earth_specular.jpg`);
 
   const earthMat  = createDayNightMaterial({ dayMap, nightMap, specMap });
   const earthMesh = new THREE.Mesh(earthGeo, earthMat);
@@ -26,7 +27,7 @@ export function buildGlobe(scene, textureLoader) {
 
   // ── Cloud layer ─────────────────────────────────────────────────
   const cloudGeo = new THREE.SphereGeometry(1.01, 32, 32);
-  const cloudTex = textureLoader.load('textures/earth_clouds.png');
+  const cloudTex = textureLoader.load(`${base}textures/earth_clouds.png`);
   const cloudMat = new THREE.MeshBasicMaterial({
     map: cloudTex,
     transparent: true,
