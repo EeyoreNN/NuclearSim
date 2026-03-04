@@ -302,12 +302,58 @@ window.addEventListener('sim:detonate', async e => {
 });
 window.addEventListener('ui:export_report', () => exporter.exportTextReport());
 
+// === Weapon placement mode (weapon designer → globe click) ===
+let _pendingWeaponConfig = null;
+
+function _enterPlacementMode(config) {
+  _pendingWeaponConfig = config;
+  const canvas = document.getElementById('globe-canvas');
+  if (canvas) canvas.style.cursor = 'crosshair';
+  // Show placement hint in HUD
+  const hint = document.getElementById('placement-hint');
+  if (hint) {
+    hint.style.display = 'block';
+    hint.textContent = `📍 Click globe to place: ${config.system?.name || 'weapon'} (${config.yield_kt ?? '?'}kt) — ESC to cancel`;
+  }
+}
+
+function _exitPlacementMode() {
+  _pendingWeaponConfig = null;
+  const canvas = document.getElementById('globe-canvas');
+  if (canvas) canvas.style.cursor = '';
+  const hint = document.getElementById('placement-hint');
+  if (hint) hint.style.display = 'none';
+}
+
+// Listen for weapon designer "Add to Force" → enter placement mode
+window.addEventListener('weapondesigner:add_to_force', e => {
+  if (e.detail?.config) _enterPlacementMode(e.detail.config);
+});
+
+// ESC cancels placement
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && _pendingWeaponConfig) _exitPlacementMode();
+});
+
 const globeCanvas = document.getElementById('globe-canvas');
 if (globeCanvas && cameraCtrl && cameraCtrl.getPickedLatLon) {
   globeCanvas.addEventListener('click', e => {
     try {
       const picked = cameraCtrl.getPickedLatLon(e);
-      if (picked) window.dispatchEvent(new CustomEvent('globe:click', { detail: picked }));
+      if (!picked) return;
+
+      // If in placement mode → place weapon unit at clicked location
+      if (_pendingWeaponConfig && forceManager) {
+        const config = _pendingWeaponConfig;
+        _exitPlacementMode();
+        const unitId = forceManager.addUnit(config, picked.lat, picked.lon);
+        console.info(`[NuclearSim] Unit placed: ${unitId} @ (${picked.lat.toFixed(2)}, ${picked.lon.toFixed(2)})`);
+        // Auto-switch to force order panel so user sees the placed unit
+        layout.switchPanel?.('force');
+        return;
+      }
+
+      window.dispatchEvent(new CustomEvent('globe:click', { detail: picked }));
     } catch (_) {}
   });
 }
