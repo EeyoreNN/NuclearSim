@@ -1,19 +1,15 @@
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   base: '/NuclearSim/',
+  plugins: [react()],
   build: {
     outDir: 'dist',
     sourcemap: false,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          three: ['three'],
-        },
-      },
-    },
   },
   server: {
     port: 3000,
+    host: true,
   },
 });
