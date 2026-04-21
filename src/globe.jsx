@@ -83,15 +83,11 @@ function Globe({
   const [drag, setDrag] = useState(null);
   const svgRef = useRef(null);
   const [hover, setHover] = useState(null);
-  const [tick, setTick] = useState(0);
 
-  // Animate (very slight — missiles move along arcs)
-  useEffect(() => {
-    let raf;
-    const loop = () => { setTick(t => t + 1); raf = requestAnimationFrame(loop); };
-    raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
-  }, []);
+  // Great-circle arcs are a property of (origin, destination) and don't change
+  // once a missile has launched. Cache one resolved path per missile id so we
+  // don't recompute or flicker-redraw on every frame.
+  const arcCache = useRef(new Map());
 
   const cx = width/2, cy = height/2;
   const baseR = Math.min(width, height) * 0.42;
@@ -187,6 +183,13 @@ function Globe({
     ['icbm','slbm','mrbm','srbm','cruise_alcm','cruise_slcm','cruise_glcm','abm_interceptor','sam_interceptor'].includes(e.cls)
     && e.origin && e.destination
   );
+  // Drop cached arcs for missiles that no longer exist (detonated, intercepted)
+  useEffect(() => {
+    const live = new Set(missiles.map(m => m.id));
+    for (const id of arcCache.current.keys()) {
+      if (!live.has(id)) arcCache.current.delete(id);
+    }
+  }, [missiles]);
 
   // --- Render ---
   // Listen for external zoom commands
@@ -291,26 +294,29 @@ function Globe({
           );
         })}
 
-        {/* Trajectories — great-circle arcs */}
+        {/* Trajectories — one static great-circle arc per missile.
+            The path is resolved once (origin → destination is fixed) and
+            cached by missile id, so it does not flicker or redraw as the
+            missile advances; only the marker moves along it. */}
         {overlays.arcs && missiles.map(m => {
-          const pts = gcPath(m.origin, m.destination, 60);
-          // split at progress index
-          const cutIdx = Math.floor(m.progress * pts.length);
-          const pastPts = pts.slice(0, cutIdx+1);
-          const futurePts = pts.slice(cutIdx);
-          const segPast = projectPolyline(pastPts, rot.lon, rot.lat, R, cx, cy);
-          const segFuture = projectPolyline(futurePts, rot.lon, rot.lat, R, cx, cy);
+          let pts = arcCache.current.get(m.id);
+          if (!pts) {
+            pts = gcPath(m.origin, m.destination, 60);
+            arcCache.current.set(m.id, pts);
+          }
+          const segs = projectPolyline(pts, rot.lon, rot.lat, R, cx, cy);
           const c = window.NATO.colorFor(m.side);
           const isInterceptor = m.cls === 'abm_interceptor' || m.cls === 'sam_interceptor';
           return (
-            <g key={'arc-'+m.id}>
-              <path d={pathFromSegs(segPast)} fill="none"
-                stroke={isInterceptor ? '#5a9a6a' : c.stroke}
-                strokeWidth="1.2" opacity="0.85"/>
-              <path d={pathFromSegs(segFuture)} fill="none"
-                stroke={isInterceptor ? '#5a9a6a' : c.stroke}
-                strokeWidth="0.8" strokeDasharray="3 3" opacity="0.45"/>
-            </g>
+            <path
+              key={'arc-'+m.id}
+              d={pathFromSegs(segs)}
+              fill="none"
+              stroke={isInterceptor ? '#5a9a6a' : c.stroke}
+              strokeWidth="1.0"
+              strokeDasharray="4 3"
+              opacity="0.55"
+            />
           );
         })}
 
