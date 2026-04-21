@@ -56,17 +56,21 @@ function App() {
   const [filterSides, setFilterSides] = uS({ usa: true, rus: true, chn: true, gbr: true, fra: true, prk: true, ind: true, pak: true, isr: true, irn: true });
   const [overlays, setOverlays] = uS({ arcs: true, domes: true, radar: true });
 
-  // Resize stage to fit
+  // Resize stage to fit — ResizeObserver so the globe re-centers when
+  // the stage column changes width (nav toggles, window resize, etc.)
   const stageRef = uR(null);
   uE(() => {
-    function update() {
-      if (!stageRef.current) return;
-      const r = stageRef.current.getBoundingClientRect();
-      setStageSize({ w: Math.max(400, r.width), h: Math.max(300, r.height) });
-    }
+    const el = stageRef.current;
+    if (!el) return;
+    const update = () => {
+      const r = el.getBoundingClientRect();
+      setStageSize({ w: Math.max(400, Math.floor(r.width)), h: Math.max(300, Math.floor(r.height)) });
+    };
     update();
+    const ro = new ResizeObserver(update);
+    ro.observe(el);
     window.addEventListener('resize', update);
-    return () => window.removeEventListener('resize', update);
+    return () => { ro.disconnect(); window.removeEventListener('resize', update); };
   }, []);
 
   // Persist playhead

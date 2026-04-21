@@ -876,3 +876,10 @@ Object.assign(window, {
   ShipOrderModal, AircraftOrderModal,
   formatNum, formatAlt, fmtLat, fmtLon, fmtDur,
 });
+
+// Named exports for testing
+export {
+  NationsRail, RightRail, EventLog, Controls,
+  LaunchOrderModal, FullInspectorModal, ShipOrderModal, AircraftOrderModal,
+  formatNum, formatAlt, fmtLat, fmtLon, fmtDur,
+};

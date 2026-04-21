@@ -408,3 +408,6 @@ function classSize(cls) {
 window.Globe = Globe;
 window.project = project;
 window.gcPath = gcPath;
+
+// Named exports for testing
+export { Globe, project, gcPath, projectPolyline, pathFromSegs, kmToPx };

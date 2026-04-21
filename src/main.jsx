@@ -13,8 +13,7 @@ import './panels.jsx';
 import App from './app.jsx';
 import './styles.css';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+// StrictMode intentionally omitted: the design's effects predate the
+// double-invocation contract and the stage-resize useEffect misfires on
+// the second mount, leaving the globe sized from the initial state.
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);

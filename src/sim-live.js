@@ -128,6 +128,8 @@
   function disconnect() {
     if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
     if (ws) { try { ws.close(); } catch(e){} ws = null; }
+    // Deliberate disconnect → drop any queued commands; reconnect starts fresh.
+    queue.length = 0;
     setStatus('idle');
   }
 
