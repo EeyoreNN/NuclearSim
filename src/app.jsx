@@ -20,30 +20,8 @@ function App() {
   const useLive = liveEnabled && liveData && liveStatus === 'live';
   const nations = useLive ? liveData.nations : window.SimData.NATIONS;
   const cities = useLive ? liveData.cities : window.SimData.CITIES;
-  // Entities: in mock mode we animate missile positions along their great-circle
-  // arcs using the playhead so the scene doesn't look frozen. Live entities come
-  // already-positioned from the backend.
-  const entities = uM(() => {
-    if (useLive) return liveData.entities;
-    const src = window.SimData.ENT;
-    const t0ref = window.SimData.NOW_T;
-    // seconds since snapshot
-    const dt = Math.max(0, playheadT - t0ref);
-    return src.map(e => {
-      if (!e.origin || !e.destination) return e;
-      // At snapshot: each missile was at `progress` with `impact_eta_s` left.
-      // Total flight = eta_remaining / (1 - progress). Advance progress by dt/total.
-      const p0 = e.progress ?? 0;
-      const etaRem = e.impact_eta_s ?? 600;
-      const total = etaRem / Math.max(0.001, 1 - p0);
-      const p = Math.min(1, p0 + dt / total);
-      const [lat1, lon1] = e.origin, [lat2, lon2] = e.destination;
-      const lat = lat1 + (lat2 - lat1) * p;
-      const lon = lon1 + (lon2 - lon1) * p;
-      const alt = Math.sin(p * Math.PI) * 800_000; // rough bow
-      return { ...e, progress: p, pos: [lat, lon, alt], state: p >= 1 ? 'impact' : e.state };
-    });
-  }, [useLive, liveData, playheadT]);
+  // `entities` is declared below, after playheadT — see the useMemo tagged
+  // "entities source" near the lookups block.
   const detonations = useLive
     ? (liveData.events.filter(e => e.kind === 'detonation').map(e => ({ ...(e.data||{}), t: e.t })))
     : window.SimData.DETONATIONS;
@@ -163,6 +141,27 @@ function App() {
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
   }, [playing, timeScale]);
+
+  // Entities source — in live mode pass through the server snapshot;
+  // in mock mode advance each in-flight missile along its arc using the playhead.
+  const entities = uM(() => {
+    if (useLive) return liveData.entities;
+    const src = window.SimData.ENT;
+    const t0ref = window.SimData.NOW_T;
+    const dt = Math.max(0, playheadT - t0ref);
+    return src.map(e => {
+      if (!e.origin || !e.destination) return e;
+      const p0 = e.progress ?? 0;
+      const etaRem = e.impact_eta_s ?? 600;
+      const total = etaRem / Math.max(0.001, 1 - p0);
+      const p = Math.min(1, p0 + dt / total);
+      const [lat1, lon1] = e.origin, [lat2, lon2] = e.destination;
+      const lat = lat1 + (lat2 - lat1) * p;
+      const lon = lon1 + (lon2 - lon1) * p;
+      const alt = Math.sin(p * Math.PI) * 800_000;
+      return { ...e, progress: p, pos: [lat, lon, alt], state: p >= 1 ? 'impact' : e.state };
+    });
+  }, [useLive, liveData, playheadT]);
 
   // Lookups
   const entitiesById = uM(() => Object.fromEntries(entities.map(e => [e.id, e])), [entities]);
