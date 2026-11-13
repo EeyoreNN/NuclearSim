@@ -251,6 +251,30 @@
   @media (prefers-reduced-motion: reduce) {
     button:active { transform: none; }
   }
+  #enter-immersive {
+    text-align: center;
+    background: rgba(150, 190, 255, 0.22);
+    border-color: rgba(198, 224, 255, 0.62);
+  }
+  #enter-immersive span { color: var(--muted); }
+  .focus-root {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: max(18px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+    overflow: auto;
+    background:
+      radial-gradient(900px 520px at 12% -10%, rgba(72, 126, 255, 0.38), transparent 55%),
+      radial-gradient(720px 480px at 110% 0%, rgba(168, 96, 255, 0.28), transparent 50%),
+      #070b14;
+  }
+  .focus-root .card { width: min(880px, 100%); margin: auto; }
+  .focus-root .formula, .focus-root .headline { font-size: clamp(2.6rem, 8vw, 4.2rem); }
+  .focus-root button { min-height: 72px; font-size: 1.28rem; }
+  .focus-root .choice { min-height: 72px; }
 </style>
 </head>
 <body>
@@ -787,7 +811,46 @@
     ["ionic", "roman", "covalent", "classify", "reverse", "poly", "lmp"].forEach((section) => {
       check(QUESTIONS.some((q) => q.section === section), "missing section " + section);
     });
+    ["ionic", "roman", "covalent", "poly"].forEach((section) => {
+      const sample = QUESTIONS.find((item) => item.kind === "type" && item.section === section);
+      if (!sample) return;
+      const built = buildImmersiveChoices(sample);
+      const correct = built.filter((choice) => choice.correct);
+      check(correct.length === 1, "immersive one correct " + sample.id);
+      check(correct[0] && matches(correct[0].text, sample.answer), "immersive answer " + sample.id);
+      built.forEach((choice) => {
+        if (!choice.correct) check(!matches(choice.text, sample.answer), "immersive distractor " + sample.id);
+      });
+    });
+    const mcSample = QUESTIONS.find((item) => item.kind === "mc");
+    if (mcSample) {
+      const built = buildImmersiveChoices(mcSample);
+      check(built.length === mcSample.choices.length, "immersive keeps mc choices");
+      check(built.filter((choice) => choice.correct).length === 1, "immersive mc correct");
+    }
     return { ok: fails.length === 0, fails: fails, count: QUESTIONS.length };
+  }
+
+  function buildImmersiveChoices(q) {
+    if (q.kind === "mc" && q.choices && q.choices.length) {
+      return shuffle(q.choices.map((choice) => ({ text: choice.text, html: choice.html, correct: !!choice.correct })));
+    }
+    const seen = {};
+    const answerKey = normalizeAnswer(q.answer || "");
+    seen[answerKey] = true;
+    const sameSection = [];
+    const otherSections = [];
+    QUESTIONS.forEach((item) => {
+      if (item.kind !== "type" || !item.answer) return;
+      const key = normalizeAnswer(item.answer);
+      if (!key || seen[key]) return;
+      seen[key] = true;
+      const choice = { text: item.answer, html: item.answer, correct: false };
+      if (item.section === q.section) sameSection.push(choice);
+      else otherSections.push(choice);
+    });
+    const distractors = shuffle(sameSection).concat(shuffle(otherSections)).slice(0, 3);
+    return shuffle([{ text: q.answer, html: q.answer, correct: true }].concat(distractors));
   }
 
   const STORE_KEY = "chemQuiz.v1";
@@ -1035,6 +1098,20 @@
     }
     card.appendChild(stats);
     const stack = el("div", { class: "stack" });
+    if (immersiveKind === "xr" || immersiveKind === "focus") {
+      const blurb = immersiveKind === "xr"
+        ? "Opens a floating quiz panel in visionOS. Gaze and pinch to answer."
+        : "Fullscreen focus mode with large cards on this device.";
+      stack.appendChild(el("button", {
+        type: "button",
+        class: "primary",
+        id: "enter-immersive",
+        onclick: function () { enterImmersive(); }
+      }, [
+        el("strong", null, "Enter Immersive Experience"),
+        el("span", null, blurb)
+      ]));
+    }
     SECTIONS.forEach((section) => {
       const count = sectionCount(section.id);
       stack.appendChild(el("button", { type: "button", onclick: function () { startSection(section.id); } }, [
@@ -1203,6 +1280,677 @@
     app.appendChild(card);
   }
 
+  let immersiveKind = "pending";
+  let focusHadFullscreen = false;
+  let closingImmersive = false;
+  let xrSession = null;
+  let xrRenderer = null;
+  let xrExtras = [];
+
+  const immer = {
+    active: false,
+    mode: null,
+    queue: [],
+    index: 0,
+    phase: "ask",
+    choices: [],
+    picked: -1,
+    wasCorrect: false,
+    roundCorrect: 0,
+    roundTotal: 0
+  };
+
+  function canUseFocus() {
+    return !!(document.body && document.body.appendChild);
+  }
+
+  function detectImmersive() {
+    let pending = Promise.resolve(false);
+    try {
+      if (navigator.xr && typeof navigator.xr.isSessionSupported === "function") {
+        pending = navigator.xr.isSessionSupported("immersive-vr");
+      }
+    } catch (err) {
+      pending = Promise.resolve(false);
+    }
+    Promise.resolve(pending).then(function (supported) {
+      return !!supported;
+    }).catch(function () {
+      return false;
+    }).then(function (xrOk) {
+      if (xrOk) {
+        immersiveKind = "xr";
+        loadThree().catch(function () {});
+      } else if (canUseFocus()) {
+        immersiveKind = "focus";
+      } else {
+        immersiveKind = "none";
+      }
+      if (state.view === "home" && location.hash !== "#selftest") render();
+    });
+  }
+
+  function loadThree() {
+    return import("https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js");
+  }
+
+  function choiceLabel(choice) {
+    return choice.text || "";
+  }
+
+  function beginImmersiveRound() {
+    immer.queue = shuffle(QUESTIONS.slice());
+    immer.index = 0;
+    immer.roundCorrect = 0;
+    immer.roundTotal = 0;
+    immer.phase = "ask";
+    immer.picked = -1;
+    immer.wasCorrect = false;
+    immer.choices = [];
+    if (immer.queue.length) beginImmersiveQuestion();
+    else immer.phase = "done";
+  }
+
+  function beginImmersiveQuestion() {
+    const q = immer.queue[immer.index];
+    immer.phase = "ask";
+    immer.picked = -1;
+    immer.wasCorrect = false;
+    immer.choices = buildImmersiveChoices(q);
+  }
+
+  function refreshImmersive() {
+    if (immer.mode === "focus") renderFocus();
+    else if (immer.mode === "xr" && xrExtras.renderPanel) xrExtras.renderPanel();
+  }
+
+  function immerAnswer(index) {
+    if (!immer.active || immer.phase !== "ask") return;
+    const q = immer.queue[immer.index];
+    const choice = immer.choices[index];
+    if (!q || !choice) return;
+    immer.picked = index;
+    immer.wasCorrect = !!choice.correct;
+    immer.phase = "feedback";
+    state.wasCorrect = immer.wasCorrect;
+    state.wasClose = false;
+    record(q, immer.wasCorrect, q.formula ? formulaHTML(q.formula) : "", q.headline || q.prompt);
+    immer.roundTotal += 1;
+    if (immer.wasCorrect) immer.roundCorrect += 1;
+    refreshImmersive();
+  }
+
+  function immerNext() {
+    if (!immer.active || immer.phase !== "feedback") return;
+    if (immer.index + 1 >= immer.queue.length) {
+      immer.phase = "done";
+      refreshImmersive();
+      return;
+    }
+    immer.index += 1;
+    beginImmersiveQuestion();
+    refreshImmersive();
+  }
+
+  function finishImmersive() {
+    if (closingImmersive) return;
+    closingImmersive = true;
+    immer.active = false;
+    immer.mode = null;
+    const root = document.getElementById("focus-root");
+    if (root && root.parentNode) root.parentNode.removeChild(root);
+    document.body.style.overflow = "";
+    const fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fsEl) {
+      const exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) {
+        try {
+          const result = exit.call(document);
+          if (result && result.catch) result.catch(function () {});
+        } catch (err) { /* already closed */ }
+      }
+    }
+    teardownXR();
+    closingImmersive = false;
+    focusHadFullscreen = false;
+    render();
+  }
+
+  function immerExit() {
+    if (immer.mode === "xr" && xrSession) {
+      const session = xrSession;
+      immer.active = false;
+      try {
+        const result = session.end();
+        if (result && result.catch) result.catch(function () { finishImmersive(); });
+      } catch (err) {
+        finishImmersive();
+      }
+      return;
+    }
+    finishImmersive();
+  }
+
+  function onFullscreenChange() {
+    const active = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!active && focusHadFullscreen && immer.mode === "focus") finishImmersive();
+  }
+
+  document.addEventListener("fullscreenchange", onFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+
+  function renderFocus() {
+    let root = document.getElementById("focus-root");
+    if (!root) {
+      root = document.createElement("div");
+      root.id = "focus-root";
+      root.className = "focus-root";
+      document.body.appendChild(root);
+    }
+    root.textContent = "";
+    const q = immer.phase === "done" ? null : immer.queue[immer.index];
+    const card = el("div", { class: "card" });
+    card.appendChild(el("div", { class: "kicker" }, immer.phase === "done" ? "Immersive session" : (q.topic || "Quiz")));
+    card.appendChild(el("div", { class: "stats" }, [
+      el("div", { class: "chip" }, progress.correct + " correct"),
+      el("div", { class: "chip" }, "Streak " + progress.streak),
+      el("div", { class: "chip" }, immer.phase === "done" ? (immer.roundCorrect + "/" + immer.roundTotal + " this session") : ((immer.index + 1) + " / " + immer.queue.length))
+    ]));
+    if (!q) {
+      card.appendChild(el("h1", null, immer.roundTotal && immer.roundCorrect === immer.roundTotal ? "Clean round" : "Round done"));
+      card.appendChild(el("p", { class: "lede" }, immer.roundCorrect + " correct out of " + immer.roundTotal + " this session. Streak " + progress.streak + "."));
+    } else {
+      card.appendChild(el("p", { class: "prompt" }, q.prompt));
+      if (q.formula) card.appendChild(el("div", { class: "formula", html: formulaHTML(q.formula) }));
+      else if (q.headline) card.appendChild(el("div", { class: "headline" }, q.headline.charAt(0).toUpperCase() + q.headline.slice(1)));
+      card.appendChild(el("p", { class: "rule" }, q.rule));
+      const choices = el("div", { class: "choices" });
+      immer.choices.forEach((option, index) => {
+        let cls = option.text.length > 70 ? "choice long" : "choice";
+        if (immer.phase === "feedback") {
+          if (option.correct) cls += " right";
+          else if (index === immer.picked) cls += " wrong";
+        }
+        const button = el("button", {
+          type: "button",
+          class: cls,
+          disabled: immer.phase !== "ask",
+          onclick: function () { immerAnswer(index); }
+        });
+        fillChoice(button, option);
+        choices.appendChild(button);
+      });
+      card.appendChild(choices);
+      if (immer.phase === "feedback") {
+        card.appendChild(el("div", { class: immer.wasCorrect ? "feedback good" : "feedback bad", role: "status" }, feedbackCopy(q)));
+      }
+    }
+    const actions = el("div", { class: "actions", style: "margin-top:14px" });
+    if (immer.phase === "feedback") {
+      actions.appendChild(el("button", { type: "button", class: "primary", onclick: immerNext }, immer.index + 1 >= immer.queue.length ? "Results" : "Next"));
+    }
+    actions.appendChild(el("button", { type: "button", class: "center", onclick: immerExit }, "Exit"));
+    card.appendChild(actions);
+    root.appendChild(card);
+  }
+
+  function startFocus() {
+    closingImmersive = false;
+    immer.active = true;
+    immer.mode = "focus";
+    beginImmersiveRound();
+    document.body.style.overflow = "hidden";
+    renderFocus();
+    const root = document.getElementById("focus-root");
+    focusHadFullscreen = false;
+    if (!root) return;
+    const req = root.requestFullscreen || root.webkitRequestFullscreen;
+    const enabled = document.fullscreenEnabled || document.webkitFullscreenEnabled;
+    if (!req || !enabled) return;
+    try {
+      const result = req.call(root);
+      if (result && result.then) {
+        result.then(function () { focusHadFullscreen = true; }).catch(function () {});
+      } else if (document.fullscreenElement || document.webkitFullscreenElement) {
+        focusHadFullscreen = true;
+      }
+    } catch (err) { /* overlay still covers the page */ }
+  }
+
+  function teardownXR() {
+    xrExtras = [];
+    if (xrRenderer) {
+      try { xrRenderer.setAnimationLoop(null); } catch (err) { /* already stopped */ }
+      if (xrRenderer.domElement && xrRenderer.domElement.parentNode) xrRenderer.domElement.parentNode.removeChild(xrRenderer.domElement);
+      try { xrRenderer.dispose(); } catch (err) { /* context already gone */ }
+      xrRenderer = null;
+    }
+    xrSession = null;
+  }
+
+  function isPointerSource(source) {
+    if (!source) return false;
+    return source.targetRayMode === "transient-pointer" || source.targetRayMode === "tracked-pointer";
+  }
+
+  async function startXR(THREE, session) {
+    closingImmersive = false;
+    immer.active = true;
+    immer.mode = "xr";
+    beginImmersiveRound();
+    xrSession = session;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    xrRenderer = renderer;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (THREE.SRGBColorSpace) renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.xr.enabled = true;
+    renderer.domElement.style.position = "fixed";
+    renderer.domElement.style.inset = "0";
+    renderer.domElement.setAttribute("aria-hidden", "true");
+    document.body.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x070b14);
+    scene.add(new THREE.Mesh(
+      new THREE.SphereGeometry(30, 28, 18),
+      new THREE.MeshBasicMaterial({ color: 0x0b1020, side: THREE.BackSide })
+    ));
+    const floor = new THREE.Mesh(
+      new THREE.CircleGeometry(7, 40),
+      new THREE.MeshBasicMaterial({ color: 0x12182c })
+    );
+    floor.rotation.x = -Math.PI / 2;
+    scene.add(floor);
+    const orbColors = [0x2c4f92, 0x62407f, 0x1d6870];
+    const orbs = orbColors.map((color) => {
+      const mesh = new THREE.Mesh(new THREE.SphereGeometry(0.38, 20, 14), new THREE.MeshBasicMaterial({ color: color }));
+      scene.add(mesh);
+      return mesh;
+    });
+
+    const camera = new THREE.PerspectiveCamera(70, window.innerWidth / Math.max(window.innerHeight, 1), 0.01, 50);
+    const panel = new THREE.Group();
+    panel.visible = false;
+    scene.add(panel);
+    const raycaster = new THREE.Raycaster();
+    raycaster.far = 8;
+    let hitTargets = [];
+    let placed = false;
+    let xrAlive = true;
+    let latestFrame = null;
+    const selectQueue = [];
+    let lastActionAt = 0;
+
+    function disposePanel() {
+      const old = panel.children.slice();
+      old.forEach((child) => {
+        panel.remove(child);
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) {
+          if (child.material.map) child.material.map.dispose();
+          child.material.dispose();
+        }
+      });
+      hitTargets = [];
+    }
+
+    function makeTexture(draw, width, height) {
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      draw(canvas.getContext("2d"), width, height);
+      const texture = new THREE.CanvasTexture(canvas);
+      if (THREE.SRGBColorSpace) texture.colorSpace = THREE.SRGBColorSpace;
+      texture.needsUpdate = true;
+      if (renderer.capabilities && renderer.capabilities.getMaxAnisotropy) {
+        texture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
+      }
+      return texture;
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      const radius = Math.min(r, w / 2, h / 2);
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.arcTo(x + w, y, x + w, y + h, radius);
+      ctx.arcTo(x + w, y + h, x, y + h, radius);
+      ctx.arcTo(x, y + h, x, y, radius);
+      ctx.arcTo(x, y, x + w, y, radius);
+      ctx.closePath();
+    }
+
+    function wrapText(ctx, text, maxWidth) {
+      const words = String(text || "").split(/\s+/).filter(Boolean);
+      const lines = [];
+      let line = "";
+      words.forEach((word) => {
+        const next = line ? line + " " + word : word;
+        if (line && ctx.measureText(next).width > maxWidth) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = next;
+        }
+      });
+      if (line) lines.push(line);
+      return lines.length ? lines : [""];
+    }
+
+    function drawInline(ctx, html, x, baseline, fontPx, color, maxWidth) {
+      const source = String(html || "");
+      const runs = [];
+      const re = /([^<]+)|<sub>(.*?)<\/sub>|<sup>(.*?)<\/sup>/g;
+      let match;
+      while ((match = re.exec(source))) {
+        if (match[1]) runs.push({ text: match[1], kind: "base" });
+        else if (match[2] != null) runs.push({ text: match[2], kind: "sub" });
+        else if (match[3] != null) runs.push({ text: match[3], kind: "sup" });
+      }
+      if (!runs.length) runs.push({ text: source.replace(/<[^>]+>/g, ""), kind: "base" });
+      const fontFor = function (kind) {
+        const size = kind === "base" ? fontPx : Math.round(fontPx * 0.55);
+        return "700 " + size + "px -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif";
+      };
+      let width = 0;
+      runs.forEach((run) => {
+        ctx.font = fontFor(run.kind);
+        run.width = ctx.measureText(run.text).width;
+        width += run.width;
+      });
+      if (width > maxWidth && fontPx > 42) {
+        return drawInline(ctx, html, x, baseline - 8, Math.round(fontPx * 0.78), color, maxWidth);
+      }
+      let cursorX = x;
+      ctx.fillStyle = color;
+      ctx.textBaseline = "alphabetic";
+      runs.forEach((run) => {
+        ctx.font = fontFor(run.kind);
+        const dy = run.kind === "sub" ? fontPx * 0.22 : run.kind === "sup" ? -fontPx * 0.42 : 0;
+        ctx.fillText(run.text, cursorX, baseline + dy);
+        cursorX += run.width;
+      });
+      return Math.round(fontPx * 1.05);
+    }
+
+    function drawLines(ctx, lines, font, color, x, y, lineHeight) {
+      ctx.font = font;
+      ctx.fillStyle = color;
+      ctx.textBaseline = "top";
+      lines.forEach((line, index) => {
+        ctx.fillText(line, x, y + index * lineHeight);
+      });
+    }
+
+    function renderPanel() {
+      disposePanel();
+      const q = immer.phase === "done" ? null : immer.queue[immer.index];
+      const boardW = 1480;
+      const boardH = q ? 760 : 520;
+      const boardTex = makeTexture(function (ctx, w, h) {
+        ctx.clearRect(0, 0, w, h);
+        roundRect(ctx, 0, 0, w, h, 48);
+        ctx.fillStyle = "rgba(14, 20, 38, 0.96)";
+        ctx.fill();
+        ctx.strokeStyle = "rgba(255,255,255,0.28)";
+        ctx.lineWidth = 6;
+        ctx.stroke();
+        ctx.font = "600 34px -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif";
+        ctx.fillStyle = "#d7ecff";
+        ctx.textBaseline = "top";
+        const kicker = q ? (q.topic || "Quiz") : "Immersive session";
+        ctx.fillText(kicker.toUpperCase(), 56, 40);
+        const scoreLine = progress.correct + " correct   ·   streak " + progress.streak + "   ·   " + (q ? ((immer.index + 1) + " / " + immer.queue.length) : (immer.roundCorrect + "/" + immer.roundTotal + " this session"));
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#d5deee";
+        ctx.fillText(scoreLine, w - 56, 40);
+        ctx.textAlign = "left";
+        if (!q) {
+          ctx.font = "700 84px -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif";
+          ctx.fillStyle = "#f6f8fc";
+          ctx.fillText(immer.roundTotal && immer.roundCorrect === immer.roundTotal ? "Clean round" : "Round done", 56, 140);
+          ctx.font = "500 40px -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif";
+          ctx.fillStyle = "#d5deee";
+          const doneLines = wrapText(ctx, immer.roundCorrect + " correct out of " + immer.roundTotal + " this session.", w - 112);
+          drawLines(ctx, doneLines, ctx.font, "#d5deee", 56, 260, 54);
+          return;
+        }
+        ctx.font = "600 40px -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif";
+        const promptLines = wrapText(ctx, q.prompt, w - 112).slice(0, 4);
+        drawLines(ctx, promptLines, ctx.font, "#f6f8fc", 56, 110, 50);
+        const bigHtml = q.formula ? formulaHTML(q.formula) : (q.headline ? (q.headline.charAt(0).toUpperCase() + q.headline.slice(1)) : "");
+        let bigBlock = 0;
+        if (bigHtml) {
+          bigBlock = drawInline(ctx, bigHtml, 56, 110 + promptLines.length * 50 + 78, 92, "#ffffff", w - 112);
+        }
+        const ruleY = 110 + promptLines.length * 50 + 24 + bigBlock;
+        ctx.font = "500 30px -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif";
+        const ruleLines = wrapText(ctx, q.rule, w - 112).slice(0, 3);
+        drawLines(ctx, ruleLines, ctx.font, "#d5deee", 56, Math.min(ruleY, h - 180), 38);
+        if (immer.phase === "feedback") {
+          const why = feedbackCopy(q);
+          roundRect(ctx, 40, h - 168, w - 80, 124, 28);
+          ctx.fillStyle = immer.wasCorrect ? "rgba(90, 190, 140, 0.28)" : "rgba(210, 90, 80, 0.30)";
+          ctx.fill();
+          ctx.font = "600 30px -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif";
+          const whyLines = wrapText(ctx, why, w - 140).slice(0, 3);
+          drawLines(ctx, whyLines, ctx.font, immer.wasCorrect ? "#d8ffee" : "#ffd8d4", 64, h - 148, 36);
+        }
+      }, boardW, boardH);
+
+      const board = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.52, 1.52 * (boardH / boardW)),
+        new THREE.MeshBasicMaterial({ map: boardTex })
+      );
+      panel.add(board);
+
+      const buttons = [];
+      if (q) {
+        immer.choices.forEach((choice, index) => {
+          let tone = "idle";
+          if (immer.phase === "feedback") {
+            if (choice.correct) tone = "right";
+            else if (index === immer.picked) tone = "wrong";
+            else tone = "dim";
+          }
+          buttons.push({ label: choiceLabel(choice), html: choice.html || choice.text, tone: tone, action: { kind: "choice", index: index }, enabled: immer.phase === "ask" });
+        });
+      }
+      if (immer.phase === "feedback") {
+        buttons.push({ label: immer.index + 1 >= immer.queue.length ? "Results" : "Next", tone: "next", action: { kind: "next" }, enabled: true });
+      }
+      buttons.push({ label: "Exit", tone: "exit", action: { kind: "exit" }, enabled: true });
+
+      const gap = 0.03;
+      const sizes = buttons.map((button) => {
+        const long = button.label.length > 70;
+        return { w: 1.46, h: long ? 0.26 : 0.15, long: long };
+      });
+      const boardHeight = 1.52 * (boardH / boardW);
+      let cursor = -boardHeight / 2 - 0.04 - sizes[0].h / 2;
+      buttons.forEach((button, index) => {
+        const size = sizes[index];
+        if (index > 0) cursor -= (sizes[index - 1].h / 2) + gap + size.h / 2;
+        const tex = makeTexture(function (ctx, w, h) {
+          ctx.clearRect(0, 0, w, h);
+          roundRect(ctx, 8, 8, w - 16, h - 16, 36);
+          if (button.tone === "right") ctx.fillStyle = "rgba(90, 190, 140, 0.92)";
+          else if (button.tone === "wrong") ctx.fillStyle = "rgba(176, 72, 68, 0.94)";
+          else if (button.tone === "next") ctx.fillStyle = "rgba(126, 168, 224, 0.95)";
+          else if (button.tone === "dim") ctx.fillStyle = "rgba(255,255,255,0.08)";
+          else if (button.tone === "exit") ctx.fillStyle = "rgba(255,255,255,0.14)";
+          else ctx.fillStyle = "rgba(255,255,255,0.16)";
+          ctx.fill();
+          ctx.lineWidth = 6;
+          ctx.strokeStyle = "rgba(255,255,255,0.38)";
+          ctx.stroke();
+          const fontPx = size.long ? 42 : 54;
+          const labelHtml = button.html || button.label;
+          if (!size.long && labelHtml.indexOf("<") !== -1) {
+            drawInline(ctx, labelHtml, 48, h / 2 + fontPx * 0.32, fontPx, button.tone === "dim" ? "#b7c3d8" : "#f7f8fb", w - 96);
+          } else {
+            ctx.font = "600 " + fontPx + "px -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif";
+            const lines = wrapText(ctx, button.label, w - 80).slice(0, size.long ? 3 : 2);
+            const lineH = fontPx + 8;
+            const blockH = lines.length * lineH;
+            drawLines(ctx, lines, ctx.font, button.tone === "dim" ? "#b7c3d8" : "#f7f8fb", 48, (h - blockH) / 2, lineH);
+          }
+        }, 1400, size.long ? 360 : 220);
+        const mesh = new THREE.Mesh(
+          new THREE.PlaneGeometry(size.w, size.h),
+          new THREE.MeshBasicMaterial({ map: tex })
+        );
+        mesh.position.set(0, cursor, 0.03);
+        mesh.userData.action = button.action;
+        mesh.userData.locked = !button.enabled;
+        panel.add(mesh);
+        hitTargets.push(mesh);
+      });
+      panel.updateMatrixWorld(true);
+    }
+
+    function sameAction(a, b) {
+      if (!a || !b) return false;
+      return a.kind === b.kind && a.index === b.index;
+    }
+
+    function raycastSource(frame, source) {
+      if (!frame || !source || !source.targetRaySpace) return null;
+      const ref = renderer.xr.getReferenceSpace();
+      if (!ref) return null;
+      let pose = null;
+      try { pose = frame.getPose(source.targetRaySpace, ref); } catch (err) { pose = null; }
+      if (!pose) return null;
+      const p = pose.transform.position;
+      const o = pose.transform.orientation;
+      const origin = new THREE.Vector3(p.x, p.y, p.z);
+      const direction = new THREE.Vector3(0, 0, -1).applyQuaternion(new THREE.Quaternion(o.x, o.y, o.z, o.w)).normalize();
+      raycaster.set(origin, direction);
+      const hits = raycaster.intersectObjects(hitTargets, false);
+      return hits.length ? hits[0].object.userData.action : null;
+    }
+
+    function applyHover(action) {
+      hitTargets.forEach((mesh) => {
+        if (mesh.userData.locked) {
+          mesh.scale.setScalar(1);
+          return;
+        }
+        const hot = sameAction(mesh.userData.action, action);
+        mesh.material.color.setHex(hot ? 0xd7e8ff : 0xffffff);
+        mesh.scale.setScalar(hot ? 1.035 : 1);
+      });
+    }
+
+    function activateAction(action) {
+      if (!action || !immer.active || immer.mode !== "xr") return;
+      const now = performance.now();
+      if (now - lastActionAt < 280) return;
+      lastActionAt = now;
+      if (action.kind === "exit") immerExit();
+      else if (action.kind === "next") immerNext();
+      else if (action.kind === "choice") immerAnswer(action.index);
+    }
+
+    function placePanel(frame) {
+      const ref = renderer.xr.getReferenceSpace();
+      if (!ref) return;
+      const pose = frame.getViewerPose(ref);
+      if (!pose) return;
+      const p = pose.transform.position;
+      const o = pose.transform.orientation;
+      const forward = new THREE.Vector3(0, 0, -1).applyQuaternion(new THREE.Quaternion(o.x, o.y, o.z, o.w));
+      forward.y = 0;
+      if (forward.lengthSq() < 1e-6) forward.set(0, 0, -1);
+      else forward.normalize();
+      const distance = 1.75;
+      panel.position.set(p.x, p.y - 0.18, p.z).addScaledVector(forward, distance);
+      panel.lookAt(p.x, panel.position.y, p.z);
+      floor.position.set(p.x, p.y - 1.45, p.z);
+      orbs.forEach((orb, index) => {
+        const angle = index * 2.15 + 0.6;
+        orb.position.set(p.x + Math.sin(angle) * 4.2, p.y - 0.35, p.z + Math.cos(angle) * 4.2);
+      });
+      panel.updateMatrixWorld(true);
+      placed = true;
+    }
+
+    xrExtras.renderPanel = renderPanel;
+    renderPanel();
+
+    session.addEventListener("end", function () {
+      xrAlive = false;
+      finishImmersive();
+    });
+    session.addEventListener("selectstart", function (event) {
+      if (!isPointerSource(event.inputSource)) return;
+      const hit = raycastSource(latestFrame, event.inputSource);
+      if (hit) applyHover(hit);
+      else selectQueue.push({ source: event.inputSource, kind: "hover" });
+    });
+    session.addEventListener("select", function (event) {
+      if (!isPointerSource(event.inputSource)) return;
+      const hit = raycastSource(latestFrame, event.inputSource);
+      if (hit) activateAction(hit);
+      else selectQueue.push({ source: event.inputSource, kind: "select" });
+    });
+
+    await renderer.xr.setSession(session);
+    renderer.setAnimationLoop(function (time, frame) {
+      if (!xrAlive) return;
+      latestFrame = frame || null;
+      if (frame && !placed) placePanel(frame);
+      panel.visible = placed;
+      if (frame && selectQueue.length) {
+        const queued = selectQueue.splice(0, selectQueue.length);
+        queued.forEach((item) => {
+          const hit = raycastSource(frame, item.source);
+          if (!hit) return;
+          if (item.kind === "select") activateAction(hit);
+          else applyHover(hit);
+        });
+      }
+      if (frame && session.inputSources) {
+        let hover = null;
+        for (let i = 0; i < session.inputSources.length; i++) {
+          const source = session.inputSources[i];
+          if (!isPointerSource(source)) continue;
+          const hit = raycastSource(frame, source);
+          if (hit) { hover = hit; break; }
+        }
+        if (hover) applyHover(hover);
+      }
+      if (xrAlive) renderer.render(scene, camera);
+    });
+  }
+
+  async function enterImmersive() {
+    if (immer.active) return;
+    if (immersiveKind === "xr" && navigator.xr && typeof navigator.xr.requestSession === "function") {
+      let session = null;
+      try {
+        session = await navigator.xr.requestSession("immersive-vr", { optionalFeatures: ["local-floor"] });
+      } catch (err) {
+        session = null;
+      }
+      if (session) {
+        try {
+          const THREE = await loadThree();
+          await startXR(THREE, session);
+          return;
+        } catch (err) {
+          try {
+            const ending = session.end();
+            if (ending && ending.catch) ending.catch(function () {});
+          } catch (endErr) { /* session already closed */ }
+          teardownXR();
+        }
+      }
+    }
+    if (canUseFocus()) startFocus();
+  }
+
+  detectImmersive();
   render();
 })();
 </script>
