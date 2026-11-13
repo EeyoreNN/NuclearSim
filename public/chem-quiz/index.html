@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b14">
+<title>Naming compounds — practice quiz</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --text: #f6f8fc;
+    --muted: #d5deee;
+    --faint: #b7c3d8;
+    --line: rgba(255, 255, 255, 0.22);
+    --good: #b6f3d4;
+    --good-bg: rgba(90, 190, 140, 0.18);
+    --bad: #ffd0cb;
+    --bad-bg: rgba(210, 90, 80, 0.2);
+    --accent: #d7ecff;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    background: #070b14;
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+    font-size: 20px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100dvh; }
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(30px);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .orb-a { width: 52vw; height: 52vw; max-width: 640px; max-height: 640px; background: rgba(72, 126, 255, 0.38); top: -14vw; left: -12vw; }
+  .orb-b { width: 42vw; height: 42vw; max-width: 520px; max-height: 520px; background: rgba(168, 96, 255, 0.26); top: 6vh; right: -14vw; }
+  .orb-c { width: 48vw; height: 48vw; max-width: 560px; max-height: 560px; background: rgba(46, 186, 196, 0.18); bottom: -18vw; left: 18vw; }
+  main {
+    position: relative;
+    z-index: 1;
+    width: min(760px, 100%);
+    margin: 0 auto;
+    padding: max(20px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom));
+  }
+  .card {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.045) 32%, rgba(255,255,255,0.03)),
+      rgba(12, 18, 36, 0.82);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.38),
+      0 24px 50px rgba(0,0,0,0.32);
+    padding: 22px 18px 18px;
+  }
+  h1 {
+    font-size: clamp(2rem, 6vw, 2.7rem);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+    margin: 0 0 8px;
+    font-weight: 680;
+  }
+  h2 {
+    font-size: clamp(1.45rem, 4vw, 1.8rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin: 0;
+    font-weight: 680;
+  }
+  p { margin: 0; }
+  .lede { color: var(--muted); font-size: 1.05rem; margin-bottom: 16px; }
+  .stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0 16px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 40px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.14);
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+  button, .tap {
+    font: inherit;
+    color: var(--text);
+    min-height: 56px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.22);
+    background: rgba(255,255,255,0.1);
+    padding: 12px 16px;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+    touch-action: manipulation;
+  }
+  button strong { display: block; font-size: 1.12rem; font-weight: 680; letter-spacing: -0.02em; }
+  button span { display: block; color: var(--muted); font-size: 0.92rem; margin-top: 2px; }
+  button:hover { background: rgba(255,255,255,0.16); }
+  button:active { transform: translateY(1px); }
+  button:focus-visible, input:focus-visible {
+    outline: 3px solid #9dceff;
+    outline-offset: 3px;
+  }
+  button:disabled {
+    cursor: default;
+    color: var(--faint);
+    background: rgba(255,255,255,0.05);
+  }
+  button:disabled span { color: var(--faint); }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  @media (max-width: 560px) {
+    .quiz-head { flex-direction: column; align-items: stretch; }
+    .quiz-head .ghost { width: fit-content; }
+  }
+  .row .grow { flex: 1; min-width: 0; }
+  .ghost {
+    width: auto;
+    min-width: 56px;
+    background: rgba(255,255,255,0.08);
+    padding: 12px 16px;
+    font-size: 1.05rem;
+    font-weight: 640;
+  }
+  .kicker {
+    color: var(--accent);
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 680;
+    margin-bottom: 6px;
+  }
+  .prompt { font-size: 1.2rem; margin-bottom: 8px; }
+  .formula, .headline {
+    font-size: clamp(2.15rem, 8vw, 3.15rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    margin: 4px 0 10px;
+    overflow-wrap: anywhere;
+  }
+  sub { font-size: 0.58em; }
+  sup { font-size: 0.5em; }
+  .rule {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 16px;
+  }
+  form { display: flex; flex-direction: column; gap: 12px; }
+  input[type="text"] {
+    font: inherit;
+    font-size: 1.3rem;
+    color: var(--text);
+    width: 100%;
+    min-height: 64px;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.28);
+    background: rgba(0,0,0,0.28);
+    padding: 12px 16px;
+  }
+  input::placeholder { color: #9aabc2; }
+  .actions { display: flex; flex-direction: column; gap: 12px; }
+  @media (min-width: 640px) {
+    .actions.inline { flex-direction: row; }
+    .actions.inline button { width: auto; flex: 1; text-align: center; }
+  }
+  button.primary { text-align: center; font-weight: 680; background: rgba(190, 220, 255, 0.18); }
+  button.center { text-align: center; font-weight: 680; }
+  .choices { display: flex; flex-direction: column; gap: 12px; }
+  .choice {
+    font-size: 1.28rem;
+    font-weight: 650;
+    display: flex;
+    align-items: center;
+    min-height: 56px;
+    line-height: 1.3;
+  }
+  .choice.long {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+  @media (min-width: 680px) {
+    .choices.pair { flex-direction: row; }
+    .choices.pair .choice { flex: 1; justify-content: center; text-align: center; }
+  }
+  .choice span { display: inline; line-height: 1.3; }
+  .choice.right, .feedback.good {
+    background: var(--good-bg);
+    border-color: rgba(170, 235, 200, 0.7);
+    color: var(--good);
+  }
+  .choice.wrong, .feedback.bad {
+    background: var(--bad-bg);
+    border-color: rgba(255, 180, 170, 0.75);
+    color: var(--bad);
+  }
+  .feedback {
+    margin-top: 14px;
+    border-radius: 18px;
+    border: 1px solid var(--line);
+    padding: 14px 16px;
+    font-size: 1.05rem;
+  }
+  .hint {
+    margin-top: 12px;
+    color: var(--muted);
+    background: rgba(255,255,255,0.06);
+    border-radius: 16px;
+    padding: 12px 14px;
+  }
+  .progress {
+    height: 8px;
+    border-radius: 99px;
+    background: rgba(255,255,255,0.1);
+    overflow: hidden;
+    margin: 4px 0 14px;
+  }
+  .progress > div {
+    height: 100%;
+    background: linear-gradient(90deg, #8eb6ff, #b7f3dd);
+    width: 0;
+  }
+  .fine { color: var(--faint); font-size: 0.9rem; margin-top: 14px; }
+  .miss-list { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
+  .miss {
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  .miss b { font-size: 1.15rem; }
+  @media (prefers-reduced-motion: reduce) {
+    button:active { transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="orb orb-a" aria-hidden="true"></div>
+<div class="orb orb-b" aria-hidden="true"></div>
+<div class="orb orb-c" aria-hidden="true"></div>
+<main id="app"></main>
+<script>
+(function () {
+  const SUB = "₀₁₂₃₄₅₆₇₈₉";
+  const SUP = { "+": "⁺", "−": "⁻", "-": "⁻", "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹" };
+  const ROMAN = { "1": "i", "2": "ii", "3": "iii", "4": "iv", "5": "v", "6": "vi", i: "i", ii: "ii", iii: "iii", iv: "iv", v: "v", vi: "vi" };
+
+  function parseFormula(src) {
+    const parts = [];
+    for (let i = 0; i < src.length; i++) {
+      const c = src[i];
+      if (c === "^") {
+        let sup = "";
+        i++;
+        while (i < src.length) { sup += src[i]; i++; }
+        i--;
+        parts.push({ sup: sup.replace(/-/g, "−") });
+      } else if (/\d/.test(c)) {
+        let num = c;
+        while (i + 1 < src.length && /\d/.test(src[i + 1])) { i++; num += src[i]; }
+        parts.push({ sub: num });
+      } else {
+        parts.push({ text: c });
+      }
+    }
+    return parts;
+  }
+
+  function formulaHTML(src) {
+    return parseFormula(src).map((p) => {
+      if (p.sub) return "<sub>" + p.sub + "</sub>";
+      if (p.sup) return "<sup>" + p.sup + "</sup>";
+      return p.text;
+    }).join("");
+  }
+
+  function formulaText(src) {
+    return parseFormula(src).map((p) => {
+      if (p.sub) return p.sub.split("").map((d) => SUB[Number(d)] || d).join("");
+      if (p.sup) return p.sup.split("").map((ch) => SUP[ch] || ch).join("");
+      return p.text;
+    }).join("");
+  }
+
+  function toRoman(token) {
+    return ROMAN[String(token).toLowerCase()] || String(token).toLowerCase();
+  }
+
+  function oxidePrefix(prefix) {
+    let p = prefix;
+    if (p.endsWith("a") || p.endsWith("o")) p = p.slice(0, -1);
+    return p + "oxide";
+  }
+
+  function normalizeAnswer(raw) {
+    let t = String(raw || "").toLowerCase();
+    t = t.replace(/aluminium/g, "aluminum");
+    t = t.replace(/sulph/g, "sulf");
+    t = t.replace(/[?!.,;:]+/g, "");
+    t = t.replace(/\s+/g, " ").trim();
+    t = t.replace(/\s*\(\s*/g, "(").replace(/\s*\)\s*/g, ") ");
+    t = t.replace(/\s+/g, " ").trim();
+    const romanToken = "iv|vi|iii|ii|i|[1-6]";
+    t = t.replace(new RegExp("\\((" + romanToken + ")\\)", "g"), function (_, tok) {
+      return "(" + toRoman(tok) + ")";
+    });
+    t = t.replace(new RegExp("\\b(iron|copper|lead|tin|chromium|manganese)\\s+(" + romanToken + ")\\b", "g"), function (_, metal, tok) {
+      return metal + "(" + toRoman(tok) + ")";
+    });
+    const prefixes = "mono|di|tri|tetra|penta|hexa|hepta|octa|nona|deca";
+    t = t.replace(new RegExp("\\b(" + prefixes + ")\\s+oxide\\b", "g"), function (_, p) { return oxidePrefix(p); });
+    t = t.replace(new RegExp("\\b(" + prefixes + ")oxide\\b", "g"), function (_, p) { return oxidePrefix(p); });
+    t = t.replace(/\s+/g, " ").trim();
+    return t;
+  }
+
+  function matches(input, answer) {
+    const a = normalizeAnswer(input);
+    const b = normalizeAnswer(answer);
+    if (!a) return false;
+    return a === b || a === b + "s" || a === b + " ion" || a === b + "s ion";
+  }
+
+  function sameLoose(input, answer) {
+    const squash = (s) => String(s).toLowerCase().replace(/\s+/g, " ").trim();
+    return squash(input) === squash(answer);
+  }
+
+  const IONIC_RULE = "Name the metal, then the nonmetal root with -ide. Never use prefixes.";
+  const ROMAN_RULE = "Balance charges to get the Roman numeral. O and S are −2, halogens are −1, and N is −3. Ag is always +1 and Zn is always +2, and those two get no numeral.";
+  const COVALENT_RULE = "Prefixes: mono, di, tri, tetra, penta, hexa, hepta, octa, nona, deca. Skip mono- on the first element. Drop a or o before oxide.";
+  const CLASS_RULE = "A metal with a nonmetal is ionic. Two nonmetals are covalent.";
+  const NUM_RULE = "Transition metals, tin, and lead need a Roman numeral. Silver and zinc do not. Main-group metals and covalent compounds do not.";
+  const REV_RULE = "Ionic subscripts come from the charges. Covalent subscripts come from the prefixes. A swapped prefix is a different formula.";
+  const POLY_RULE = "Name the positive ion, then the negative ion. Polyatomic ions keep their own names. Use parentheses when a group has a subscript.";
+  const LMP_RULE = "When two elements form more than one compound, fix the mass of one element. The masses of the other element are in a small whole-number ratio.";
+
+  const ionic = [
+    ["nacl", "NaCl", "sodium chloride", "Sodium", "+1", "chloride", "−1", ["NaCl2", "Na2Cl", "ClNa"]],
+    ["mgo", "MgO", "magnesium oxide", "Magnesium", "+2", "oxide", "−2", ["Mg2O", "MgO2", "OMg"]],
+    ["kbr", "KBr", "potassium bromide", "Potassium", "+1", "bromide", "−1", ["KBr2", "K2Br", "BrK"]],
+    ["cacl2", "CaCl2", "calcium chloride", "Calcium", "+2", "chloride", "−1", ["CaCl", "Ca2Cl", "CaCl3"]],
+    ["al2o3", "Al2O3", "aluminum oxide", "Aluminum", "+3", "oxide", "−2", ["Al3O2", "AlO3", "Al2O"]],
+    ["na2s", "Na2S", "sodium sulfide", "Sodium", "+1", "sulfide", "−2", ["NaS", "NaS2", "Na2S3"]],
+    ["caf2", "CaF2", "calcium fluoride", "Calcium", "+2", "fluoride", "−1", ["CaF", "Ca2F", "CaF3"]],
+    ["li2o", "Li2O", "lithium oxide", "Lithium", "+1", "oxide", "−2", ["LiO", "LiO2", "Li2O3"]],
+    ["k3n", "K3N", "potassium nitride", "Potassium", "+1", "nitride", "−3", ["KN", "KN3", "K3N2"]],
+    ["mgbr2", "MgBr2", "magnesium bromide", "Magnesium", "+2", "bromide", "−1", ["MgBr", "Mg2Br", "MgBr3"]],
+    ["bai2", "BaI2", "barium iodide", "Barium", "+2", "iodide", "−1", ["BaI", "Ba2I", "BaI3"]],
+    ["alcl3", "AlCl3", "aluminum chloride", "Aluminum", "+3", "chloride", "−1", ["AlCl", "Al3Cl", "AlCl2"]]
+  ];
+
+  const roman = [
+    ["feo", "FeO", "iron(II) oxide", "1 O × −2 = −2, ÷ 1 Fe = +2", "", "Iron(II) is +2 and oxide is −2, so the charges cancel in FeO.", "1 oxygen is −2. That whole charge belongs to 1 iron. Write it as a Roman numeral.", ["Fe2O3", "FeO2", "Fe2O"]],
+    ["fe2o3", "Fe2O3", "iron(III) oxide", "3 O × −2 = −6, ÷ 2 Fe = +3", "", "Iron(III) is +3 and oxide is −2, so the charges criss-cross to Fe₂O₃.", "3 oxygens are each −2. Divide that total by 2 iron atoms.", ["FeO", "Fe3O2", "FeO3"]],
+    ["cuo", "CuO", "copper(II) oxide", "1 O × −2 = −2, ÷ 1 Cu = +2", "", "Copper(II) is +2 and oxide is −2, so the formula is CuO.", "1 oxygen is −2. That charge belongs to 1 copper.", ["Cu2O", "CuO2", "Cu2O3"]],
+    ["cu2o", "Cu2O", "copper(I) oxide", "1 O × −2 = −2, ÷ 2 Cu = +1", "", "Copper(I) is +1 and oxide is −2, so two coppers balance one oxide: Cu₂O.", "1 oxygen is −2. Divide that total by 2 copper atoms.", ["CuO", "CuO2", "Cu2O3"]],
+    ["fecl3", "FeCl3", "iron(III) chloride", "3 Cl × −1 = −3, ÷ 1 Fe = +3", "", "Iron(III) is +3 and chloride is −1, so the formula is FeCl₃.", "3 chlorines are each −1. That total belongs to 1 iron.", ["FeCl2", "Fe3Cl", "FeCl"]],
+    ["cucl2", "CuCl2", "copper(II) chloride", "2 Cl × −1 = −2, ÷ 1 Cu = +2", "", "Copper(II) is +2 and chloride is −1, so the formula is CuCl₂.", "2 chlorines are each −1. That total belongs to 1 copper.", ["CuCl", "Cu2Cl", "CuCl3"]],
+    ["pbo2", "PbO2", "lead(IV) oxide", "2 O × −2 = −4, ÷ 1 Pb = +4", "", "Lead(IV) is +4 and oxide is −2, so two oxides balance one lead: PbO₂.", "Lead needs a Roman numeral. 2 oxygens are each −2.", ["PbO", "Pb2O", "PbO4"]],
+    ["sncl2", "SnCl2", "tin(II) chloride", "2 Cl × −1 = −2, ÷ 1 Sn = +2", "", "Tin(II) is +2 and chloride is −1, so the formula is SnCl₂.", "Tin needs a Roman numeral. 2 chlorines are each −1.", ["SnCl4", "Sn2Cl", "SnCl"]],
+    ["crcl3", "CrCl3", "chromium(III) chloride", "3 Cl × −1 = −3, ÷ 1 Cr = +3", "", "Chromium(III) is +3 and chloride is −1, so the formula is CrCl₃.", "3 chlorines are each −1. That total belongs to 1 chromium.", ["CrCl2", "Cr3Cl", "CrCl"]],
+    ["mno2", "MnO2", "manganese(IV) oxide", "2 O × −2 = −4, ÷ 1 Mn = +4", "", "Manganese(IV) is +4 and oxide is −2, so the formula is MnO₂.", "2 oxygens are each −2. That total belongs to 1 manganese.", ["MnO", "Mn2O3", "MnO4"]],
+    ["zno", "ZnO", "zinc oxide", "1 O × −2 = −2, ÷ 1 Zn = +2", "Zinc is always +2, so it does not get a Roman numeral.", "Zinc is always +2 and oxide is −2, so the formula is ZnO, and the name has no numeral.", "Zinc is always +2. Leave the Roman numeral off.", ["Zn2O", "ZnO2", "Zn2O3"]],
+    ["agcl", "AgCl", "silver chloride", "1 Cl × −1 = −1, ÷ 1 Ag = +1", "Silver is always +1, so it does not get a Roman numeral.", "Silver is always +1 and chloride is −1, so the formula is AgCl, and the name has no numeral.", "Silver is always +1. Leave the Roman numeral off.", ["AgCl2", "Ag2Cl", "AgCl3"]]
+  ];
+
+  const covalent = [
+    ["co", "CO", "carbon monoxide", "Two nonmetals. Skip mono- on carbon, and drop the o in mono before oxide.", "Two nonmetals. The first element gets no mono-, and mono drops the o before oxide.", ["CO2", "C2O", "OC"]],
+    ["co2", "CO2", "carbon dioxide", "Two nonmetals. One carbon has no prefix, and two oxygens make dioxide.", "Skip a prefix on the single carbon. Two oxygens use di-.", ["CO", "C2O2", "CO3"]],
+    ["pcl3", "PCl3", "phosphorus trichloride", "Two nonmetals. One phosphorus has no prefix, and three chlorines make trichloride.", "Skip mono- on phosphorus. Three chlorines use tri-.", ["P3Cl", "PCl5", "Cl3P"]],
+    ["n2o5", "N2O5", "dinitrogen pentoxide", "Two nonmetals. di- is two nitrogens, and penta drops the a before oxide.", "Use a prefix on both elements. Drop the a in penta before oxide.", ["N5O2", "N2O4", "NO5"]],
+    ["n2o4", "N2O4", "dinitrogen tetroxide", "Two nonmetals. di- is two nitrogens, and tetra drops the a before oxide.", "Use a prefix on both elements. Drop the a in tetra before oxide.", ["N4O2", "N2O5", "NO4"]],
+    ["sf6", "SF6", "sulfur hexafluoride", "Two nonmetals. One sulfur has no prefix, and six fluorines make hexafluoride.", "Skip mono- on sulfur. Six fluorines use hexa-.", ["S6F", "SF4", "F6S"]],
+    ["ccl4", "CCl4", "carbon tetrachloride", "Two nonmetals. One carbon has no prefix, and four chlorines make tetrachloride.", "Skip mono- on carbon. Four chlorines use tetra-.", ["C4Cl", "CCl2", "Cl4C"]],
+    ["p2o5", "P2O5", "diphosphorus pentoxide", "Two nonmetals. di- means two phosphorus atoms, and penta drops the a before oxide.", "Prefix both elements. Drop the a in penta before oxide.", ["P5O2", "P2O3", "PO5"]],
+    ["no2", "NO2", "nitrogen dioxide", "Two nonmetals. One nitrogen has no prefix, and two oxygens make dioxide.", "Skip mono- on nitrogen. Two oxygens use di-.", ["N2O", "NO", "N2O4"]],
+    ["so3", "SO3", "sulfur trioxide", "Two nonmetals. One sulfur has no prefix, and three oxygens make trioxide.", "Skip mono- on sulfur. Three oxygens use tri-.", ["S3O", "SO2", "SO4"]],
+    ["n2o", "N2O", "dinitrogen monoxide", "Two nonmetals. di- is two nitrogens, and mono drops the o before oxide.", "Prefix both elements. Drop the o in mono before oxide.", ["NO", "N2O3", "NO2"]],
+    ["sio2", "SiO2", "silicon dioxide", "Two nonmetals. One silicon has no prefix, and two oxygens make dioxide.", "Skip mono- on silicon. Two oxygens use di-.", ["Si2O", "SiO", "SiO4"]]
+  ];
+
+  const polyCompounds = [
+    ["ca-no3", "Ca(NO3)2", "calcium nitrate", "Calcium is +2 and nitrate is −1, so two nitrate groups are needed.", "Name the metal, then nitrate. No prefixes, and calcium does not get a Roman numeral.", "Calcium (+2) and nitrate (−1) need two nitrate ions: Ca(NO₃)₂.", ["CaNO3", "Ca(NO3)3", "Ca2(NO3)"]],
+    ["naoh", "NaOH", "sodium hydroxide", "Sodium is +1 and hydroxide is −1, so one of each is enough.", "Name the metal, then the polyatomic ion hydroxide.", "Sodium (+1) and hydroxide (−1) make NaOH.", ["Na(OH)2", "Na2OH", "NaO"]],
+    ["al-so4", "Al2(SO4)3", "aluminum sulfate", "Aluminum is +3 and sulfate is −2, so the ions criss-cross to two Al and three sulfate.", "Criss-cross +3 and −2, and keep sulfate inside parentheses.", "Aluminum (+3) and sulfate (−2) criss-cross to Al₂(SO₄)₃.", ["Al(SO4)3", "Al2SO4", "AlSO4"]],
+    ["nh4cl", "NH4Cl", "ammonium chloride", "Ammonium is NH₄⁺ and chloride is Cl⁻, so one of each is enough.", "Ammonium is the positive ion here, not a metal. Then chloride.", "Ammonium (NH₄⁺) and chloride (Cl⁻) make NH₄Cl.", ["(NH4)2Cl", "NH4Cl2", "NH3Cl"]]
+  ];
+
+  const ions = [
+    ["ammonium", "NH4^+", "ammonium", "Ammonium is the positive ion on this list: NH₄⁺.", ["NH3", "NH4^2+", "NO3^-"]],
+    ["nitrate", "NO3^-", "nitrate", "Nitrate is NO₃⁻. Nitrite is NO₂⁻, one fewer oxygen and the same charge.", ["NO2^-", "NO3^2-", "SO4^2-"]],
+    ["nitrite", "NO2^-", "nitrite", "Nitrite is NO₂⁻. Nitrate is NO₃⁻, one more oxygen.", ["NO3^-", "NO2^2-", "SO3^2-"]],
+    ["sulfate", "SO4^2-", "sulfate", "Sulfate is SO₄²⁻. Sulfite is SO₃²⁻, one fewer oxygen.", ["SO3^2-", "SO4^-", "S^2-"]],
+    ["sulfite", "SO3^2-", "sulfite", "Sulfite is SO₃²⁻. Sulfate is SO₄²⁻, one more oxygen.", ["SO4^2-", "SO3^-", "S^2-"]],
+    ["hydroxide", "OH^-", "hydroxide", "Hydroxide is OH⁻.", ["OH^2-", "O^2-", "HO2^-"]],
+    ["carbonate", "CO3^2-", "carbonate", "Carbonate is CO₃²⁻.", ["CO2", "CO3^-", "HCO3^-"]],
+    ["phosphate", "PO4^3-", "phosphate", "Phosphate is PO₄³⁻.", ["PO3^3-", "PO4^-", "P^3-"]],
+    ["acetate", "C2H3O2^-", "acetate", "Acetate is C₂H₃O₂⁻.", ["C2H3O2^2-", "C2H3O^-", "CO3^2-"]]
+  ];
+
+  function choice(formula, correct) {
+    return { html: formulaHTML(formula), text: formulaText(formula), correct: !!correct };
+  }
+
+  function buildQuestions() {
+    const questions = [];
+
+    ionic.forEach((row) => {
+      const formula = row[1];
+      const name = row[2];
+      const metal = row[3];
+      const mCharge = row[4];
+      const anion = row[5];
+      const aCharge = row[6];
+      const wrong = row[7];
+      questions.push({
+        id: "name-" + row[0],
+        section: "ionic",
+        topic: "Ionic",
+        rule: IONIC_RULE,
+        kind: "type",
+        prompt: "Name this compound.",
+        formula: formula,
+        answer: name,
+        hint: "Metal + nonmetal, so no prefixes.",
+        why: metal + " is a main-group metal paired with a nonmetal, so the name has no prefixes."
+      });
+      questions.push({
+        id: "rev-" + row[0],
+        section: "reverse",
+        topic: "Name → formula",
+        rule: REV_RULE,
+        kind: "mc",
+        prompt: "Which formula matches this name?",
+        headline: name,
+        hint: metal + " is " + mCharge + " and " + anion + " is " + aCharge + ". Criss-cross those charges. Do not add prefixes.",
+        why: metal + " (" + mCharge + ") and " + anion + " (" + aCharge + ") give " + formulaText(formula) + ".",
+        choices: [choice(formula, true)].concat(wrong.map((f) => choice(f, false)))
+      });
+    });
+
+    roman.forEach((row) => {
+      const formula = row[1];
+      const name = row[2];
+      const math = row[3];
+      const exception = row[4];
+      const revWhy = row[5];
+      const hint = row[6];
+      const wrong = row[7];
+      questions.push({
+        id: "rom-" + row[0],
+        section: "roman",
+        topic: "Roman numerals",
+        rule: ROMAN_RULE,
+        kind: "type",
+        prompt: "Name this compound.",
+        formula: formula,
+        answer: name,
+        hint: hint,
+        why: exception ? math + ". " + exception : math + "."
+      });
+      questions.push({
+        id: "rev-" + row[0],
+        section: "reverse",
+        topic: "Name → formula",
+        rule: REV_RULE,
+        kind: "mc",
+        prompt: "Which formula matches this name?",
+        headline: name,
+        hint: hint,
+        why: revWhy + " Check: " + math + ".",
+        choices: [choice(formula, true)].concat(wrong.map((f) => choice(f, false)))
+      });
+    });
+
+    covalent.forEach((row) => {
+      const formula = row[1];
+      const name = row[2];
+      questions.push({
+        id: "cov-" + row[0],
+        section: "covalent",
+        topic: "Covalent",
+        rule: COVALENT_RULE,
+        kind: "type",
+        prompt: "Name this compound.",
+        formula: formula,
+        answer: name,
+        hint: row[4],
+        why: row[3]
+      });
+      questions.push({
+        id: "rev-" + row[0],
+        section: "reverse",
+        topic: "Name → formula",
+        rule: REV_RULE,
+        kind: "mc",
+        prompt: "Which formula matches this name?",
+        headline: name,
+        hint: "Read the prefixes as subscripts. A missing prefix on the first element means 1. Do not swap the two numbers.",
+        why: "In " + name + ", the prefixes are the subscripts, so the formula is " + formulaText(formula) + ".",
+        choices: [choice(formula, true)].concat(row[5].map((f) => choice(f, false)))
+      });
+    });
+
+    const typePairs = [
+      ["NaCl", "ionic", "Sodium is a metal and chlorine is a nonmetal, so NaCl is ionic."],
+      ["CO2", "covalent", "Carbon and oxygen are both nonmetals, so CO₂ is covalent."],
+      ["MgO", "ionic", "Magnesium is a metal and oxygen is a nonmetal, so MgO is ionic."],
+      ["PCl3", "covalent", "Phosphorus and chlorine are both nonmetals, so PCl₃ is covalent."],
+      ["Fe2O3", "ionic", "Iron is a metal and oxygen is a nonmetal, so Fe₂O₃ is ionic."],
+      ["SF6", "covalent", "Sulfur and fluorine are both nonmetals, so SF₆ is covalent."],
+      ["CaF2", "ionic", "Calcium is a metal and fluorine is a nonmetal, so CaF₂ is ionic."],
+      ["N2O5", "covalent", "Nitrogen and oxygen are both nonmetals, so N₂O₅ is covalent."],
+      ["ZnO", "ionic", "Zinc is a metal and oxygen is a nonmetal, so ZnO is ionic."],
+      ["SiO2", "covalent", "Silicon and oxygen are both nonmetals, so SiO₂ is covalent."],
+      ["AgCl", "ionic", "Silver is a metal and chlorine is a nonmetal, so AgCl is ionic."],
+      ["SO3", "covalent", "Sulfur and oxygen are both nonmetals, so SO₃ is covalent."]
+    ];
+    typePairs.forEach((row) => {
+      const ionicYes = row[1] === "ionic";
+      questions.push({
+        id: "cls-" + row[0].toLowerCase(),
+        section: "classify",
+        topic: "Classify",
+        rule: CLASS_RULE,
+        kind: "mc",
+        prompt: "Is this compound ionic or covalent?",
+        formula: row[0],
+        hint: "Look for a metal. Metal + nonmetal is ionic. Two nonmetals are covalent.",
+        why: row[2],
+        choices: [
+          { text: "Ionic", html: "Ionic", correct: ionicYes },
+          { text: "Covalent", html: "Covalent", correct: !ionicYes }
+        ]
+      });
+    });
+
+    const numeralPairs = [
+      ["FeO", true, "Iron is a transition metal, so FeO needs a Roman numeral."],
+      ["NaCl", false, "Sodium is a group 1 metal with a fixed charge, so NaCl needs no Roman numeral."],
+      ["CuCl2", true, "Copper is a transition metal, so CuCl₂ needs a Roman numeral."],
+      ["ZnO", false, "Zinc is always +2, so ZnO does not get a Roman numeral."],
+      ["AgCl", false, "Silver is always +1, so AgCl does not get a Roman numeral."],
+      ["SnCl2", true, "Tin is not a transition metal, but Sn and Pb still need a Roman numeral."],
+      ["PbO2", true, "Lead needs a Roman numeral. 2 O × −2 = −4, so Pb in PbO₂ is +4."],
+      ["MgBr2", false, "Magnesium is a group 2 metal with a fixed charge, so MgBr₂ needs no Roman numeral."],
+      ["CrCl3", true, "Chromium is a transition metal, so CrCl₃ needs a Roman numeral."],
+      ["CO2", false, "CO₂ is covalent, two nonmetals, so it does not use a Roman numeral."],
+      ["Al2O3", false, "Aluminum is a main-group metal with a fixed +3 charge, so Al₂O₃ needs no Roman numeral."],
+      ["MnO2", true, "Manganese is a transition metal, so MnO₂ needs a Roman numeral."]
+    ];
+    numeralPairs.forEach((row) => {
+      questions.push({
+        id: "num-" + row[0].toLowerCase(),
+        section: "classify",
+        topic: "Roman numeral?",
+        rule: NUM_RULE,
+        kind: "mc",
+        prompt: "Does this name need a Roman numeral?",
+        formula: row[0],
+        hint: "Say yes for transition metals and for Sn and Pb. Say no for Ag, Zn, other main-group metals, and covalent compounds.",
+        why: row[2],
+        choices: [
+          { text: "Yes — needs a Roman numeral", html: "Yes — needs a Roman numeral", correct: row[1] },
+          { text: "No numeral", html: "No numeral", correct: !row[1] }
+        ]
+      });
+    });
+
+    ions.forEach((row) => {
+      const name = row[2];
+      const pretty = name.charAt(0).toUpperCase() + name.slice(1);
+      questions.push({
+        id: "ionname-" + row[0],
+        section: "poly",
+        topic: "Polyatomic ions",
+        rule: POLY_RULE,
+        kind: "type",
+        prompt: "Name this ion.",
+        formula: row[1],
+        answer: name,
+        hint: row[3],
+        why: row[3]
+      });
+      questions.push({
+        id: "ionform-" + row[0],
+        section: "poly",
+        topic: "Polyatomic ions",
+        rule: POLY_RULE,
+        kind: "mc",
+        prompt: "Which formula is this ion?",
+        headline: pretty,
+        hint: "Match the name, the oxygen count, and the charge. Nitrate has one more oxygen than nitrite, and sulfate has one more than sulfite.",
+        why: row[3],
+        choices: [choice(row[1], true)].concat(row[4].map((f) => choice(f, false)))
+      });
+    });
+
+    polyCompounds.forEach((row) => {
+      questions.push({
+        id: "poly-" + row[0],
+        section: "poly",
+        topic: "Polyatomic ions",
+        rule: POLY_RULE,
+        kind: "type",
+        prompt: "Name this compound.",
+        formula: row[1],
+        answer: row[2],
+        hint: row[4],
+        why: row[3]
+      });
+      questions.push({
+        id: "rev-poly-" + row[0],
+        section: "poly",
+        topic: "Polyatomic ions",
+        rule: POLY_RULE,
+        kind: "mc",
+        prompt: "Which formula matches this name?",
+        headline: row[2],
+        hint: row[4],
+        why: row[5],
+        choices: [choice(row[1], true)].concat(row[6].map((f) => choice(f, false)))
+      });
+    });
+
+    questions.push({
+      id: "lmp-co",
+      section: "lmp",
+      topic: "Multiple proportions",
+      rule: LMP_RULE,
+      kind: "mc",
+      prompt: "Carbon monoxide (CO) and carbon dioxide (CO₂) both contain carbon and oxygen. For the same mass of carbon, the ratio of the mass of oxygen in CO to the mass of oxygen in CO₂ is:",
+      hint: "Count oxygen atoms per carbon. CO has 1 and CO₂ has 2.",
+      why: "CO has one oxygen per carbon and CO₂ has two, so for a fixed mass of carbon the oxygen masses are in the ratio 1:2.",
+      choices: [
+        { text: "1 : 2", html: "1 : 2", correct: true },
+        { text: "2 : 1", html: "2 : 1", correct: false },
+        { text: "1 : 1", html: "1 : 1", correct: false },
+        { text: "1 : 4", html: "1 : 4", correct: false }
+      ]
+    });
+    questions.push({
+      id: "lmp-law",
+      section: "lmp",
+      topic: "Multiple proportions",
+      rule: "Read each statement. Only one of them is the law of multiple proportions.",
+      kind: "mc",
+      prompt: "Which statement is the law of multiple proportions?",
+      hint: "This law compares two different compounds made from the same two elements.",
+      why: "Multiple proportions says that with one element's mass fixed, the other element's masses form a small whole-number ratio. “Always the same proportion” is definite proportions, and “mass is conserved” is a different law.",
+      choices: [
+        { text: "When two elements form more than one compound, the masses of one element that combine with a fixed mass of the other are in a ratio of small whole numbers.", html: "When two elements form more than one compound, the masses of one element that combine with a fixed mass of the other are in a ratio of small whole numbers.", correct: true },
+        { text: "A given compound always contains the same elements in the same proportion by mass.", html: "A given compound always contains the same elements in the same proportion by mass.", correct: false },
+        { text: "Mass is neither created nor destroyed in a chemical reaction.", html: "Mass is neither created nor destroyed in a chemical reaction.", correct: false },
+        { text: "Atoms of different elements always have different masses.", html: "Atoms of different elements always have different masses.", correct: false }
+      ]
+    });
+    questions.push({
+      id: "lmp-so",
+      section: "lmp",
+      topic: "Multiple proportions",
+      rule: LMP_RULE,
+      kind: "mc",
+      prompt: "Sulfur dioxide (SO₂) and sulfur trioxide (SO₃) are two compounds of sulfur and oxygen. For a fixed mass of sulfur, the ratio of oxygen mass in SO₂ to oxygen mass in SO₃ is:",
+      hint: "Hold sulfur at one atom and compare the oxygen subscripts, 2 and 3.",
+      why: "SO₂ has 2 oxygen atoms per sulfur and SO₃ has 3, so the oxygen masses are in the ratio 2:3.",
+      choices: [
+        { text: "2 : 3", html: "2 : 3", correct: true },
+        { text: "3 : 2", html: "3 : 2", correct: false },
+        { text: "1 : 2", html: "1 : 2", correct: false },
+        { text: "1 : 1", html: "1 : 1", correct: false }
+      ]
+    });
+
+    return questions;
+  }
+
+  const QUESTIONS = buildQuestions();
+  const QUESTION_BY_ID = {};
+  QUESTIONS.forEach((q) => { QUESTION_BY_ID[q.id] = q; });
+
+  const SECTIONS = [
+    { id: "ionic", title: "Ionic", blurb: "Main-group metal + nonmetal. No prefixes." },
+    { id: "roman", title: "Roman numerals", blurb: "Transition metals, plus Sn and Pb. Ag and Zn have no numeral." },
+    { id: "covalent", title: "Covalent", blurb: "Two nonmetals. Prefixes, and the oxide spelling rule." },
+    { id: "classify", title: "Classify", blurb: "Ionic or covalent, and does the name need a numeral?" },
+    { id: "reverse", title: "Name → formula", blurb: "Multiple choice, with wrong subscripts and swapped prefixes." },
+    { id: "poly", title: "Polyatomic ions", blurb: "The short ion list, plus four compounds." },
+    { id: "lmp", title: "Multiple proportions", blurb: "Three conceptual questions, including CO and CO₂." },
+    { id: "mixed", title: "Mixed — everything", blurb: "Every question above, in random order." }
+  ];
+
+  function runSelfTest() {
+    const fails = [];
+    function check(cond, msg) { if (!cond) fails.push(msg); }
+    const cases = [
+      ["Iron(III) oxide", "iron(III) oxide", true],
+      ["iron (III) oxide", "iron(III) oxide", true],
+      ["iron ( III ) oxide", "iron(III) oxide", true],
+      ["iron( III)oxide", "iron(III) oxide", true],
+      ["iron 3 oxide", "iron(III) oxide", true],
+      ["iron(3) oxide", "iron(III) oxide", true],
+      ["IRON(iii)  OXIDE", "iron(III) oxide", true],
+      ["iron iii oxide", "iron(III) oxide", true],
+      ["iron(II) oxide", "iron(III) oxide", false],
+      ["iron oxide", "iron(III) oxide", false],
+      ["sodium chloride", "sodium chloride", true],
+      ["Sodium  Chloride", "sodium chloride", true],
+      ["aluminium oxide", "aluminum oxide", true],
+      ["sodium sulphide", "sodium sulfide", true],
+      ["sodium chlorides", "sodium chloride", true],
+      ["carbon monooxide", "carbon monoxide", true],
+      ["carbon mono oxide", "carbon monoxide", true],
+      ["dinitrogen pentaoxide", "dinitrogen pentoxide", true],
+      ["dinitrogen tetraoxide", "dinitrogen tetroxide", true],
+      ["dinitrogen tetra oxide", "dinitrogen tetroxide", true],
+      ["carbon monoxide", "carbon dioxide", false],
+      ["disodium chloride", "sodium chloride", false],
+      ["zinc(II) oxide", "zinc oxide", false],
+      ["zinc oxide", "zinc oxide", true],
+      ["silver chloride", "silver chloride", true],
+      ["manganese 4 oxide", "manganese(IV) oxide", true],
+      ["tin II chloride", "tin(II) chloride", true],
+      ["lead (4) oxide", "lead(IV) oxide", true],
+      ["copper (I) oxide", "copper(I) oxide", true],
+      ["nitrate ion", "nitrate", true],
+      ["", "sodium chloride", false],
+      ["Fe2O3", "iron(III) oxide", false]
+    ];
+    cases.forEach((row) => {
+      const got = matches(row[0], row[1]);
+      if (got !== row[2]) fails.push(JSON.stringify({ input: row[0], answer: row[1], expected: row[2], got: got, norm: normalizeAnswer(row[0]) }));
+    });
+    const snaps = {
+      "Fe2O3": "Fe₂O₃",
+      "Ca(NO3)2": "Ca(NO₃)₂",
+      "Al2(SO4)3": "Al₂(SO₄)₃",
+      "SO4^2-": "SO₄²⁻",
+      "NH4^+": "NH₄⁺",
+      "OH^-": "OH⁻",
+      "N2O5": "N₂O₅",
+      "Cu2O": "Cu₂O",
+      "CO": "CO"
+    };
+    Object.keys(snaps).forEach((src) => {
+      if (formulaText(src) !== snaps[src]) fails.push("formulaText " + src + " -> " + formulaText(src));
+      if (!formulaHTML(src).includes("<") && /\d/.test(src)) fails.push("formulaHTML missing sub " + src);
+    });
+    const ids = {};
+    QUESTIONS.forEach((q) => {
+      if (ids[q.id]) fails.push("duplicate id " + q.id);
+      ids[q.id] = true;
+      if (q.kind === "type") {
+        check(matches(q.answer, q.answer), "answer does not match itself " + q.id);
+      } else {
+        const good = q.choices.filter((c) => c.correct);
+        check(good.length === 1, "expected one correct choice " + q.id);
+        const texts = {};
+        q.choices.forEach((c) => {
+          const key = c.html + "|" + c.text;
+          if (texts[key]) fails.push("duplicate choice " + q.id);
+          texts[key] = true;
+        });
+      }
+      check(q.why && q.hint && q.prompt, "missing copy " + q.id);
+    });
+    ["ionic", "roman", "covalent", "classify", "reverse", "poly", "lmp"].forEach((section) => {
+      check(QUESTIONS.some((q) => q.section === section), "missing section " + section);
+    });
+    return { ok: fails.length === 0, fails: fails, count: QUESTIONS.length };
+  }
+
+  const STORE_KEY = "chemQuiz.v1";
+
+  function emptyProgress() {
+    return { correct: 0, attempted: 0, streak: 0, best: 0, missed: [] };
+  }
+
+  function loadProgress() {
+    try {
+      const raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return emptyProgress();
+      const data = JSON.parse(raw);
+      const missed = Array.isArray(data.missed) ? data.missed.filter((id) => typeof id === "string" && QUESTION_BY_ID[id]) : [];
+      return {
+        correct: data.correct | 0,
+        attempted: data.attempted | 0,
+        streak: data.streak | 0,
+        best: data.best | 0,
+        missed: missed
+      };
+    } catch (err) {
+      return emptyProgress();
+    }
+  }
+
+  function saveProgress(progress) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(progress)); } catch (err) { /* private mode */ }
+  }
+
+  function shuffle(list) {
+    const copy = list.slice();
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      const swap = copy[i];
+      copy[i] = copy[j];
+      copy[j] = swap;
+    }
+    return copy;
+  }
+
+  const api = {
+    matches: matches,
+    normalizeAnswer: normalizeAnswer,
+    formulaHTML: formulaHTML,
+    formulaText: formulaText,
+    buildQuestions: buildQuestions,
+    runSelfTest: runSelfTest,
+    QUESTIONS: QUESTIONS
+  };
+  if (typeof globalThis !== "undefined") globalThis.ChemQuiz = api;
+
+  if (typeof document === "undefined") return;
+
+  const app = document.getElementById("app");
+  const progress = loadProgress();
+  const state = {
+    view: "home",
+    section: null,
+    queue: [],
+    index: 0,
+    phase: "ask",
+    hint: false,
+    draft: "",
+    choices: [],
+    picked: null,
+    wasCorrect: null,
+    wasClose: null,
+    roundCorrect: 0,
+    roundTotal: 0,
+    roundMisses: [],
+    confirmReset: false
+  };
+
+  function el(tag, attrs, children) {
+    const node = document.createElement(tag);
+    if (attrs) {
+      Object.keys(attrs).forEach((key) => {
+        const value = attrs[key];
+        if (value == null || value === false) return;
+        if (key === "class") node.className = value;
+        else if (key === "html") node.innerHTML = value;
+        else if (key.indexOf("on") === 0 && typeof value === "function") node.addEventListener(key.slice(2), value);
+        else node.setAttribute(key, value === true ? "" : String(value));
+      });
+    }
+    const kids = Array.isArray(children) ? children : children == null ? [] : [children];
+    kids.forEach((kid) => {
+      if (kid == null || kid === false) return;
+      node.appendChild(typeof kid === "string" ? document.createTextNode(kid) : kid);
+    });
+    return node;
+  }
+
+  function fillChoice(button, option) {
+    const label = document.createElement("span");
+    if (option.html === option.text) label.textContent = option.text;
+    else label.innerHTML = option.html;
+    button.appendChild(label);
+  }
+
+  function sectionCount(id) {
+    if (id === "mixed") return QUESTIONS.length;
+    if (id === "missed") return progress.missed.length;
+    return QUESTIONS.filter((q) => q.section === id).length;
+  }
+
+  function questionsFor(id) {
+    if (id === "mixed") return QUESTIONS.slice();
+    if (id === "missed") return progress.missed.map((qid) => QUESTION_BY_ID[qid]).filter(Boolean);
+    return QUESTIONS.filter((q) => q.section === id);
+  }
+
+  function sectionTitle(id) {
+    if (id === "missed") return "Missed questions";
+    const found = SECTIONS.filter((s) => s.id === id)[0];
+    return found ? found.title : "Quiz";
+  }
+
+  function startSection(id) {
+    const items = questionsFor(id);
+    if (!items.length) return;
+    state.view = "quiz";
+    state.section = id;
+    state.queue = shuffle(items);
+    state.index = 0;
+    state.roundCorrect = 0;
+    state.roundTotal = 0;
+    state.roundMisses = [];
+    state.confirmReset = false;
+    prepareQuestion();
+    render();
+  }
+
+  function prepareQuestion() {
+    const q = state.queue[state.index];
+    state.phase = "ask";
+    state.hint = false;
+    state.draft = "";
+    state.picked = null;
+    state.wasCorrect = null;
+    state.wasClose = null;
+    state.choices = q && q.kind === "mc" ? shuffle(q.choices) : [];
+  }
+
+  function record(q, correct, labelHtml, labelText) {
+    progress.attempted += 1;
+    state.roundTotal += 1;
+    if (correct) {
+      progress.correct += 1;
+      state.roundCorrect += 1;
+      progress.streak += 1;
+      if (progress.streak > progress.best) progress.best = progress.streak;
+      progress.missed = progress.missed.filter((id) => id !== q.id);
+    } else {
+      progress.streak = 0;
+      if (progress.missed.indexOf(q.id) === -1) progress.missed.push(q.id);
+      const exact = q.kind === "type" ? q.answer : correctChoiceText(q);
+      const exactHtml = q.kind === "mc" ? (q.choices.filter((c) => c.correct)[0] || {}).html : "";
+      state.roundMisses.push({ html: labelHtml, text: labelText, answer: exact, answerHtml: exactHtml });
+    }
+    saveProgress(progress);
+  }
+
+  function correctChoiceText(q) {
+    const good = q.choices.filter((c) => c.correct)[0];
+    return good ? good.text : "";
+  }
+
+  function gradeTyped(q, raw) {
+    const typed = String(raw || "").trim();
+    if (!typed) return;
+    const correct = matches(typed, q.answer);
+    state.wasCorrect = correct;
+    state.wasClose = correct && !sameLoose(typed, q.answer);
+    state.phase = "feedback";
+    record(q, correct, formulaHTML(q.formula), formulaText(q.formula));
+    render();
+    const next = document.getElementById("next-btn");
+    if (next) next.focus();
+  }
+
+  function gradeChoice(q, choiceIndex) {
+    if (state.phase !== "ask") return;
+    const picked = state.choices[choiceIndex];
+    state.picked = choiceIndex;
+    state.wasCorrect = !!picked.correct;
+    state.phase = "feedback";
+    record(q, !!picked.correct, q.formula ? formulaHTML(q.formula) : "", q.headline || (q.formula ? formulaText(q.formula) : q.prompt));
+    render();
+    const next = document.getElementById("next-btn");
+    if (next) next.focus();
+  }
+
+  function goNext() {
+    if (state.index + 1 >= state.queue.length) {
+      state.view = "done";
+      render();
+      return;
+    }
+    state.index += 1;
+    prepareQuestion();
+    render();
+    const field = document.getElementById("answer");
+    if (field) field.focus();
+  }
+
+  function feedbackCopy(q) {
+    if (q.kind === "type") {
+      const lead = state.wasCorrect
+        ? (state.wasClose ? "Correct. Exact form: " + q.answer + ". " : "Correct — " + q.answer + ". ")
+        : "Not quite. The name is " + q.answer + ". ";
+      return lead + q.why;
+    }
+    return (state.wasCorrect ? "Correct. " : "Not quite. ") + q.why;
+  }
+
+  function render() {
+    app.textContent = "";
+    if (location.hash === "#selftest") {
+      const result = runSelfTest();
+      app.appendChild(el("div", { class: "card" }, [
+        el("h1", null, result.ok ? "Self-test passed" : "Self-test failed"),
+        el("p", { class: "lede" }, result.count + " questions. " + (result.ok ? "All checks passed." : result.fails.join(" | ")))
+      ]));
+      return;
+    }
+    if (state.view === "home") renderHome();
+    else if (state.view === "done") renderDone();
+    else renderQuiz();
+  }
+
+  function renderHome() {
+    const card = el("div", { class: "card" }, [
+      el("h1", null, "Naming compounds"),
+      el("p", { class: "lede" }, "Practice for the quiz: ionic names, Roman numerals, covalent prefixes, polyatomic ions, and multiple proportions. Nothing is sent anywhere. Your score stays on this device.")
+    ]);
+    const stats = el("div", { class: "stats" });
+    if (progress.attempted) {
+      stats.appendChild(el("div", { class: "chip" }, progress.correct + " correct of " + progress.attempted));
+      stats.appendChild(el("div", { class: "chip" }, "Streak " + progress.streak));
+      stats.appendChild(el("div", { class: "chip" }, "Best " + progress.best));
+    } else {
+      stats.appendChild(el("div", { class: "chip" }, "No answers yet"));
+    }
+    card.appendChild(stats);
+    const stack = el("div", { class: "stack" });
+    SECTIONS.forEach((section) => {
+      const count = sectionCount(section.id);
+      stack.appendChild(el("button", { type: "button", onclick: function () { startSection(section.id); } }, [
+        el("strong", null, section.title),
+        el("span", null, section.blurb + " · " + count + (count === 1 ? " question" : " questions"))
+      ]));
+    });
+    const missed = progress.missed.length;
+    stack.appendChild(el("button", {
+      type: "button",
+      disabled: missed ? false : true,
+      onclick: function () { if (missed) startSection("missed"); }
+    }, [
+      el("strong", null, missed ? "Missed questions (" + missed + ")" : "Missed questions"),
+      el("span", null, missed ? "A review round of the ones you missed." : "None yet. Miss one and it will wait here.")
+    ]));
+    card.appendChild(stack);
+    const reset = el("button", {
+      type: "button",
+      class: "center",
+      style: "margin-top:12px",
+      onclick: function () {
+        if (!state.confirmReset) {
+          state.confirmReset = true;
+          render();
+          return;
+        }
+        const fresh = emptyProgress();
+        progress.correct = fresh.correct;
+        progress.attempted = fresh.attempted;
+        progress.streak = fresh.streak;
+        progress.best = fresh.best;
+        progress.missed = fresh.missed;
+        saveProgress(progress);
+        state.confirmReset = false;
+        render();
+      }
+    }, state.confirmReset ? "Tap again to erase the saved score" : "Reset saved progress");
+    card.appendChild(reset);
+    card.appendChild(el("p", { class: "fine" }, "Answers ignore capitals and extra spaces. iron(III), iron (III), and iron 3 all count, and the exact form is shown."));
+    app.appendChild(card);
+  }
+
+  function renderQuiz() {
+    const q = state.queue[state.index];
+    const card = el("div", { class: "card" });
+    const head = el("div", { class: "row quiz-head" }, [
+      el("button", { type: "button", class: "ghost", onclick: function () { state.view = "home"; render(); } }, "Home"),
+      el("div", { class: "grow" }, [
+        el("div", { class: "kicker" }, q.topic),
+        el("h2", null, sectionTitle(state.section))
+      ])
+    ]);
+    card.appendChild(head);
+    const stats = el("div", { class: "stats" }, [
+      el("div", { class: "chip" }, (state.index + 1) + " / " + state.queue.length),
+      el("div", { class: "chip" }, state.roundTotal ? "This round " + state.roundCorrect + "/" + state.roundTotal : "This round"),
+      el("div", { class: "chip" }, "Streak " + progress.streak)
+    ]);
+    card.appendChild(stats);
+    const pct = Math.round((state.index / state.queue.length) * 100);
+    card.appendChild(el("div", { class: "progress", role: "presentation" }, el("div", { style: "width:" + pct + "%" })));
+    card.appendChild(el("p", { class: "prompt" }, q.prompt));
+    if (q.formula) card.appendChild(el("div", { class: "formula", html: formulaHTML(q.formula) }));
+    if (q.headline) {
+      const shown = q.headline.charAt(0).toUpperCase() + q.headline.slice(1);
+      card.appendChild(el("div", { class: "headline" }, shown));
+    }
+    card.appendChild(el("p", { class: "rule" }, q.rule));
+
+    if (q.kind === "type" && state.phase === "ask") {
+      const form = el("form", { onsubmit: function (event) {
+        event.preventDefault();
+        gradeTyped(q, document.getElementById("answer").value);
+      }});
+      form.appendChild(el("label", { class: "fine", for: "answer", style: "margin-top:0" }, "Type the name"));
+      const field = el("input", {
+        id: "answer",
+        type: "text",
+        autocomplete: "off",
+        autocorrect: "off",
+        autocapitalize: "off",
+        spellcheck: "false",
+        placeholder: "type the name",
+        value: state.draft,
+        oninput: function (event) { state.draft = event.target.value; }
+      });
+      form.appendChild(field);
+      const actions = el("div", { class: "actions inline" }, [
+        el("button", { type: "submit", class: "primary" }, "Check"),
+        el("button", { type: "button", onclick: function () { state.hint = !state.hint; render(); const box = document.getElementById("answer"); if (box) box.focus(); } }, state.hint ? "Hide hint" : "Show hint")
+      ]);
+      form.appendChild(actions);
+      card.appendChild(form);
+    } else if (q.kind === "mc" && state.phase === "ask") {
+      const choices = el("div", { class: q.choices.length === 2 ? "choices pair" : "choices" });
+      state.choices.forEach((option, index) => {
+        const button = el("button", {
+          type: "button",
+          class: option.text.length > 70 ? "choice long" : "choice",
+          onclick: function () { gradeChoice(q, index); }
+        });
+        fillChoice(button, option);
+        choices.appendChild(button);
+      });
+      card.appendChild(choices);
+      card.appendChild(el("div", { class: "actions", style: "margin-top:12px" }, [
+        el("button", { type: "button", onclick: function () { state.hint = !state.hint; render(); } }, state.hint ? "Hide hint" : "Show hint")
+      ]));
+    }
+
+    if (state.hint) card.appendChild(el("div", { class: "hint" }, q.hint));
+
+    if (state.phase === "feedback") {
+      if (q.kind === "mc") {
+        const choices = el("div", { class: q.choices.length === 2 ? "choices pair" : "choices" });
+        state.choices.forEach((option, index) => {
+          let cls = "choice";
+          if (option.correct) cls += " right";
+          else if (index === state.picked) cls += " wrong";
+          const button = el("button", { type: "button", class: cls + (option.text.length > 70 ? " long" : ""), disabled: true });
+          fillChoice(button, option);
+          choices.appendChild(button);
+        });
+        card.appendChild(choices);
+      }
+      card.appendChild(el("div", { class: state.wasCorrect ? "feedback good" : "feedback bad", role: "status" }, feedbackCopy(q)));
+      card.appendChild(el("div", { class: "actions", style: "margin-top:12px" }, [
+        el("button", {
+          id: "next-btn",
+          type: "button",
+          class: "primary",
+          onclick: goNext
+        }, state.index + 1 >= state.queue.length ? "See results" : "Next")
+      ]));
+    }
+    app.appendChild(card);
+  }
+
+  function renderDone() {
+    const title = sectionTitle(state.section);
+    const card = el("div", { class: "card" }, [
+      el("h1", null, state.roundCorrect === state.roundTotal ? "Clean round" : "Round done"),
+      el("p", { class: "lede" }, title + ": " + state.roundCorrect + " correct out of " + state.roundTotal + ". Streak " + progress.streak + ". Best " + progress.best + ".")
+    ]);
+    if (state.roundMisses.length) {
+      card.appendChild(el("p", { class: "prompt" }, "Missed this round"));
+      const list = el("div", { class: "miss-list" });
+      state.roundMisses.forEach((item) => {
+        const row = el("div", { class: "miss" });
+        if (item.html) row.appendChild(el("div", { html: item.html }));
+        else if (item.text) row.appendChild(el("div", null, item.text));
+        if (item.answerHtml && item.answerHtml !== item.answer) row.appendChild(el("b", { html: item.answerHtml }));
+        else row.appendChild(el("b", null, item.answer));
+        list.appendChild(row);
+      });
+      card.appendChild(list);
+    }
+    const stack = el("div", { class: "stack" });
+    if (progress.missed.length) {
+      stack.appendChild(el("button", { type: "button", class: "primary center", onclick: function () { startSection("missed"); } }, "Review missed questions (" + progress.missed.length + ")"));
+    }
+    stack.appendChild(el("button", { type: "button", class: "center", onclick: function () { startSection(state.section); } }, "Try this section again"));
+    stack.appendChild(el("button", { type: "button", class: "center", onclick: function () { state.view = "home"; render(); } }, "Home"));
+    card.appendChild(stack);
+    app.appendChild(card);
+  }
+
+  render();
+})();
+</script>
+</body>
+</html>
