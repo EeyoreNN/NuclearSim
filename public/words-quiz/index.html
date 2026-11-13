@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b14">
+<title>MX Words 41–44 — practice quiz</title>
+<script>
+try {
+  var savedTheme = JSON.parse(localStorage.getItem("mx-words-41-44-quiz-v1") || "{}").theme;
+  if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
+} catch (err) { /* storage unavailable */ }
+</script>
+<style>
+  :root {
+    color-scheme: dark;
+    --text: #f6f8fc;
+    --muted: #d5deee;
+    --faint: #b7c3d8;
+    --line: rgba(255, 255, 255, 0.22);
+    --good: #b6f3d4;
+    --good-bg: rgba(90, 190, 140, 0.18);
+    --bad: #ffd0cb;
+    --bad-bg: rgba(210, 90, 80, 0.2);
+    --accent: #d7ecff;
+    --bg: #070b14;
+    --card: rgba(12, 18, 36, 0.82);
+    --chip: rgba(255,255,255,0.08);
+    --field: rgba(0,0,0,0.28);
+    --fill: rgba(255,255,255,0.1);
+    --fill-2: rgba(255,255,255,0.16);
+  }
+  html[data-theme="light"] {
+    color-scheme: light;
+    --text: #161922;
+    --muted: #3d4658;
+    --faint: #5c677a;
+    --line: rgba(20, 28, 48, 0.16);
+    --good: #0c6b42;
+    --good-bg: rgba(24, 140, 90, 0.14);
+    --bad: #8e221c;
+    --bad-bg: rgba(180, 40, 36, 0.12);
+    --accent: #1a4f8b;
+    --bg: #e8edf5;
+    --card: rgba(255, 255, 255, 0.86);
+    --chip: rgba(20, 30, 50, 0.06);
+    --field: rgba(255,255,255,0.9);
+    --fill: rgba(20, 30, 50, 0.05);
+    --fill-2: rgba(20, 30, 50, 0.08);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", system-ui, sans-serif;
+    font-size: 20px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { min-height: 100dvh; }
+  .orb { position: fixed; border-radius: 50%; filter: blur(30px); z-index: 0; pointer-events: none; }
+  .orb-a { width: 52vw; height: 52vw; max-width: 640px; max-height: 640px; background: rgba(72, 126, 255, 0.38); top: -14vw; left: -12vw; }
+  .orb-b { width: 42vw; height: 42vw; max-width: 520px; max-height: 520px; background: rgba(168, 96, 255, 0.26); top: 6vh; right: -14vw; }
+  .orb-c { width: 48vw; height: 48vw; max-width: 560px; max-height: 560px; background: rgba(46, 186, 196, 0.18); bottom: -18vw; left: 18vw; }
+  html[data-theme="light"] .orb { opacity: 0.55; }
+  main {
+    position: relative;
+    z-index: 1;
+    width: min(760px, 100%);
+    margin: 0 auto;
+    padding: max(20px, env(safe-area-inset-top)) 16px max(32px, env(safe-area-inset-bottom));
+  }
+  .card {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.16), rgba(255,255,255,0.045) 32%, rgba(255,255,255,0.03)),
+      var(--card);
+    -webkit-backdrop-filter: blur(28px) saturate(160%);
+    backdrop-filter: blur(28px) saturate(160%);
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.38), 0 24px 50px rgba(0,0,0,0.28);
+    padding: 22px 18px 18px;
+  }
+  html[data-theme="light"] .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.78)), var(--card);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 18px 40px rgba(30, 40, 70, 0.08);
+  }
+  h1 { font-size: clamp(2rem, 6vw, 2.7rem); line-height: 1.05; letter-spacing: -0.035em; margin: 0 0 8px; font-weight: 680; }
+  h2 { font-size: clamp(1.45rem, 4vw, 1.8rem); line-height: 1.15; letter-spacing: -0.03em; margin: 0; font-weight: 680; }
+  p { margin: 0; }
+  .lede { color: var(--muted); font-size: 1.05rem; margin-bottom: 16px; }
+  .stats { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 16px; }
+  .chip {
+    display: inline-flex; align-items: center; min-height: 40px; padding: 6px 12px; border-radius: 999px;
+    background: var(--chip); border: 1px solid var(--line); color: var(--muted); font-size: 0.95rem;
+  }
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+  button, .tap {
+    font: inherit; color: var(--text); min-height: 56px; border-radius: 18px;
+    border: 1px solid var(--line); background: var(--fill); padding: 12px 16px;
+    text-align: left; cursor: pointer; width: 100%; touch-action: manipulation;
+  }
+  button strong { display: block; font-size: 1.12rem; font-weight: 680; letter-spacing: -0.02em; }
+  button span, .fine { color: var(--muted); }
+  button span { display: block; font-size: 0.92rem; margin-top: 2px; }
+  button:hover { background: var(--fill-2); }
+  button:active { transform: translateY(1px); }
+  button:focus-visible, input:focus-visible { outline: 3px solid #9dceff; outline-offset: 3px; }
+  button:disabled { cursor: default; color: var(--faint); background: var(--fill); }
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+  @media (max-width: 560px) {
+    .quiz-head { flex-direction: column; align-items: stretch; }
+    .quiz-head .ghost { width: fit-content; }
+  }
+  .row .grow { flex: 1; min-width: 0; }
+  .ghost { width: auto; min-width: 56px; background: var(--fill); padding: 12px 16px; font-size: 1.05rem; font-weight: 640; }
+  .kicker { color: var(--accent); font-size: 0.85rem; letter-spacing: 0.06em; text-transform: uppercase; font-weight: 680; margin-bottom: 6px; }
+  .prompt { font-size: 1.2rem; margin-bottom: 8px; }
+  .headline {
+    font-size: clamp(2.15rem, 8vw, 3.15rem); font-weight: 700; letter-spacing: -0.03em;
+    line-height: 1.15; margin: 4px 0 10px; overflow-wrap: anywhere;
+  }
+  .rule { color: var(--muted); font-size: 1rem; margin-bottom: 16px; }
+  .example { color: var(--muted); font-size: 1rem; margin-top: 8px; }
+  .example b { color: var(--accent); font-weight: 680; }
+  form { display: flex; flex-direction: column; gap: 12px; }
+  input[type="text"] {
+    font: inherit; font-size: 1.3rem; color: var(--text); width: 100%; min-height: 64px;
+    border-radius: 18px; border: 1px solid var(--line); background: var(--field); padding: 12px 16px;
+  }
+  input::placeholder { color: var(--faint); }
+  .actions { display: flex; flex-direction: column; gap: 12px; }
+  @media (min-width: 640px) {
+    .actions.inline { flex-direction: row; }
+    .actions.inline button { width: auto; flex: 1; text-align: center; }
+  }
+  button.primary { text-align: center; font-weight: 680; background: rgba(190, 220, 255, 0.18); }
+  html[data-theme="light"] button.primary { background: rgba(26, 79, 139, 0.1); }
+  button.center { text-align: center; font-weight: 680; }
+  .choices { display: flex; flex-direction: column; gap: 12px; }
+  .choice { font-size: 1.2rem; font-weight: 640; display: flex; align-items: center; min-height: 56px; line-height: 1.3; }
+  .choice.long { font-size: 1.05rem; font-weight: 600; }
+  .choice.picked, button.picked { border-color: rgba(150, 196, 255, 0.9); background: rgba(120, 170, 230, 0.2); }
+  .choice.right, .feedback.good { background: var(--good-bg); border-color: rgba(120, 200, 160, 0.8); color: var(--good); }
+  .choice.wrong, .feedback.bad { background: var(--bad-bg); border-color: rgba(220, 140, 130, 0.8); color: var(--bad); }
+  .feedback { margin-top: 14px; border-radius: 18px; border: 1px solid var(--line); padding: 14px 16px; font-size: 1.05rem; }
+  .bar { height: 10px; border-radius: 99px; background: var(--fill); overflow: hidden; margin: 8px 0 14px; }
+  .bar > div { height: 100%; width: 0; background: linear-gradient(90deg, #8eb6ff, #b7f3dd); }
+  .fine { color: var(--faint); font-size: 0.9rem; margin-top: 14px; }
+  .map { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; margin: 8px 0 16px; }
+  .map-tile {
+    flex: 1 0 132px; width: auto; min-height: 96px; text-align: left; border-radius: 20px;
+  }
+  .map-tile strong { font-size: 1.25rem; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 16px; }
+  .badge { min-height: 56px; width: auto; border-radius: 999px; padding: 10px 14px; font-size: 0.95rem; font-weight: 650; }
+  .badge.locked { color: var(--faint); background: transparent; }
+  .timer { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--accent); }
+  #enter-immersive { text-align: center; background: rgba(150, 190, 255, 0.22); border-color: rgba(198, 224, 255, 0.62); }
+  html[data-theme="light"] #enter-immersive { background: rgba(26, 79, 139, 0.1); }
+  .focus-root {
+    position: fixed; inset: 0; z-index: 40; display: flex; align-items: flex-start; justify-content: center;
+    padding: max(18px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+    overflow: auto;
+    background:
+      radial-gradient(900px 520px at 12% -10%, rgba(72, 126, 255, 0.38), transparent 55%),
+      radial-gradient(720px 480px at 110% 0%, rgba(168, 96, 255, 0.28), transparent 50%),
+      var(--bg);
+  }
+  .focus-root .card { width: min(880px, 100%); margin: auto; }
+  .focus-root .headline { font-size: clamp(2.4rem, 8vw, 4rem); }
+  .focus-root button, .focus-root .choice { min-height: 72px; }
+  @media (prefers-reduced-motion: reduce) { button:active { transform: none; } }
+</style>
+</head>
+<body>
+<div class="orb orb-a" aria-hidden="true"></div>
+<div class="orb orb-b" aria-hidden="true"></div>
+<div class="orb orb-c" aria-hidden="true"></div>
+<main id="app"></main>
+<script>
+(function () {
+  var STORE_KEY = "mx-words-41-44-quiz-v1";
+  var RAW = [
+    [41, "supplicate", "ask humbly and earnestly", "The villagers supplicated the governor for food."],
+    [41, "diatribe", "a bitter, abusive speech", "His diatribe against the call lasted the whole ride home."],
+    [41, "exacerbate", "make worse", "Scratching the rash will only exacerbate it."],
+    [41, "deplorable", "lamentable, miserable", "The storm left the harbor in a deplorable state."],
+    [41, "desist", "stop", "The librarian told them to desist from shouting."],
+    [41, "paradox", "seems contradictory but is in some way true", "\"Less is more\" is a familiar paradox."],
+    [41, "epithet", "an adjective that characterizes, not just describes", "\"Swift-footed\" is an epithet for Achilles."],
+    [41, "arbitrary", "random, without reason", "The new seating chart felt arbitrary."],
+    [41, "complacent", "smug", "After one easy win, the team grew complacent."],
+    [41, "assiduous", "careful, diligent", "Assiduous practice improved her serve."],
+    [41, "repudiate", "disown", "She repudiated the rumor in a short statement."],
+    [41, "attest", "be proof of", "The worn boots attest to years of trail work."],
+    [41, "averse", "having a distaste for", "He is averse to speaking in front of a crowd."],
+    [41, "castigate", "scold severely", "The coach castigated the players for missing practice."],
+    [41, "cursory", "hasty, superficial", "A cursory glance missed the second mistake."],
+    [42, "sinuous", "winding", "A sinuous path led down to the river."],
+    [42, "curtail", "shorten", "Rain curtailed the outdoor rehearsal."],
+    [42, "avarice", "greed", "Avarice made him keep every coin he found."],
+    [42, "furtive", "sneaky", "She took a furtive look at the clock during the talk."],
+    [42, "gesticulate", "make gestures", "He gesticulated so much he nearly knocked over a glass."],
+    [42, "profligate", "recklessly wasteful", "Profligate spending emptied the club account."],
+    [42, "fruition", "achievement of what was worked for", "Years of practice came to fruition at the recital."],
+    [42, "abet", "encourage, incite", "Laughing at the prank only abets the next one."],
+    [42, "banal", "trite, unoriginal", "The movie ending was banal."],
+    [42, "brazen", "shameless", "The brazen lie surprised even his friends."],
+    [42, "clemency", "mercy", "The principal showed clemency and shortened the detention."],
+    [42, "coerce", "force", "Nobody should coerce you into signing that form."],
+    [42, "convivial", "sociable", "The convivial host pulled every guest into the conversation."],
+    [42, "daunt", "intimidate", "The steep first hill did not daunt her."],
+    [42, "defamation", "slander", "Printing that false story was defamation."],
+    [43, "guise", "outward appearance", "He came back in the guise of a delivery driver."],
+    [43, "conversant", "familiar", "She is conversant with the lab safety rules."],
+    [43, "deign", "condescend to grant", "The busy editor did not deign to answer the email."],
+    [43, "efface", "wipe out", "Rain could not efface the chalk drawing completely."],
+    [43, "concurrent", "happening at the same time", "Two concurrent clubs forced her to choose one."],
+    [43, "effervescent", "bubbly, lively", "Her effervescent laugh filled the room."],
+    [43, "encroach", "intrude gradually", "Weeds began to encroach on the garden path."],
+    [43, "apex", "highest point", "They reached the apex of the climb at noon."],
+    [43, "encumber", "burden", "A heavy pack encumbered the hikers."],
+    [43, "ensconce", "settle comfortably", "The cat ensconced itself on the warm chair."],
+    [43, "exhort", "urge on", "The captain exhorted the team to finish the drill."],
+    [43, "foist", "impose by trickery", "He tried to foist the leftover chores on his brother."],
+    [43, "gibe", "mocking remark", "The gibe about his shoes stung more than he admitted."],
+    [43, "gloat", "take malicious pleasure", "Do not gloat just because the other team lost."],
+    [43, "languid", "listless", "The languid heat made everyone move slowly."],
+    [44, "impair", "weaken", "Too little sleep can impair your memory."],
+    [44, "esoteric", "understood by few", "The manual was too esoteric for a new player."],
+    [44, "incipient", "just beginning", "She rested so the incipient cold would not grow."],
+    [44, "equivocal", "ambiguous", "His equivocal reply left the group unsure."],
+    [44, "ineffectual", "powerless", "The ineffectual protest changed nothing."],
+    [44, "mortify", "humiliate", "Tripping on the way to the microphone would mortify him."],
+    [44, "ramification", "consequence", "One missed deadline had ramifications for the whole project."],
+    [44, "inscrutable", "impossible to understand", "The cat's inscrutable stare gave nothing away."],
+    [44, "lackluster", "dull", "The lackluster speech lost the audience."],
+    [44, "latitude", "freedom from restraints", "The teacher gave them latitude in choosing a topic."],
+    [44, "mitigate", "make less severe", "A quick apology can mitigate the hurt."],
+    [44, "muse", "ponder", "She sat by the window to muse over the last paragraph."],
+    [44, "ornate", "elaborately decorated", "The ornate frame drew more looks than the photo."],
+    [44, "parlance", "manner of speaking", "In soccer parlance, that play is called a give-and-go."],
+    [44, "prim", "stiffly proper", "His prim posture made the joke seem even funnier."]
+  ];
+
+  var WORDS = RAW.map(function (row) {
+    return { id: row[1], list: row[0], word: row[1], def: row[2], example: row[3] };
+  });
+  var WORD_BY_ID = {};
+  WORDS.forEach(function (word) { WORD_BY_ID[word.id] = word; });
+
+  var BLOCK_PAIRS = [
+    ["castigate", "diatribe"], ["castigate", "mortify"], ["castigate", "gibe"],
+    ["exacerbate", "encumber"], ["exacerbate", "impair"],
+    ["efface", "curtail"], ["efface", "desist"], ["efface", "impair"],
+    ["exhort", "abet"], ["diatribe", "gibe"], ["diatribe", "defamation"], ["gibe", "defamation"],
+    ["esoteric", "inscrutable"], ["esoteric", "equivocal"], ["inscrutable", "equivocal"],
+    ["paradox", "equivocal"], ["languid", "lackluster"], ["languid", "ineffectual"],
+    ["lackluster", "ineffectual"], ["lackluster", "banal"], ["complacent", "brazen"],
+    ["avarice", "profligate"], ["effervescent", "convivial"], ["coerce", "foist"],
+    ["parlance", "epithet"]
+  ];
+  var BLOCK = {};
+  BLOCK_PAIRS.forEach(function (pair) {
+    BLOCK[pair.slice().sort().join("|")] = true;
+  });
+
+  var BADGE_DEFS = [
+    { id: "first", name: "First word", detail: "Answer one question." },
+    { id: "combo5", name: "Combo 5", detail: "Five correct in a row." },
+    { id: "combo10", name: "Combo 10", detail: "Ten correct in a row." },
+    { id: "list41", name: "List 41", detail: "Get every List 41 word right at least once." },
+    { id: "list42", name: "List 42", detail: "Get every List 42 word right at least once." },
+    { id: "list43", name: "List 43", detail: "Get every List 43 word right at least once." },
+    { id: "list44", name: "List 44", detail: "Get every List 44 word right at least once." },
+    { id: "all60", name: "All 60", detail: "Get every word right at least once." },
+    { id: "typed10", name: "Exact typist", detail: "Type 10 words with exact spelling." },
+    { id: "mock80", name: "Mock 80%", detail: "Score at least 80% on a mock test." },
+    { id: "mock100", name: "Perfect mock", detail: "Score 100% on a mock test." },
+    { id: "leitner", name: "Box 3 x10", detail: "Move 10 words into Leitner box 3." },
+    { id: "match", name: "Clean match", detail: "Finish a matching round with no mistakes." }
+  ];
+
+  function shuffle(list) {
+    var copy = list.slice();
+    for (var i = copy.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var swap = copy[i];
+      copy[i] = copy[j];
+      copy[j] = swap;
+    }
+    return copy;
+  }
+
+  function isBlocked(a, b) {
+    return !!BLOCK[[a, b].sort().join("|")];
+  }
+
+  function normalizeWord(value) {
+    return String(value || "").toLowerCase().replace(/[^a-z]/g, "");
+  }
+
+  function damerau(a, b) {
+    var n = a.length;
+    var m = b.length;
+    var dp = [];
+    for (var i = 0; i <= n; i++) {
+      dp[i] = [];
+      for (var j = 0; j <= m; j++) dp[i][j] = 0;
+      dp[i][0] = i;
+    }
+    for (var k = 0; k <= m; k++) dp[0][k] = k;
+    for (var x = 1; x <= n; x++) {
+      for (var y = 1; y <= m; y++) {
+        var cost = a.charAt(x - 1) === b.charAt(y - 1) ? 0 : 1;
+        dp[x][y] = Math.min(dp[x - 1][y] + 1, dp[x][y - 1] + 1, dp[x - 1][y - 1] + cost);
+        if (x > 1 && y > 1 && a.charAt(x - 1) === b.charAt(y - 2) && a.charAt(x - 2) === b.charAt(y - 1)) {
+          dp[x][y] = Math.min(dp[x][y], dp[x - 2][y - 2] + 1);
+        }
+      }
+    }
+    return dp[n][m];
+  }
+
+  function gradeTyped(input, answer) {
+    var typed = normalizeWord(input);
+    var target = normalizeWord(answer);
+    if (!typed) return "empty";
+    if (typed === target) return "exact";
+    var stolen = WORDS.some(function (word) { return word.word !== answer && normalizeWord(word.word) === typed; });
+    if (stolen) return "wrong";
+    if (target.length >= 4 && damerau(typed, target) === 1) return "close";
+    return "wrong";
+  }
+
+  function otherWords(word) {
+    return WORDS.filter(function (item) { return item.id !== word.id && !isBlocked(item.id, word.id); });
+  }
+
+  function pickDistractors(word, field) {
+    var pool = otherWords(word);
+    var same = shuffle(pool.filter(function (item) { return item.list === word.list; }));
+    var rest = shuffle(pool.filter(function (item) { return item.list !== word.list; }));
+    var ordered = same.concat(rest);
+    var chosen = [];
+    var seen = {};
+    ordered.forEach(function (item) {
+      if (chosen.length >= 3) return;
+      var value = item[field];
+      if (seen[value] || value === word[field]) return;
+      seen[value] = true;
+      chosen.push(item);
+    });
+    return chosen;
+  }
+
+  function choiceSet(word, field) {
+    var correct = { id: word.id, text: word[field], correct: true };
+    var options = [correct].concat(pickDistractors(word, field).map(function (item) {
+      return { id: item.id, text: item[field], correct: false };
+    }));
+    return shuffle(options);
+  }
+
+  function wordsIn(scope) {
+    if (scope === "all") return WORDS.slice();
+    return WORDS.filter(function (word) { return word.list === scope; });
+  }
+
+  function chunkMatching(list) {
+    var items = list.slice();
+    items.sort(function (a, b) {
+      function degree(word) {
+        return list.filter(function (other) { return other.id !== word.id && isBlocked(word.id, other.id); }).length;
+      }
+      return degree(b) - degree(a) || (Math.random() - 0.5);
+    });
+    var rounds = [];
+    function canAdd(round, word) {
+      return round.length < 5 && round.every(function (other) { return !isBlocked(other.id, word.id); });
+    }
+    function solve(index) {
+      if (index === items.length) return true;
+      var word = items[index];
+      var order = shuffle(rounds.map(function (_, i) { return i; }));
+      for (var n = 0; n < order.length; n++) {
+        var round = rounds[order[n]];
+        if (!canAdd(round, word)) continue;
+        round.push(word);
+        if (solve(index + 1)) return true;
+        round.pop();
+      }
+      if (rounds.length * 5 < items.length) {
+        rounds.push([word]);
+        if (solve(index + 1)) return true;
+        rounds.pop();
+      }
+      return false;
+    }
+    if (!solve(0)) return items.map(function (word) { return [word]; });
+    return rounds;
+  }
+
+  function emptyProgress() {
+    return {
+      xp: 0, combo: 0, bestCombo: 0, correct: 0, attempted: 0,
+      exactTyped: 0, cleanMatches: 0, theme: "dark",
+      words: {}, badges: {}, mocks: []
+    };
+  }
+
+  function loadProgress() {
+    var base = emptyProgress();
+    try {
+      if (typeof localStorage === "undefined") return base;
+      var raw = localStorage.getItem(STORE_KEY);
+      if (!raw) return base;
+      var data = JSON.parse(raw);
+      base.xp = data.xp | 0;
+      base.combo = data.combo | 0;
+      base.bestCombo = data.bestCombo | 0;
+      base.correct = data.correct | 0;
+      base.attempted = data.attempted | 0;
+      base.exactTyped = data.exactTyped | 0;
+      base.cleanMatches = data.cleanMatches | 0;
+      base.theme = data.theme === "light" ? "light" : "dark";
+      base.words = data.words && typeof data.words === "object" ? data.words : {};
+      base.badges = data.badges && typeof data.badges === "object" ? data.badges : {};
+      base.mocks = Array.isArray(data.mocks) ? data.mocks : [];
+    } catch (err) { /* keep defaults */ }
+    return base;
+  }
+
+  function saveProgress() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(progress)); } catch (err) { /* private mode */ }
+  }
+
+  function wordState(id) {
+    if (!progress.words[id]) progress.words[id] = { correct: 0, wrong: 0, box: 1, due: 0 };
+    return progress.words[id];
+  }
+
+  function listMastered(list) {
+    return wordsIn(list).every(function (word) { return (wordState(word.id).correct || 0) > 0; });
+  }
+
+  function masteredCount(scope) {
+    return wordsIn(scope).filter(function (word) { return (wordState(word.id).correct || 0) > 0; }).length;
+  }
+
+  function box3Count() {
+    return WORDS.filter(function (word) { return (wordState(word.id).box || 1) >= 3; }).length;
+  }
+
+  function levelInfo(xp) {
+    var level = 1;
+    var need = 80;
+    var left = xp;
+    while (left >= need && level < 40) {
+      left -= need;
+      level += 1;
+      need = 80 + (level - 1) * 20;
+    }
+    var titles = ["Novice", "Reader", "Student", "Scholar", "Analyst", "Wordsmith", "Lexicographer"];
+    return { level: level, into: left, need: need, title: titles[Math.min(level, titles.length) - 1] || ("Level " + level) };
+  }
+
+  function comboMultiplier() {
+    var combo = progress.combo;
+    if (combo >= 10) return 3;
+    if (combo >= 5) return 2;
+    if (combo >= 3) return 1.5;
+    if (combo >= 2) return 1.2;
+    return 1;
+  }
+
+  function unlockBadges() {
+    var earned = [];
+    var checks = {
+      first: progress.attempted >= 1,
+      combo5: progress.bestCombo >= 5,
+      combo10: progress.bestCombo >= 10,
+      list41: listMastered(41),
+      list42: listMastered(42),
+      list43: listMastered(43),
+      list44: listMastered(44),
+      all60: listMastered("all"),
+      typed10: progress.exactTyped >= 10,
+      mock80: progress.mocks.some(function (item) { return item.total && item.score / item.total >= 0.8; }),
+      mock100: progress.mocks.some(function (item) { return item.total && item.score === item.total; }),
+      leitner: box3Count() >= 10,
+      match: progress.cleanMatches >= 1
+    };
+    Object.keys(checks).forEach(function (id) {
+      if (checks[id] && !progress.badges[id]) {
+        progress.badges[id] = true;
+        earned.push(id);
+      }
+    });
+    return earned;
+  }
+
+  function recordOutcome(wordId, outcome) {
+    var stat = wordState(wordId);
+    var gain = 0;
+    if (outcome === "wrong" || outcome === "again") {
+      progress.combo = 0;
+      stat.wrong = (stat.wrong || 0) + 1;
+      if (outcome === "again") {
+        stat.box = 1;
+        stat.due = Date.now();
+      }
+    } else {
+      progress.combo += 1;
+      if (progress.combo > progress.bestCombo) progress.bestCombo = progress.combo;
+      progress.correct = (progress.correct || 0) + 1;
+      stat.correct = (stat.correct || 0) + 1;
+      var base = outcome === "exact" ? 15 : outcome === "close" ? 8 : outcome === "card" ? 5 : outcome === "match" ? 4 : 10;
+      if (outcome === "exact") progress.exactTyped = (progress.exactTyped || 0) + 1;
+      if (outcome === "card") {
+        stat.box = Math.min(3, (stat.box || 1) + 1);
+        var delay = stat.box === 3 ? 3 * 86400000 : stat.box === 2 ? 86400000 : 0;
+        stat.due = Date.now() + delay;
+      }
+      gain = Math.round(base * comboMultiplier());
+      progress.xp = (progress.xp || 0) + gain;
+    }
+    progress.attempted = (progress.attempted || 0) + 1;
+    var badges = unlockBadges();
+    saveProgress();
+    return { gain: gain, badges: badges };
+  }
+
+  function runSelfTest() {
+    var fails = [];
+    function check(cond, msg) { if (!cond) fails.push(msg); }
+    check(WORDS.length === 60, "expected 60 words");
+    [41, 42, 43, 44].forEach(function (list) {
+      check(wordsIn(list).length === 15, "list " + list + " count");
+    });
+    var seen = {};
+    WORDS.forEach(function (word) {
+      check(!seen[word.id], "duplicate " + word.id);
+      seen[word.id] = true;
+      check(word.def && word.example && word.example.toLowerCase().indexOf(word.word) !== -1, "example missing headword " + word.id);
+      var defs = pickDistractors(word, "def");
+      var names = pickDistractors(word, "word");
+      check(defs.length === 3, "def distractors " + word.id);
+      check(names.length === 3, "word distractors " + word.id);
+      defs.concat(names).forEach(function (other) {
+        check(other.id !== word.id, "self distractor " + word.id);
+        check(!isBlocked(word.id, other.id), "blocked pair " + word.id + " " + other.id);
+      });
+      var defTexts = {};
+      defs.forEach(function (other) {
+        check(other.def !== word.def, "same def " + word.id);
+        check(!defTexts[other.def], "dup def distractor " + word.id);
+        defTexts[other.def] = true;
+      });
+    });
+    check(gradeTyped("  Supplicate ", "supplicate") === "exact", "exact case");
+    check(gradeTyped("suplicate", "supplicate") === "close", "missing letter");
+    check(gradeTyped("supplicat", "supplicate") === "close", "dropped end");
+    check(gradeTyped("castigate", "diatribe") === "wrong", "other vocab word");
+    check(gradeTyped("exacerbate", "encumber") === "wrong", "near pair not accepted");
+    check(gradeTyped("mortify", "castigate") === "wrong", "mortify/castigate");
+    check(gradeTyped("", "muse") === "empty", "empty");
+    check(gradeTyped("musee", "muse") === "close", "muse extra letter");
+    [41, 42, 43, 44, "all"].forEach(function (scope) {
+      var rounds = chunkMatching(wordsIn(scope));
+      var used = {};
+      rounds.forEach(function (round) {
+        check(round.length === 5, "round size " + scope + " " + round.length);
+        round.forEach(function (word, index) {
+          check(!used[word.id], "match dupe " + word.id);
+          used[word.id] = true;
+          for (var i = index + 1; i < round.length; i++) check(!isBlocked(word.id, round[i].id), "match block " + word.id);
+        });
+      });
+      check(Object.keys(used).length === wordsIn(scope).length, "match coverage " + scope);
+    });
+    return { ok: fails.length === 0, fails: fails, count: WORDS.length };
+  }
+
+  var api = {
+    WORDS: WORDS,
+    gradeTyped: gradeTyped,
+    pickDistractors: pickDistractors,
+    isBlocked: isBlocked,
+    chunkMatching: chunkMatching,
+    runSelfTest: runSelfTest,
+    STORE_KEY: STORE_KEY
+  };
+  if (typeof globalThis !== "undefined") globalThis.WordsQuiz = api;
+  if (typeof document === "undefined") return;
+
+  var progress = loadProgress();
+  document.documentElement.setAttribute("data-theme", progress.theme || "dark");
+  var app = document.getElementById("app");
+  var immersiveKind = "pending";
+  var focusHadFullscreen = false;
+  var closingImmersive = false;
+  var xrSession = null;
+  var xrRenderer = null;
+  var mockClock = null;
+
+  var state = {
+    view: "home",
+    scope: "all",
+    mode: null,
+    queue: [],
+    index: 0,
+    phase: "ask",
+    choices: [],
+    picked: -1,
+    outcome: null,
+    gain: 0,
+    newBadges: [],
+    roundCorrect: 0,
+    roundTotal: 0,
+    roundXp: 0,
+    rounds: [],
+    roundIndex: 0,
+    matchLeft: [],
+    matchRight: [],
+    matchSelected: null,
+    matchDone: {},
+    matchMistakes: 0,
+    cards: [],
+    cardFlipped: false,
+    mockItems: [],
+    mockAnswers: [],
+    mockLeft: 0,
+    mockSubmitted: false,
+    confirmReset: false,
+    confirmSubmit: false
+  };
+
+  function el(tag, attrs, children) {
+    var node = document.createElement(tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (key) {
+        var value = attrs[key];
+        if (value == null || value === false) return;
+        if (key === "class") node.className = value;
+        else if (key.indexOf("on") === 0 && typeof value === "function") node.addEventListener(key.slice(2), value);
+        else node.setAttribute(key, value === true ? "" : String(value));
+      });
+    }
+    var kids = Array.isArray(children) ? children : children == null ? [] : [children];
+    kids.forEach(function (kid) {
+      if (kid == null || kid === false) return;
+      node.appendChild(typeof kid === "string" ? document.createTextNode(kid) : kid);
+    });
+    return node;
+  }
+
+  function scopeLabel(scope) {
+    return scope === "all" ? "All 60" : "List " + scope;
+  }
+
+  function applyTheme(theme) {
+    progress.theme = theme === "light" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", progress.theme);
+    var meta = document.querySelector("meta[name=theme-color]");
+    if (meta) meta.setAttribute("content", progress.theme === "light" ? "#e8edf5" : "#070b14");
+    saveProgress();
+  }
+
+  function stopClock() {
+    if (mockClock) {
+      clearInterval(mockClock);
+      mockClock = null;
+    }
+  }
+
+  function render() {
+    if (state.view !== "mock") stopClock();
+    app.textContent = "";
+    if (location.hash === "#selftest") {
+      var result = runSelfTest();
+      app.appendChild(el("div", { class: "card" }, [
+        el("h1", null, result.ok ? "Self-test passed" : "Self-test failed"),
+        el("p", { class: "lede" }, result.count + " words. " + (result.ok ? "All checks passed." : result.fails.join(" | ")))
+      ]));
+      return;
+    }
+    if (state.view === "home") renderHome();
+    else if (state.view === "modes") renderModes();
+    else if (state.view === "quiz") renderQuiz();
+    else if (state.view === "match") renderMatch();
+    else if (state.view === "cards") renderCards();
+    else if (state.view === "mock") renderMock();
+    else if (state.view === "review") renderReview();
+    else renderDone();
+  }
+
+  function hud() {
+    var info = levelInfo(progress.xp || 0);
+    var wrap = el("div", null, [
+      el("div", { class: "stats" }, [
+        el("div", { class: "chip" }, "Level " + info.level + " · " + info.title),
+        el("div", { class: "chip" }, (progress.xp || 0) + " XP"),
+        el("div", { class: "chip" }, "Combo " + (progress.combo || 0)),
+        el("div", { class: "chip" }, "Best " + (progress.bestCombo || 0))
+      ]),
+      el("div", { class: "bar", role: "presentation" }, el("div", { style: "width:" + Math.round((info.into / info.need) * 100) + "%" })),
+      el("p", { class: "rule" }, (info.need - info.into) + " XP to level " + (info.level + 1) + ".")
+    ]);
+    return wrap;
+  }
+
+  function mapTiles() {
+    var row = el("div", { class: "map" });
+    [41, 42, 43, 44, "all"].forEach(function (scope) {
+      var total = wordsIn(scope).length;
+      var done = masteredCount(scope);
+      row.appendChild(el("button", { type: "button", class: "map-tile", onclick: function () { openModes(scope); } }, [
+        el("strong", null, scope === "all" ? "All 60" : "List " + scope),
+        el("span", null, done + " / " + total + " learned")
+      ]));
+    });
+    return row;
+  }
+
+  function badgeRow() {
+    var row = el("div", { class: "badges" });
+    BADGE_DEFS.forEach(function (badge) {
+      var on = !!progress.badges[badge.id];
+      row.appendChild(el("button", {
+        type: "button",
+        class: on ? "badge" : "badge locked",
+        title: badge.detail,
+        onclick: function () {}
+      }, (on ? "" : "Locked · ") + badge.name));
+    });
+    return row;
+  }
+
+  function renderHome() {
+    var card = el("div", { class: "card" }, [
+      el("div", { class: "row" }, [
+        el("h1", { class: "grow" }, "MX Words 41–44"),
+        el("button", {
+          type: "button",
+          class: "ghost",
+          onclick: function () { applyTheme(progress.theme === "light" ? "dark" : "light"); render(); }
+        }, progress.theme === "light" ? "Dark theme" : "Light theme")
+      ]),
+      el("p", { class: "lede" }, "Sixty words for Monday. Definitions stay on this device with your XP, boxes, and badges.")
+    ]);
+    card.appendChild(hud());
+    card.appendChild(el("p", { class: "kicker" }, "Progress map"));
+    card.appendChild(mapTiles());
+    card.appendChild(el("p", { class: "kicker" }, "Badges"));
+    card.appendChild(badgeRow());
+    var stack = el("div", { class: "stack" });
+    if (immersiveKind === "xr" || immersiveKind === "focus") {
+      stack.appendChild(el("button", {
+        type: "button", id: "enter-immersive", class: "primary",
+        onclick: function () { state.scope = "all"; enterImmersive(); }
+      }, [
+        el("strong", null, "Enter Immersive Experience"),
+        el("span", null, immersiveKind === "xr"
+          ? "Floating panel in visionOS. Gaze and pinch to answer."
+          : "Fullscreen focus mode with large cards on this device.")
+      ]));
+    }
+    [41, 42, 43, 44].forEach(function (list) {
+      stack.appendChild(el("button", { type: "button", onclick: function () { openModes(list); } }, [
+        el("strong", null, "List " + list),
+        el("span", null, masteredCount(list) + " of 15 learned")
+      ]));
+    });
+    stack.appendChild(el("button", { type: "button", onclick: function () { openModes("all"); } }, [
+      el("strong", null, "All 60"),
+      el("span", null, "Mix every list. " + masteredCount("all") + " of 60 learned.")
+    ]));
+    stack.appendChild(el("button", { type: "button", class: "primary", onclick: startMock }, [
+      el("strong", null, "Mock test"),
+      el("span", null, "20 questions, 10 minutes, all four lists. Feedback after you submit.")
+    ]));
+    card.appendChild(stack);
+    card.appendChild(el("button", {
+      type: "button", class: "center", style: "margin-top:12px",
+      onclick: function () {
+        if (!state.confirmReset) { state.confirmReset = true; render(); return; }
+        progress = emptyProgress();
+        progress.theme = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+        saveProgress();
+        state.confirmReset = false;
+        render();
+      }
+    }, state.confirmReset ? "Tap again to erase saved progress" : "Reset saved progress"));
+    card.appendChild(el("p", { class: "fine" }, "Typed answers ignore capitals. A one-letter slip counts as close, and the exact spelling is shown. A different list word never counts."));
+    app.appendChild(card);
+  }
+
+  function openModes(scope) {
+    state.view = "modes";
+    state.scope = scope;
+    state.confirmReset = false;
+    render();
+  }
+
+  function renderModes() {
+    var total = wordsIn(state.scope).length;
+    var card = el("div", { class: "card" });
+    card.appendChild(el("div", { class: "row" }, [
+      el("button", { type: "button", class: "ghost", onclick: function () { state.view = "home"; render(); } }, "Home"),
+      el("div", { class: "grow" }, [
+        el("div", { class: "kicker" }, "Choose a mode"),
+        el("h2", null, scopeLabel(state.scope))
+      ])
+    ]));
+    card.appendChild(el("p", { class: "lede" }, masteredCount(state.scope) + " of " + total + " learned."));
+    var modes = [
+      ["word", "Word → definition", "See the word. Pick the MX definition."],
+      ["def", "Definition → word", "See the definition. Pick the word."],
+      ["type", "Type the word", "See the definition. Spell the word."],
+      ["match", "Matching rounds", "Five words and five definitions at a time."],
+      ["cards", "Flashcards", "Leitner boxes. Again sends a word back to box 1."]
+    ];
+    var stack = el("div", { class: "stack" });
+    modes.forEach(function (mode) {
+      stack.appendChild(el("button", { type: "button", onclick: function () { startMode(mode[0]); } }, [
+        el("strong", null, mode[1]),
+        el("span", null, mode[2])
+      ]));
+    });
+    card.appendChild(stack);
+    app.appendChild(card);
+  }
+
+  function startMode(mode) {
+    var words = shuffle(wordsIn(state.scope));
+    state.mode = mode;
+    state.roundCorrect = 0;
+    state.roundTotal = 0;
+    state.roundXp = 0;
+    state.newBadges = [];
+    state.phase = "ask";
+    state.outcome = null;
+    if (mode === "match") {
+      state.rounds = chunkMatching(wordsIn(state.scope));
+      state.roundIndex = 0;
+      state.view = "match";
+      prepareMatch();
+    } else if (mode === "cards") {
+      var now = Date.now();
+      var due = words.filter(function (word) { return (wordState(word.id).due || 0) <= now; });
+      state.cards = shuffle((due.length ? due : words).slice(0, 12));
+      state.index = 0;
+      state.cardFlipped = false;
+      state.view = state.cards.length ? "cards" : "done";
+    } else {
+      if (mode === "word") state.queue = words.map(function (word) { return { kind: "word", word: word, choices: choiceSet(word, "def") }; });
+      if (mode === "def") state.queue = words.map(function (word) { return { kind: "def", word: word, choices: choiceSet(word, "word") }; });
+      if (mode === "type") state.queue = words.map(function (word) { return { kind: "type", word: word }; });
+      state.index = 0;
+      state.view = "quiz";
+      prepareQuizItem();
+    }
+    render();
+  }
+
+  function prepareQuizItem() {
+    state.phase = "ask";
+    state.picked = -1;
+    state.outcome = null;
+    state.gain = 0;
+  }
+
+  function currentItem() {
+    return state.queue[state.index];
+  }
+
+  function finishAnswer(wordId, outcome) {
+    var result = recordOutcome(wordId, outcome);
+    state.outcome = outcome;
+    state.gain = result.gain;
+    state.newBadges = state.newBadges.concat(result.badges);
+    state.phase = "feedback";
+    state.roundTotal += 1;
+    if (outcome !== "wrong") {
+      state.roundCorrect += 1;
+      state.roundXp += result.gain;
+    }
+    render();
+    var next = document.getElementById("next-btn");
+    if (next) next.focus();
+  }
+
+  function answerChoice(index) {
+    if (state.phase !== "ask") return;
+    var item = currentItem();
+    state.picked = index;
+    finishAnswer(item.word.id, item.choices[index].correct ? "mc" : "wrong");
+  }
+
+  function answerTyped(raw) {
+    var item = currentItem();
+    var outcome = gradeTyped(raw, item.word.word);
+    if (outcome === "empty") return;
+    finishAnswer(item.word.id, outcome);
+  }
+
+  function quizNext() {
+    if (state.index + 1 >= state.queue.length) {
+      state.view = "done";
+      render();
+      return;
+    }
+    state.index += 1;
+    prepareQuizItem();
+    render();
+    var field = document.getElementById("answer");
+    if (field) field.focus();
+  }
+
+  function feedbackText(item) {
+    var word = item.word;
+    var xp = state.gain ? " +" + state.gain + " XP." : "";
+    var combo = progress.combo ? " Combo " + progress.combo + "." : "";
+    if (item.kind === "type") {
+      if (state.outcome === "exact") return "Correct — " + word.word + "." + xp + combo;
+      if (state.outcome === "close") return "Close. Exact spelling: " + word.word + "." + xp + combo;
+      return "Not quite. The word is " + word.word + ".";
+    }
+    if (state.outcome === "wrong") return "Not quite. " + word.word + " means “" + word.def + ".”";
+    return "Correct. " + word.word + " means “" + word.def + ".”" + xp + combo;
+  }
+
+  function renderQuiz() {
+    var item = currentItem();
+    var word = item.word;
+    var card = el("div", { class: "card" });
+    card.appendChild(quizHead(state.index + 1, state.queue.length));
+    card.appendChild(el("p", { class: "prompt" }, item.kind === "word" ? "What does this word mean?" : item.kind === "def" ? "Which word matches this definition?" : "Type the word for this definition."));
+    if (item.kind === "word") card.appendChild(el("div", { class: "headline" }, word.word));
+    else card.appendChild(el("div", { class: "headline" }, word.def));
+    card.appendChild(el("p", { class: "rule" }, scopeLabel(word.list) + " · " + (item.kind === "type" ? "Spelling counts. A small typo is marked close." : "One answer matches the MX list.")));
+    if (item.kind === "type" && state.phase === "ask") {
+      var form = el("form", { onsubmit: function (event) {
+        event.preventDefault();
+        answerTyped(document.getElementById("answer").value);
+      }});
+      form.appendChild(el("input", {
+        id: "answer", type: "text", autocomplete: "off", autocorrect: "off", autocapitalize: "off", spellcheck: "false",
+        placeholder: "type the word"
+      }));
+      form.appendChild(el("button", { type: "submit", class: "primary" }, "Check"));
+      card.appendChild(form);
+    } else if (item.kind !== "type") {
+      var choices = el("div", { class: "choices" });
+      item.choices.forEach(function (choice, index) {
+        var cls = choice.text.length > 64 ? "choice long" : "choice";
+        if (state.phase === "feedback") {
+          if (choice.correct) cls += " right";
+          else if (index === state.picked) cls += " wrong";
+        }
+        choices.appendChild(el("button", {
+          type: "button",
+          class: cls,
+          disabled: state.phase !== "ask",
+          onclick: function () { answerChoice(index); }
+        }, choice.text));
+      });
+      card.appendChild(choices);
+    }
+    if (state.phase === "feedback") {
+      card.appendChild(el("div", { class: state.outcome === "wrong" ? "feedback bad" : "feedback good", role: "status" }, feedbackText(item)));
+      card.appendChild(el("p", { class: "example" }, [el("b", null, "Example. "), word.example]));
+      card.appendChild(el("button", {
+        id: "next-btn", type: "button", class: "primary", style: "margin-top:12px", onclick: quizNext
+      }, state.index + 1 >= state.queue.length ? "See results" : "Next"));
+    }
+    app.appendChild(card);
+  }
+
+  function quizHead(current, total) {
+    return el("div", null, [
+      el("div", { class: "row quiz-head" }, [
+        el("button", { type: "button", class: "ghost", onclick: function () { state.view = "modes"; render(); } }, "Back"),
+        el("div", { class: "grow" }, [
+          el("div", { class: "kicker" }, scopeLabel(state.scope)),
+          el("h2", null, modeTitle(state.mode))
+        ])
+      ]),
+      el("div", { class: "stats" }, [
+        el("div", { class: "chip" }, current + " / " + total),
+        el("div", { class: "chip" }, "This round " + state.roundCorrect + "/" + state.roundTotal),
+        el("div", { class: "chip" }, "Combo " + (progress.combo || 0)),
+        el("div", { class: "chip" }, (progress.xp || 0) + " XP")
+      ])
+    ]);
+  }
+
+  function modeTitle(mode) {
+    if (mode === "word") return "Word → definition";
+    if (mode === "def") return "Definition → word";
+    if (mode === "type") return "Type the word";
+    if (mode === "match") return "Matching";
+    if (mode === "cards") return "Flashcards";
+    return "Quiz";
+  }
+
+  function prepareMatch() {
+    var round = state.rounds[state.roundIndex] || [];
+    state.matchLeft = shuffle(round.slice());
+    state.matchRight = shuffle(round.slice());
+    state.matchSelected = null;
+    state.matchDone = {};
+    state.matchMistakes = 0;
+    state.phase = "ask";
+  }
+
+  function selectMatchWord(id) {
+    if (state.matchDone[id]) return;
+    state.matchSelected = id;
+    render();
+  }
+
+  function tryMatchDef(id) {
+    if (!state.matchSelected || state.matchDone[id]) return;
+    if (state.matchSelected === id) {
+      state.matchDone[id] = true;
+      var result = recordOutcome(id, "match");
+      state.roundXp += result.gain;
+      state.newBadges = state.newBadges.concat(result.badges);
+      state.matchSelected = null;
+      var round = state.rounds[state.roundIndex];
+      var finished = round.every(function (word) { return state.matchDone[word.id]; });
+      if (finished) {
+        state.phase = "feedback";
+        state.roundTotal += round.length;
+        state.roundCorrect += round.length;
+        if (state.matchMistakes === 0) {
+          progress.cleanMatches = (progress.cleanMatches || 0) + 1;
+          progress.xp = (progress.xp || 0) + 10;
+          state.roundXp += 10;
+          state.newBadges = state.newBadges.concat(unlockBadges());
+          saveProgress();
+        }
+      }
+    } else {
+      state.matchMistakes += 1;
+      progress.combo = 0;
+      wordState(state.matchSelected).wrong = (wordState(state.matchSelected).wrong || 0) + 1;
+      saveProgress();
+      state.matchSelected = null;
+      state.phase = "miss";
+    }
+    render();
+    if (state.phase === "miss") {
+      setTimeout(function () {
+        if (state.view === "match" && state.phase === "miss") { state.phase = "ask"; render(); }
+      }, 700);
+    }
+  }
+
+  function nextMatchRound() {
+    if (state.roundIndex + 1 >= state.rounds.length) {
+      state.view = "done";
+      render();
+      return;
+    }
+    state.roundIndex += 1;
+    prepareMatch();
+    render();
+  }
+
+  function renderMatch() {
+    var round = state.rounds[state.roundIndex] || [];
+    var doneCount = round.filter(function (word) { return state.matchDone[word.id]; }).length;
+    var card = el("div", { class: "card" });
+    card.appendChild(quizHead(state.roundIndex + 1, state.rounds.length));
+    card.appendChild(el("p", { class: "prompt" }, "Tap a word, then tap its definition."));
+    card.appendChild(el("p", { class: "rule" }, doneCount + " of " + round.length + " matched" + (state.matchMistakes ? " · " + state.matchMistakes + " miss" + (state.matchMistakes === 1 ? "" : "es") : "") + "."));
+    if (state.phase === "miss") card.appendChild(el("div", { class: "feedback bad", role: "status" }, "Those two do not match. Combo reset."));
+    if (state.phase === "feedback") card.appendChild(el("div", { class: "feedback good", role: "status" }, state.matchMistakes ? "Round complete." : "Clean round. +10 XP bonus."));
+    card.appendChild(el("p", { class: "kicker" }, "Words"));
+    var words = el("div", { class: "choices" });
+    state.matchLeft.forEach(function (word) {
+      var cls = "choice";
+      if (state.matchDone[word.id]) cls += " right";
+      else if (state.matchSelected === word.id) cls += " picked";
+      words.appendChild(el("button", { type: "button", class: cls, disabled: !!state.matchDone[word.id], onclick: function () { selectMatchWord(word.id); } }, word.word));
+    });
+    card.appendChild(words);
+    card.appendChild(el("p", { class: "kicker" }, "Definitions"));
+    var defs = el("div", { class: "choices" });
+    state.matchRight.forEach(function (word) {
+      var cls = word.def.length > 64 ? "choice long" : "choice";
+      if (state.matchDone[word.id]) cls += " right";
+      defs.appendChild(el("button", { type: "button", class: cls, disabled: !!state.matchDone[word.id] || !state.matchSelected, onclick: function () { tryMatchDef(word.id); } }, word.def));
+    });
+    card.appendChild(defs);
+    if (state.phase === "feedback") {
+      card.appendChild(el("button", { type: "button", class: "primary", style: "margin-top:12px", onclick: nextMatchRound }, state.roundIndex + 1 >= state.rounds.length ? "See results" : "Next round"));
+    }
+    app.appendChild(card);
+  }
+
+  function renderCards() {
+    var word = state.cards[state.index];
+    if (!word) { state.view = "done"; renderDone(); return; }
+    var stat = wordState(word.id);
+    var card = el("div", { class: "card" });
+    card.appendChild(quizHead(state.index + 1, state.cards.length));
+    card.appendChild(el("p", { class: "rule" }, "Leitner box " + (stat.box || 1) + " of 3. Got it moves the word up. Again returns it to box 1."));
+    card.appendChild(el("div", { class: "headline" }, state.cardFlipped ? word.def : word.word));
+    if (!state.cardFlipped) {
+      card.appendChild(el("p", { class: "prompt" }, "Recall the definition, then flip."));
+      card.appendChild(el("button", { type: "button", class: "primary", onclick: function () { state.cardFlipped = true; render(); } }, "Show definition"));
+    } else {
+      card.appendChild(el("p", { class: "example" }, [el("b", null, "Example. "), word.example]));
+      var actions = el("div", { class: "actions inline", style: "margin-top:12px" });
+      actions.appendChild(el("button", { type: "button", onclick: function () { flipCard(false); } }, "Again"));
+      actions.appendChild(el("button", { type: "button", class: "primary", onclick: function () { flipCard(true); } }, "Got it"));
+      card.appendChild(actions);
+    }
+    app.appendChild(card);
+  }
+
+  function flipCard(gotIt) {
+    var word = state.cards[state.index];
+    var result = recordOutcome(word.id, gotIt ? "card" : "again");
+    state.roundTotal += 1;
+    if (gotIt) {
+      state.roundCorrect += 1;
+      state.roundXp += result.gain;
+    }
+    state.newBadges = state.newBadges.concat(result.badges);
+    if (state.index + 1 >= state.cards.length) {
+      state.view = "done";
+      render();
+      return;
+    }
+    state.index += 1;
+    state.cardFlipped = false;
+    render();
+  }
+
+  function startMock() {
+    stopClock();
+    var items = [];
+    [41, 42, 43, 44].forEach(function (list) {
+      var words = shuffle(wordsIn(list));
+      words.slice(0, 2).forEach(function (word) { items.push({ kind: "word", word: word, choices: choiceSet(word, "def") }); });
+      words.slice(2, 4).forEach(function (word) { items.push({ kind: "def", word: word, choices: choiceSet(word, "word") }); });
+      items.push({ kind: "type", word: words[4] });
+    });
+    state.view = "mock";
+    state.mockItems = shuffle(items);
+    state.mockAnswers = state.mockItems.map(function () { return null; });
+    state.index = 0;
+    state.mockLeft = 10 * 60;
+    state.mockSubmitted = false;
+    state.confirmSubmit = false;
+    state.roundCorrect = 0;
+    state.roundTotal = 0;
+    state.roundXp = 0;
+    state.newBadges = [];
+    mockClock = setInterval(function () {
+      state.mockLeft -= 1;
+      if (state.mockLeft <= 0) {
+        state.mockLeft = 0;
+        submitMock();
+      } else if (state.view === "mock") {
+        var label = document.getElementById("mock-timer");
+        if (label) label.textContent = formatTime(state.mockLeft);
+      }
+    }, 1000);
+    render();
+  }
+
+  function formatTime(seconds) {
+    var m = Math.floor(seconds / 60);
+    var s = seconds % 60;
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+
+  function renderMock() {
+    var item = state.mockItems[state.index];
+    var card = el("div", { class: "card" });
+    card.appendChild(el("div", { class: "row quiz-head" }, [
+      el("button", { type: "button", class: "ghost", onclick: function () { stopClock(); state.view = "home"; render(); } }, "Quit"),
+      el("div", { class: "grow" }, [
+        el("div", { class: "kicker" }, "Mock test"),
+        el("h2", null, "No feedback yet")
+      ]),
+      el("div", { id: "mock-timer", class: "timer" }, formatTime(state.mockLeft))
+    ]));
+    card.appendChild(el("p", { class: "rule" }, "Question " + (state.index + 1) + " of " + state.mockItems.length + ". Answers are saved as you go. Nothing is marked until you submit."));
+    card.appendChild(el("p", { class: "prompt" }, item.kind === "word" ? "What does this word mean?" : item.kind === "def" ? "Which word matches this definition?" : "Type the word."));
+    card.appendChild(el("div", { class: "headline" }, item.kind === "word" ? item.word.word : item.word.def));
+    if (item.kind === "type") {
+      card.appendChild(el("input", {
+        id: "mock-answer", type: "text", autocomplete: "off", autocorrect: "off", autocapitalize: "off", spellcheck: "false",
+        placeholder: "type the word", value: state.mockAnswers[state.index] || "",
+        oninput: function (event) { state.mockAnswers[state.index] = event.target.value; }
+      }));
+    } else {
+      var choices = el("div", { class: "choices" });
+      item.choices.forEach(function (choice, index) {
+        var cls = choice.text.length > 64 ? "choice long" : "choice";
+        if (state.mockAnswers[state.index] === index) cls += " picked";
+        choices.appendChild(el("button", {
+          type: "button", class: cls,
+          onclick: function () { state.mockAnswers[state.index] = index; render(); }
+        }, choice.text));
+      });
+      card.appendChild(choices);
+    }
+    var nav = el("div", { class: "actions inline", style: "margin-top:12px" });
+    nav.appendChild(el("button", { type: "button", disabled: state.index === 0, onclick: function () { state.index -= 1; state.confirmSubmit = false; render(); } }, "Back"));
+    if (state.index + 1 < state.mockItems.length) {
+      nav.appendChild(el("button", { type: "button", class: "primary", onclick: function () { state.index += 1; state.confirmSubmit = false; render(); } }, "Next"));
+    }
+    nav.appendChild(el("button", {
+      type: "button", class: "center",
+      onclick: function () {
+        if (!state.confirmSubmit) { state.confirmSubmit = true; render(); return; }
+        submitMock();
+      }
+    }, state.confirmSubmit ? "Tap again to submit" : "Submit test"));
+    card.appendChild(nav);
+    app.appendChild(card);
+  }
+
+  function scoreMockItem(item, answer) {
+    if (item.kind === "type") return gradeTyped(answer || "", item.word.word) === "exact" || gradeTyped(answer || "", item.word.word) === "close";
+    return typeof answer === "number" && item.choices[answer] && item.choices[answer].correct;
+  }
+
+  function submitMock() {
+    if (state.mockSubmitted) return;
+    state.mockSubmitted = true;
+    stopClock();
+    var score = 0;
+    state.mockItems.forEach(function (item, index) {
+      var ok = scoreMockItem(item, state.mockAnswers[index]);
+      if (ok) {
+        score += 1;
+        var result = recordOutcome(item.word.id, item.kind === "type" ? gradeTyped(state.mockAnswers[index] || "", item.word.word) : "mc");
+        state.roundXp += result.gain;
+        state.newBadges = state.newBadges.concat(result.badges);
+      } else if (state.mockAnswers[index] != null && state.mockAnswers[index] !== "") {
+        recordOutcome(item.word.id, "wrong");
+      }
+    });
+    state.roundCorrect = score;
+    state.roundTotal = state.mockItems.length;
+    progress.mocks.push({ score: score, total: state.mockItems.length, at: Date.now() });
+    state.newBadges = state.newBadges.concat(unlockBadges());
+    saveProgress();
+    state.view = "review";
+    render();
+  }
+
+  function renderReview() {
+    var card = el("div", { class: "card" }, [
+      el("h1", null, state.roundCorrect + " / " + state.roundTotal),
+      el("p", { class: "lede" }, "Mock submitted. " + state.roundXp + " XP added. Streak and boxes updated from the questions you answered.")
+    ]);
+    var list = el("div", { class: "stack" });
+    state.mockItems.forEach(function (item, index) {
+      var answer = state.mockAnswers[index];
+      var ok = scoreMockItem(item, answer);
+      var yours = item.kind === "type" ? (answer || "(blank)") : (typeof answer === "number" ? item.choices[answer].text : "(blank)");
+      list.appendChild(el("div", { class: ok ? "feedback good" : "feedback bad" }, item.word.word + " — " + item.word.def + ". Your answer: " + yours + (ok ? "" : ". Exact word: " + item.word.word + ".")));
+    });
+    card.appendChild(list);
+    card.appendChild(el("button", { type: "button", class: "primary", style: "margin-top:12px", onclick: function () { state.view = "home"; render(); } }, "Home"));
+    app.appendChild(card);
+  }
+
+  function renderDone() {
+    var names = state.newBadges.filter(function (id, index) { return state.newBadges.indexOf(id) === index; }).map(function (id) {
+      var found = BADGE_DEFS.filter(function (badge) { return badge.id === id; })[0];
+      return found ? found.name : id;
+    });
+    var card = el("div", { class: "card" }, [
+      el("h1", null, state.roundTotal && state.roundCorrect === state.roundTotal ? "Clean round" : "Round done"),
+      el("p", { class: "lede" }, scopeLabel(state.scope) + ": " + state.roundCorrect + " correct out of " + state.roundTotal + ". " + state.roundXp + " XP this round. Combo " + (progress.combo || 0) + ".")
+    ]);
+    if (names.length) card.appendChild(el("p", { class: "prompt" }, "New badges: " + names.join(", ") + "."));
+    card.appendChild(hud());
+    var stack = el("div", { class: "stack" });
+    stack.appendChild(el("button", { type: "button", class: "primary", onclick: function () { startMode(state.mode || "word"); } }, "Try this mode again"));
+    stack.appendChild(el("button", { type: "button", onclick: function () { state.view = "modes"; render(); } }, "Other modes"));
+    stack.appendChild(el("button", { type: "button", onclick: function () { state.view = "home"; render(); } }, "Home"));
+    card.appendChild(stack);
+    app.appendChild(card);
+  }
+
+  var immer = { active: false, mode: null, queue: [], index: 0, phase: "ask", choices: [], picked: -1, wasCorrect: false };
+  var xrExtras = {};
+
+  function canUseFocus() { return !!(document.body && document.body.appendChild); }
+
+  function detectImmersive() {
+    var pending = Promise.resolve(false);
+    try {
+      if (navigator.xr && typeof navigator.xr.isSessionSupported === "function") pending = navigator.xr.isSessionSupported("immersive-vr");
+    } catch (err) { pending = Promise.resolve(false); }
+    Promise.resolve(pending).then(function (ok) { return !!ok; }).catch(function () { return false; }).then(function (xrOk) {
+      if (xrOk) {
+        immersiveKind = "xr";
+        import("https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js").catch(function () {});
+      } else if (canUseFocus()) immersiveKind = "focus";
+      else immersiveKind = "none";
+      if (state.view === "home" && location.hash !== "#selftest") render();
+    });
+  }
+
+  function buildImmersiveQueue() {
+    var items = [];
+    wordsIn(state.scope || "all").forEach(function (word) {
+      items.push({ kind: "word", word: word, choices: choiceSet(word, "def") });
+      items.push({ kind: "def", word: word, choices: choiceSet(word, "word") });
+    });
+    return shuffle(items);
+  }
+
+  function beginImmersive() {
+    immer.queue = buildImmersiveQueue();
+    immer.index = 0;
+    immer.phase = immer.queue.length ? "ask" : "done";
+    immer.picked = -1;
+    immer.choices = immer.queue.length ? immer.queue[0].choices : [];
+    state.roundCorrect = 0;
+    state.roundTotal = 0;
+    state.roundXp = 0;
+    state.newBadges = [];
+  }
+
+  function refreshImmersive() {
+    if (immer.mode === "focus") renderFocus();
+    else if (immer.mode === "xr" && xrExtras.renderPanel) xrExtras.renderPanel();
+  }
+
+  function immerAnswer(index) {
+    if (!immer.active || immer.phase !== "ask") return;
+    var item = immer.queue[immer.index];
+    var choice = immer.choices[index];
+    if (!choice) return;
+    immer.picked = index;
+    immer.wasCorrect = !!choice.correct;
+    immer.phase = "feedback";
+    var result = recordOutcome(item.word.id, choice.correct ? "mc" : "wrong");
+    state.roundTotal += 1;
+    if (choice.correct) {
+      state.roundCorrect += 1;
+      state.roundXp += result.gain;
+    }
+    state.newBadges = state.newBadges.concat(result.badges);
+    refreshImmersive();
+  }
+
+  function immerNext() {
+    if (immer.phase !== "feedback") return;
+    if (immer.index + 1 >= immer.queue.length) {
+      immer.phase = "done";
+      refreshImmersive();
+      return;
+    }
+    immer.index += 1;
+    immer.phase = "ask";
+    immer.picked = -1;
+    immer.choices = immer.queue[immer.index].choices;
+    refreshImmersive();
+  }
+
+  function finishImmersive() {
+    if (closingImmersive) return;
+    closingImmersive = true;
+    immer.active = false;
+    immer.mode = null;
+    var root = document.getElementById("focus-root");
+    if (root && root.parentNode) root.parentNode.removeChild(root);
+    document.body.style.overflow = "";
+    var fsEl = document.fullscreenElement || document.webkitFullscreenElement;
+    if (fsEl) {
+      var exit = document.exitFullscreen || document.webkitExitFullscreen;
+      if (exit) {
+        try {
+          var result = exit.call(document);
+          if (result && result.catch) result.catch(function () {});
+        } catch (err) { /* already closed */ }
+      }
+    }
+    if (xrRenderer) {
+      try { xrRenderer.setAnimationLoop(null); } catch (err) { /* stopped */ }
+      if (xrRenderer.domElement && xrRenderer.domElement.parentNode) xrRenderer.domElement.parentNode.removeChild(xrRenderer.domElement);
+      try { xrRenderer.dispose(); } catch (err) { /* context gone */ }
+      xrRenderer = null;
+    }
+    xrSession = null;
+    closingImmersive = false;
+    focusHadFullscreen = false;
+    render();
+  }
+
+  function immerExit() {
+    if (immer.mode === "xr" && xrSession) {
+      var session = xrSession;
+      immer.active = false;
+      try {
+        var result = session.end();
+        if (result && result.catch) result.catch(function () { finishImmersive(); });
+      } catch (err) { finishImmersive(); }
+      return;
+    }
+    finishImmersive();
+  }
+
+  function onFullscreenChange() {
+    var active = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!active && focusHadFullscreen && immer.mode === "focus") finishImmersive();
+  }
+  document.addEventListener("fullscreenchange", onFullscreenChange);
+  document.addEventListener("webkitfullscreenchange", onFullscreenChange);
+
+  function renderFocus() {
+    var root = document.getElementById("focus-root");
+    if (!root) {
+      root = document.createElement("div");
+      root.id = "focus-root";
+      root.className = "focus-root";
+      document.body.appendChild(root);
+    }
+    root.textContent = "";
+    var item = immer.phase === "done" ? null : immer.queue[immer.index];
+    var card = el("div", { class: "card" });
+    card.appendChild(el("div", { class: "kicker" }, item ? scopeLabel(state.scope) : "Immersive session"));
+    card.appendChild(el("div", { class: "stats" }, [
+      el("div", { class: "chip" }, (progress.xp || 0) + " XP"),
+      el("div", { class: "chip" }, "Combo " + (progress.combo || 0)),
+      el("div", { class: "chip" }, item ? ((immer.index + 1) + " / " + immer.queue.length) : (state.roundCorrect + "/" + state.roundTotal))
+    ]));
+    if (!item) {
+      card.appendChild(el("h1", null, "Round done"));
+      card.appendChild(el("p", { class: "lede" }, state.roundCorrect + " correct out of " + state.roundTotal + "."));
+    } else {
+      card.appendChild(el("p", { class: "prompt" }, item.kind === "word" ? "What does this word mean?" : "Which word matches this definition?"));
+      card.appendChild(el("div", { class: "headline" }, item.kind === "word" ? item.word.word : item.word.def));
+      var choices = el("div", { class: "choices" });
+      immer.choices.forEach(function (choice, index) {
+        var cls = choice.text.length > 64 ? "choice long" : "choice";
+        if (immer.phase === "feedback") {
+          if (choice.correct) cls += " right";
+          else if (index === immer.picked) cls += " wrong";
+        }
+        choices.appendChild(el("button", {
+          type: "button", class: cls, disabled: immer.phase !== "ask",
+          onclick: function () { immerAnswer(index); }
+        }, choice.text));
+      });
+      card.appendChild(choices);
+      if (immer.phase === "feedback") {
+        card.appendChild(el("div", { class: immer.wasCorrect ? "feedback good" : "feedback bad", role: "status" }, immer.wasCorrect
+          ? "Correct. " + item.word.word + " means “" + item.word.def + ".”"
+          : "Not quite. " + item.word.word + " means “" + item.word.def + ".”"));
+        card.appendChild(el("p", { class: "example" }, [el("b", null, "Example. "), item.word.example]));
+      }
+    }
+    var actions = el("div", { class: "actions", style: "margin-top:14px" });
+    if (immer.phase === "feedback") actions.appendChild(el("button", { type: "button", class: "primary", onclick: immerNext }, immer.index + 1 >= immer.queue.length ? "Results" : "Next"));
+    actions.appendChild(el("button", { type: "button", class: "center", onclick: immerExit }, "Exit"));
+    card.appendChild(actions);
+    root.appendChild(card);
+  }
+
+  function startFocus() {
+    closingImmersive = false;
+    immer.active = true;
+    immer.mode = "focus";
+    beginImmersive();
+    document.body.style.overflow = "hidden";
+    renderFocus();
+    var root = document.getElementById("focus-root");
+    focusHadFullscreen = false;
+    if (!root) return;
+    var req = root.requestFullscreen || root.webkitRequestFullscreen;
+    var enabled = document.fullscreenEnabled || document.webkitFullscreenEnabled;
+    if (!req || !enabled) return;
+    try {
+      var result = req.call(root);
+      if (result && result.then) result.then(function () { focusHadFullscreen = true; }).catch(function () {});
+      else if (document.fullscreenElement || document.webkitFullscreenElement) focusHadFullscreen = true;
+    } catch (err) { /* overlay remains */ }
+  }
+
+  function isPointerSource(source) {
+    return !!source && (source.targetRayMode === "transient-pointer" || source.targetRayMode === "tracked-pointer");
+  }
+
+  async function startXR(THREE, session) {
+    closingImmersive = false;
+    immer.active = true;
+    immer.mode = "xr";
+    beginImmersive();
+    xrSession = session;
+    var renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    xrRenderer = renderer;
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    if (THREE.SRGBColorSpace) renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.xr.enabled = true;
+    renderer.domElement.style.position = "fixed";
+    renderer.domElement.style.inset = "0";
+    renderer.domElement.setAttribute("aria-hidden", "true");
+    document.body.appendChild(renderer.domElement);
+    var scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x070b14);
+    scene.add(new THREE.Mesh(new THREE.SphereGeometry(30, 28, 18), new THREE.MeshBasicMaterial({ color: 0x0b1020, side: THREE.BackSide })));
+    var floor = new THREE.Mesh(new THREE.CircleGeometry(7, 40), new THREE.MeshBasicMaterial({ color: 0x12182c }));
+    floor.rotation.x = -Math.PI / 2;
+    scene.add(floor);
+    var camera = new THREE.PerspectiveCamera(70, window.innerWidth / Math.max(window.innerHeight, 1), 0.01, 50);
+    var panel = new THREE.Group();
+    panel.visible = false;
+    scene.add(panel);
+    var raycaster = new THREE.Raycaster();
+    raycaster.far = 8;
+    var hitTargets = [];
+    var placed = false;
+    var xrAlive = true;
+    var latestFrame = null;
+    var selectQueue = [];
+    var lastActionAt = 0;
+
+    function disposePanel() {
+      panel.children.slice().forEach(function (child) {
+        panel.remove(child);
+        if (child.geometry) child.geometry.dispose();
+        if (child.material) {
+          if (child.material.map) child.material.map.dispose();
+          child.material.dispose();
+        }
+      });
+      hitTargets = [];
+    }
+
+    function makeTexture(draw, width, height) {
+      var canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      draw(canvas.getContext("2d"), width, height);
+      var texture = new THREE.CanvasTexture(canvas);
+      if (THREE.SRGBColorSpace) texture.colorSpace = THREE.SRGBColorSpace;
+      texture.needsUpdate = true;
+      return texture;
+    }
+
+    function wrapText(ctx, text, maxWidth) {
+      var words = String(text || "").split(/\s+/).filter(Boolean);
+      var lines = [];
+      var line = "";
+      words.forEach(function (word) {
+        var next = line ? line + " " + word : word;
+        if (line && ctx.measureText(next).width > maxWidth) { lines.push(line); line = word; }
+        else line = next;
+      });
+      if (line) lines.push(line);
+      return lines.length ? lines : [""];
+    }
+
+    function renderPanel() {
+      disposePanel();
+      var item = immer.phase === "done" ? null : immer.queue[immer.index];
+      var tex = makeTexture(function (ctx, w, h) {
+        ctx.clearRect(0, 0, w, h);
+        ctx.fillStyle = "rgba(14, 20, 38, 0.96)";
+        ctx.fillRect(0, 0, w, h);
+        ctx.strokeStyle = "rgba(255,255,255,0.28)";
+        ctx.lineWidth = 8;
+        ctx.strokeRect(8, 8, w - 16, h - 16);
+        ctx.fillStyle = "#d7ecff";
+        ctx.font = "600 34px -apple-system, BlinkMacSystemFont, sans-serif";
+        ctx.textBaseline = "top";
+        ctx.fillText(item ? (item.kind === "word" ? "WORD → DEFINITION" : "DEFINITION → WORD") : "SESSION", 48, 36);
+        ctx.textAlign = "right";
+        ctx.fillStyle = "#d5deee";
+        ctx.fillText((progress.xp || 0) + " XP   combo " + (progress.combo || 0), w - 48, 36);
+        ctx.textAlign = "left";
+        ctx.fillStyle = "#f6f8fc";
+        ctx.font = "700 64px -apple-system, BlinkMacSystemFont, sans-serif";
+        var headline = item ? (item.kind === "word" ? item.word.word : item.word.def) : "Round done";
+        var lines = wrapText(ctx, headline, w - 96).slice(0, 4);
+        lines.forEach(function (line, index) { ctx.fillText(line, 48, 120 + index * 76); });
+        if (item && immer.phase === "feedback") {
+          ctx.font = "600 32px -apple-system, BlinkMacSystemFont, sans-serif";
+          ctx.fillStyle = immer.wasCorrect ? "#d8ffee" : "#ffd8d4";
+          var why = (immer.wasCorrect ? "Correct. " : "Not quite. ") + item.word.word + " — " + item.word.def + ".";
+          wrapText(ctx, why, w - 96).slice(0, 3).forEach(function (line, index) { ctx.fillText(line, 48, h - 180 + index * 40); });
+        }
+      }, 1480, 760);
+      panel.add(new THREE.Mesh(new THREE.PlaneGeometry(1.52, 0.78), new THREE.MeshBasicMaterial({ map: tex })));
+      var buttons = [];
+      if (item) {
+        immer.choices.forEach(function (choice, index) {
+          var tone = "idle";
+          if (immer.phase === "feedback") tone = choice.correct ? "right" : index === immer.picked ? "wrong" : "dim";
+          buttons.push({ label: choice.text, tone: tone, action: { kind: "choice", index: index }, enabled: immer.phase === "ask" });
+        });
+      }
+      if (immer.phase === "feedback") buttons.push({ label: immer.index + 1 >= immer.queue.length ? "Results" : "Next", tone: "next", action: { kind: "next" }, enabled: true });
+      buttons.push({ label: "Exit", tone: "exit", action: { kind: "exit" }, enabled: true });
+      var cursorY = -0.46;
+      buttons.forEach(function (button) {
+        var tall = button.label.length > 48;
+        var h = tall ? 0.22 : 0.14;
+        cursorY -= h / 2;
+        var buttonTex = makeTexture(function (ctx, w, hgt) {
+          ctx.clearRect(0, 0, w, hgt);
+          ctx.fillStyle = button.tone === "right" ? "rgba(90,190,140,0.95)" : button.tone === "wrong" ? "rgba(176,72,68,0.95)" : button.tone === "next" ? "rgba(126,168,224,0.95)" : button.tone === "dim" ? "rgba(255,255,255,0.08)" : "rgba(255,255,255,0.16)";
+          ctx.fillRect(0, 0, w, hgt);
+          ctx.fillStyle = button.tone === "dim" ? "#b7c3d8" : "#f7f8fb";
+          ctx.font = "600 " + (tall ? 36 : 46) + "px -apple-system, BlinkMacSystemFont, sans-serif";
+          ctx.textBaseline = "top";
+          wrapText(ctx, button.label, w - 70).slice(0, 3).forEach(function (line, index) { ctx.fillText(line, 36, 28 + index * (tall ? 42 : 52)); });
+        }, 1400, tall ? 280 : 200);
+        var mesh = new THREE.Mesh(new THREE.PlaneGeometry(1.46, h), new THREE.MeshBasicMaterial({ map: buttonTex }));
+        mesh.position.set(0, cursorY, 0.03);
+        mesh.userData.action = button.action;
+        mesh.userData.locked = !button.enabled;
+        panel.add(mesh);
+        hitTargets.push(mesh);
+        cursorY -= h / 2 + 0.03;
+      });
+      panel.updateMatrixWorld(true);
+    }
+
+    function raycastSource(frame, source) {
+      if (!frame || !source || !source.targetRaySpace) return null;
+      var ref = renderer.xr.getReferenceSpace();
+      if (!ref) return null;
+      var pose = null;
+      try { pose = frame.getPose(source.targetRaySpace, ref); } catch (err) { pose = null; }
+      if (!pose) return null;
+      var p = pose.transform.position;
+      var o = pose.transform.orientation;
+      var origin = new THREE.Vector3(p.x, p.y, p.z);
+      var direction = new THREE.Vector3(0, 0, -1).applyQuaternion(new THREE.Quaternion(o.x, o.y, o.z, o.w)).normalize();
+      raycaster.set(origin, direction);
+      var hits = raycaster.intersectObjects(hitTargets, false);
+      return hits.length ? hits[0].object.userData.action : null;
+    }
+
+    function activateAction(action) {
+      if (!action || !immer.active || immer.mode !== "xr") return;
+      var now = performance.now();
+      if (now - lastActionAt < 280) return;
+      lastActionAt = now;
+      if (action.kind === "exit") immerExit();
+      else if (action.kind === "next") immerNext();
+      else if (action.kind === "choice") immerAnswer(action.index);
+    }
+
+    function placePanel(frame) {
+      var ref = renderer.xr.getReferenceSpace();
+      if (!ref) return;
+      var pose = frame.getViewerPose(ref);
+      if (!pose) return;
+      var p = pose.transform.position;
+      var o = pose.transform.orientation;
+      var forward = new THREE.Vector3(0, 0, -1).applyQuaternion(new THREE.Quaternion(o.x, o.y, o.z, o.w));
+      forward.y = 0;
+      if (forward.lengthSq() < 1e-6) forward.set(0, 0, -1);
+      else forward.normalize();
+      panel.position.set(p.x, p.y - 0.15, p.z).addScaledVector(forward, 1.75);
+      panel.lookAt(p.x, panel.position.y, p.z);
+      floor.position.set(p.x, p.y - 1.45, p.z);
+      panel.updateMatrixWorld(true);
+      placed = true;
+    }
+
+    xrExtras.renderPanel = renderPanel;
+    renderPanel();
+    session.addEventListener("end", function () { xrAlive = false; finishImmersive(); });
+    session.addEventListener("selectstart", function (event) {
+      if (!isPointerSource(event.inputSource)) return;
+      if (!raycastSource(latestFrame, event.inputSource)) selectQueue.push({ source: event.inputSource, kind: "hover" });
+    });
+    session.addEventListener("select", function (event) {
+      if (!isPointerSource(event.inputSource)) return;
+      var hit = raycastSource(latestFrame, event.inputSource);
+      if (hit) activateAction(hit);
+      else selectQueue.push({ source: event.inputSource, kind: "select" });
+    });
+    await renderer.xr.setSession(session);
+    renderer.setAnimationLoop(function (time, frame) {
+      if (!xrAlive) return;
+      latestFrame = frame || null;
+      if (frame && !placed) placePanel(frame);
+      panel.visible = placed;
+      if (frame && selectQueue.length) {
+        selectQueue.splice(0, selectQueue.length).forEach(function (entry) {
+          var hit = raycastSource(frame, entry.source);
+          if (hit && entry.kind === "select") activateAction(hit);
+        });
+      }
+      if (xrAlive) renderer.render(scene, camera);
+    });
+  }
+
+  async function enterImmersive() {
+    if (immer.active) return;
+    if (immersiveKind === "xr" && navigator.xr && typeof navigator.xr.requestSession === "function") {
+      var session = null;
+      try {
+        session = await navigator.xr.requestSession("immersive-vr", { optionalFeatures: ["local-floor"] });
+      } catch (err) { session = null; }
+      if (session) {
+        try {
+          var THREE = await import("https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js");
+          await startXR(THREE, session);
+          return;
+        } catch (err) {
+          try {
+            var ending = session.end();
+            if (ending && ending.catch) ending.catch(function () {});
+          } catch (endErr) { /* closed */ }
+          if (xrRenderer) {
+            try { xrRenderer.dispose(); } catch (disposeErr) { /* ignore */ }
+            xrRenderer = null;
+          }
+        }
+      }
+    }
+    if (canUseFocus()) startFocus();
+  }
+
+  detectImmersive();
+  render();
+})();
+</script>
+</body>
+</html>

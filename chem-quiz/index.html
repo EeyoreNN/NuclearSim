@@ -240,6 +240,7 @@
     width: 0;
   }
   .fine { color: var(--faint); font-size: 0.9rem; margin-top: 14px; }
+  .fine a { color: var(--accent); }
   .miss-list { display: flex; flex-direction: column; gap: 10px; margin: 14px 0; }
   .miss {
     padding: 12px 14px;
@@ -1152,6 +1153,10 @@
     }, state.confirmReset ? "Tap again to erase the saved score" : "Reset saved progress");
     card.appendChild(reset);
     card.appendChild(el("p", { class: "fine" }, "Answers ignore capitals and extra spaces. iron(III), iron (III), and iron 3 all count, and the exact form is shown."));
+    card.appendChild(el("p", { class: "fine" }, [
+      "Monday words list: ",
+      el("a", { href: "../words-quiz/" }, "Lists 41–44 quiz")
+    ]));
     app.appendChild(card);
   }
 
